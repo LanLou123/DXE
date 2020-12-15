@@ -50,6 +50,8 @@ public:
 
 	void setWorldMatrix(const DirectX::XMFLOAT4X4& mat);
 	DirectX::XMFLOAT4X4& getWorldMatrix();
+	float getObj2VoxelScale();
+	void setObj2VoxelScale(float _scale);
 
 	void appendAssimpMesh(const aiScene* aiscene, aiMesh* aimesh);
 
@@ -85,6 +87,7 @@ protected:
 
 	DirectX::XMFLOAT4X4 World = MathUtils::Identity4x4();
 	DirectX::XMFLOAT4X4 texTransform = MathUtils::Identity4x4();
+	float Obj2VoxelScale = 1.0f;
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView;

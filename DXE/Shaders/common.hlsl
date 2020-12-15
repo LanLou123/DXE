@@ -18,6 +18,7 @@ cbuffer cbPerObject : register(b0)
 {
     float4x4 gWorld;
     float4x4 gTexTransform;
+    float gObj2VoxelScale;
 };
 
 cbuffer cbPass : register(b1)
@@ -38,5 +39,8 @@ cbuffer cbPass : register(b1)
     float gFarZ;
     float gTotalTime;
     float gDeltaTime;
+    float4x4 gVoxelView;
+    float4x4 gVoxelProj;
+    float4x4 gVoxelViewProj;
 };
 

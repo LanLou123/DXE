@@ -4,6 +4,12 @@
 #include "Utilities/Utils.h"
 #include "Utilities/Timer.h"
 
+struct MeshVoxelizerData {
+	DirectX::XMFLOAT4X4 mVoxelView = MathUtils::Identity4x4();
+	DirectX::XMFLOAT4X4 mVoxelProj = MathUtils::Identity4x4();
+
+};
+
 class MeshVoxelizer {
 public:
 	MeshVoxelizer(ID3D12Device* _device, UINT _x, UINT _y, UINT _z);
@@ -28,11 +34,13 @@ public:
 	void OnResize(UINT newX, UINT newY, UINT newZ);
 	D3D12_VIEWPORT Viewport()const;
 	D3D12_RECT ScissorRect()const;
+	MeshVoxelizerData& getUniformData();
 
 private:
 
 	void BuildDescriptors();
 	void BuildResources();
+	void PopulateUniformData();
 
 private:
 	ID3D12Device* device;
@@ -45,7 +53,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> m3DTexture;
 	D3D12_VIEWPORT mViewPort;
 	D3D12_RECT mScissorRect;
-
+	MeshVoxelizerData mData;
 };
 
 #endif // !MESH_VOXLIZER_H

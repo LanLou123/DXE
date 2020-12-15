@@ -40,11 +40,47 @@ VertexOut VS(VertexIn vin)
 
 float4 PS(VertexOut pin) : SV_Target
 {
+    
 
     float4 PosW = gPositionMap.Sample(gsamLinearWrap, pin.Texc);
     float4 Alb = gAlbedoMap.Sample(gsamLinearWrap, pin.Texc);
     float4 Nor = gNormalMap.Sample(gsamLinearWrap, pin.Texc);
 
+
+    bool visulizevoxel = false;
+    float3 voxelPickColor = float3(0.0, 0.0, 0.0);
+    // =======================================
+    // ray marched for voxel visulization
+    // =======================================
+    if (visulizevoxel) {
+        float3 raydr = normalize(PosW.xyz - gEyePosW);
+        float3 rayori = gEyePosW;
+        float step = 0.2f;
+        float3 curloc = rayori;
+        int3 texDimensions;
+        gVoxelizer.GetDimensions(texDimensions.x, texDimensions.y, texDimensions.z);
+        
+        for (int i = 0; i < 1200; ++i) {
+            float3 mappedloc = curloc / 200.0f;
+            uint3 texIndex = uint3(((mappedloc.x * 0.5) + 0.5f) * texDimensions.x,
+                ((mappedloc.y * 0.5) + 0.5f) * texDimensions.y,
+                ((mappedloc.z * 0.5) + 0.5f) * texDimensions.z);
+            if (all(gVoxelizer[texIndex] == 0)) {
+                curloc = curloc + raydr * step;
+            }
+            else {
+                voxelPickColor = gVoxelizer[texIndex];
+                step = -0.6 * step;
+                curloc = curloc + raydr * step;
+
+            }
+
+        }
+    }
+
+    // =======================================
+    // screen space shadow mapping
+    // =======================================
 
     float4 shadowPosH = mul(PosW, gShadowTransform);
     float3 shadowPosNDC = shadowPosH.xyz / shadowPosH.w;
@@ -75,7 +111,11 @@ float4 PS(VertexOut pin) : SV_Target
     float lamb = dot(lightDir, Nor);
 
     float4 col = float4(gAlbedoMap.Sample(gsamLinearWrap, pin.Texc).rgb, 1.0f);
-    return col * lamb * percentLit;
+    col = col * lamb * percentLit;
+    if (visulizevoxel) {
+        col = float4(voxelPickColor, 1.0f);
+    }
+    return col;
 }
 
 

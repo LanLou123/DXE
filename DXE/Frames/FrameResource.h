@@ -11,6 +11,7 @@ struct ObjectConstants
 {
     DirectX::XMFLOAT4X4 World = MathUtils::Identity4x4();
     DirectX::XMFLOAT4X4 TexTransform = MathUtils::Identity4x4();
+    float Obj2VoxelScale = 1; // used to scale model down to screen space
 };
 
 struct PassConstants
@@ -32,6 +33,9 @@ struct PassConstants
     float FarZ = 0.0f;
     float TotalTime = 0.0f;
     float DeltaTime = 0.0f;
+    DirectX::XMFLOAT4X4 VoxelView = MathUtils::Identity4x4();
+    DirectX::XMFLOAT4X4 VoxelProj = MathUtils::Identity4x4();
+    DirectX::XMFLOAT4X4 VoxelViewProj = MathUtils::Identity4x4();
 };
 
 // GPU material mapper

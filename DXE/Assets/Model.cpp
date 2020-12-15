@@ -113,6 +113,14 @@ void Model::InitModel(ID3D12Device* device, CommandObject* cmdObj) {
     uploadBuffers(device, cmdObj);
 }
 
+float Model::getObj2VoxelScale() {
+    return Obj2VoxelScale;
+}
+
+void Model::setObj2VoxelScale(float _scale) {
+    Obj2VoxelScale = _scale;
+}
+
 void Model::buildGeometryAssimp(){
 
     const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);

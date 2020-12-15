@@ -24,7 +24,7 @@ GS_INPUT VS(VertexIn vin)
 {
     GS_INPUT gin;
 
-    gin.PosL = vin.PosL.xyz / 200.0f;
+    gin.PosL = mul(vin.PosL.xyz, gWorld);
 
     // Just pass vertex color into the pixel shader.
     gin.TexC = vin.TexC;
@@ -86,10 +86,11 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 			break;
 		}
 
-		outputPosH[i] = mul(inputPosL, gViewProj);
+	 
+		outputPosH[i] = mul(inputPosL, gVoxelViewProj);
 
 		output.TexC = input[i].TexC;
-		output.PosW = mul( float4(input[i].PosL, 1.0f), gWorld).xyz;
+		output.PosW = input[i].PosL / 200.0f; // make sure model in screen space
 		output.PosH = outputPosH[i];
 		output.Normal = input[i].Normal;
 

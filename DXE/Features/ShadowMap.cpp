@@ -175,7 +175,7 @@ void ShadowMap::Update(const Timer& gt) {
 	mShadowMapData.mLightNearZ = n;
 	mShadowMapData.mLightFarZ = f;
 	XMMATRIX lightProj = DirectX::XMMatrixOrthographicOffCenterLH(l, r, b, t, n, f);
-
+	//lightProj = DirectX::XMMatrixOrthographicLH(200, 200, 0, 1000);
 	// Transform NDC space [-1,+1]^2 to texture space [0,1]^2
 	XMMATRIX T(
 		0.5f, 0.0f, 0.0f, 0.0f,

@@ -51,7 +51,7 @@ void Scene::populateMeshInfos() {
             curMeshInfo->IndexCount = curDrawArg.IndexCount;
             curMeshInfo->StartIndexLocation = curDrawArg.StartIndexLocation;
             curMeshInfo->BaseVertexLocation = curDrawArg.BaseVertexLocation;
-            DirectX::XMStoreFloat4x4(&curMeshInfo->World, DirectX::XMMatrixScaling(2.0f, 2.0f, 2.0f) * DirectX::XMMatrixTranslation(0.0f, 0.5f, 0.0f));
+            DirectX::XMStoreFloat4x4(&curMeshInfo->World, DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f) * DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));
             curObjectInfo->mMeshInfos.push_back(std::move(curMeshInfo));
         }
         curObjectInfo->Model = curModel.second.get();
@@ -59,6 +59,7 @@ void Scene::populateMeshInfos() {
         curObjectInfo->ObjCBIndex = curObjectIndex;
         curObjectInfo->World = curModel.second->getWorldMatrix();
         curObjectInfo->mBound = curModel.second->getBounds();
+        curObjectInfo->Obj2VoxelScale = curModel.second->getObj2VoxelScale();
         if (curModel.second->modelType == ModelType::QUAD_MODEL) {
             mObjectInfoLayer[(int)RenderLayer::Debug].push_back(curObjectInfo.get());
             mObjectInfoLayer[(int)RenderLayer::Gbuffer].push_back(curObjectInfo.get());
@@ -116,7 +117,7 @@ void Scene::loadTextures() {
 void Scene::buildCameras() {
 
     auto normalCam = std::make_unique<Camera>();
-    normalCam->SetPosition(0.0f, 2.0f, -15.0f);
+    normalCam->SetPosition(0.0f, 92.0f, -15.0f);
     normalCam->SetLens(0.25f * MathUtils::Pi, static_cast<float>(mClientWidth) / mClientHeight, 1.0f, 1000.0f);
     mCameras["MainCam"] = std::move(normalCam);
 }
@@ -126,6 +127,7 @@ void Scene::loadModels() {
     auto mymodel1 = std::make_unique<Model>(ModelType::TEMPLATE_MODEL);
     mymodel1->Name = "model1";
     mymodel1->InitModel(md3dDevice, cpyCommandObject.get());
+    mymodel1->setObj2VoxelScale(200.0f);
     mModels["model1"] = std::move(mymodel1);
 
     auto myquad = std::make_unique<Model>(ModelType::QUAD_MODEL);
@@ -139,9 +141,10 @@ void Scene::loadAssetFromAssimp(const std::string filepath) {
 
     auto assimpModel = std::make_unique<Model>(ModelType::ASSIMP_MODEL);
 
-    DirectX::XMFLOAT4X4 worldMat = MathUtils::Identity4x4();
+    DirectX::XMFLOAT4X4 worldMat = MathUtils::Identity4x4();// the sponza model is stupidly big, I'm not happy bout dat
     DirectX::XMStoreFloat4x4(&worldMat, DirectX::XMMatrixScaling(0.1f, 0.1f, 0.1f) * DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));
     assimpModel->setWorldMatrix(worldMat);
+    assimpModel->setObj2VoxelScale(200.0f);
 
     //==============================================
     // assimp init

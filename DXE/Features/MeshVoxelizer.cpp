@@ -3,6 +3,7 @@
 MeshVoxelizer::MeshVoxelizer(ID3D12Device* _device, UINT _x, UINT _y, UINT _z):device(_device), mX(_x), mY(_y), mZ(_z) {
 	mViewPort = { 0.0f, 0.0f, (float)mX, (float)mY, 0.0f, 1.0f };
 	mScissorRect = { 0,0,(int)mX, (int)mY };
+	PopulateUniformData();
 }
 
 ID3D12Resource* MeshVoxelizer::getResourcePtr() {
@@ -100,4 +101,23 @@ D3D12_VIEWPORT MeshVoxelizer::Viewport()const {
 
 D3D12_RECT MeshVoxelizer::ScissorRect()const {
 	return mScissorRect;
+}
+
+void MeshVoxelizer::PopulateUniformData() {
+	float sceneRadius = 200.0f;
+	DirectX::XMFLOAT3 eyePos = DirectX::XMFLOAT3(0.0f, sceneRadius / 2.0f, -sceneRadius);
+	DirectX::XMFLOAT3 tartPos = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	DirectX::XMFLOAT3 up = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
+
+
+	DirectX::XMMATRIX VoxelView = DirectX::XMMatrixLookAtLH(DirectX::XMLoadFloat3(&eyePos), DirectX::XMLoadFloat3(&tartPos),
+		DirectX::XMLoadFloat3(&up));
+	DirectX::XMMATRIX VoxelProj = DirectX::XMMatrixOrthographicLH(sceneRadius, sceneRadius, 0.0f, 1000.0f);
+
+	DirectX::XMStoreFloat4x4(&mData.mVoxelView, VoxelView);
+	DirectX::XMStoreFloat4x4(&mData.mVoxelProj, VoxelProj);
+}
+
+MeshVoxelizerData& MeshVoxelizer::getUniformData() {
+	return mData;
 }

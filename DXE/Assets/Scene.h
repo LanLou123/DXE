@@ -53,6 +53,8 @@ struct ObjectInfo {
 	std::vector<std::unique_ptr<MeshInfo>> mMeshInfos;
 
 	d3dUtil::Bound mBound;
+
+	float Obj2VoxelScale;
 };
 
 

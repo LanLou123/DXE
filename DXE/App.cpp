@@ -106,7 +106,7 @@ void App::UpdateObjectCBs(const Timer& gt) {
             ObjectConstants objConstants;
             DirectX::XMStoreFloat4x4(&objConstants.World, DirectX::XMMatrixTranspose(world));
             DirectX::XMStoreFloat4x4(&objConstants.TexTransform, DirectX::XMMatrixTranspose(texTransform));
-
+            objConstants.Obj2VoxelScale = e->Obj2VoxelScale;
             currObjectCB->CopyData(e->ObjCBIndex, objConstants);
 
             // Next FrameResource need to be updated too.
@@ -150,6 +150,9 @@ void App::UpdateMainPassCB(const Timer& gt)
     XMMATRIX invProj = DirectX::XMMatrixInverse(&DirectX::XMMatrixDeterminant(proj), proj);
     XMMATRIX invViewProj = DirectX::XMMatrixInverse(&DirectX::XMMatrixDeterminant(viewProj), viewProj);
     XMMATRIX shadowTransform = XMLoadFloat4x4(&mShadowMap->mShadowMapData.mShadowTransform);
+    XMMATRIX voxelView = XMLoadFloat4x4(&mMeshVoxelizer->getUniformData().mVoxelView); 
+    XMMATRIX voxelProj = XMLoadFloat4x4(&mMeshVoxelizer->getUniformData().mVoxelProj);
+    XMMATRIX voxelViewProj = XMMatrixMultiply(voxelView, voxelProj);
 
     // use transpose to make sure we go from row - major on cpu to colume major on gpu
     DirectX::XMStoreFloat4x4(&mMainPassCB.View, DirectX::XMMatrixTranspose(view));
@@ -159,6 +162,9 @@ void App::UpdateMainPassCB(const Timer& gt)
     DirectX::XMStoreFloat4x4(&mMainPassCB.ViewProj, DirectX::XMMatrixTranspose(viewProj));
     DirectX::XMStoreFloat4x4(&mMainPassCB.InvViewProj, DirectX::XMMatrixTranspose(invViewProj));
     DirectX::XMStoreFloat4x4(&mMainPassCB.ShadowTransform, DirectX::XMMatrixTranspose(shadowTransform));
+    DirectX::XMStoreFloat4x4(&mMainPassCB.VoxelView, DirectX::XMMatrixTranspose(voxelView));
+    DirectX::XMStoreFloat4x4(&mMainPassCB.VoxelProj, DirectX::XMMatrixTranspose(voxelProj));
+    DirectX::XMStoreFloat4x4(&mMainPassCB.VoxelViewProj, DirectX::XMMatrixTranspose(voxelViewProj));
     mMainPassCB.EyePosW = mScene->getCamerasMap()["MainCam"]->GetPosition3f();
     mMainPassCB.LightPosW = mShadowMap->mShadowMapData.mLightPosW;
     mMainPassCB.RenderTargetSize = XMFLOAT2((float)mClientWidth, (float)mClientHeight);
