@@ -1,0 +1,3 @@
+﻿  App.cpp
+E:\DX12\DXE\DXE\DXE\App.cpp(400,119): warning C4244: 'argument': conversion from 'INT64' to 'UINT', possible loss of data
+  DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Debug\DXE.exe

@@ -1,0 +1,3302 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.4.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "C6001",
+          "message": {
+            "text": "Using uninitialized memory '*pParameters_1_0.DescriptorTable.pDescriptorRanges'."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                },
+                "region": {
+                  "startLine": 2296,
+                  "startColumn": 55,
+                  "endLine": 2296,
+                  "endColumn": 149
+                }
+              }
+            }
+          ],
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "index": 0,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2204,
+                            "startColumn": 21
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 1,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2206,
+                            "startColumn": 22
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 2,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2209,
+                            "startColumn": 13
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 3,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2211,
+                            "startColumn": 5
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 4,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2212,
+                            "startColumn": 35
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 5,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2217,
+                            "startColumn": 9
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 6,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2219,
+                            "startColumn": 21
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 7,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2220,
+                            "startColumn": 45
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 8,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2222,
+                            "startColumn": 26
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 9,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2223,
+                            "startColumn": 17
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 10,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2224,
+                            "startColumn": 36
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 11,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2228,
+                            "startColumn": 18
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 12,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2230,
+                            "startColumn": 17
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 13,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2232,
+                            "startColumn": 27
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 14,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2232,
+                            "startColumn": 36
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 15,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2234,
+                            "startColumn": 21
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 16,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2235,
+                            "startColumn": 54
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 17,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2236,
+                            "startColumn": 57
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 18,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2238,
+                            "startColumn": 52
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 19,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2253,
+                            "startColumn": 21
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 20,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2254,
+                            "startColumn": 59
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 21,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2256,
+                            "startColumn": 38
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 22,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2257,
+                            "startColumn": 29
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 23,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2258,
+                            "startColumn": 54
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 24,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2262,
+                            "startColumn": 30
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 25,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2264,
+                            "startColumn": 29
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 26,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2266,
+                            "startColumn": 39
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 27,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2266,
+                            "startColumn": 48
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 28,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2277,
+                            "startColumn": 52
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 29,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2278,
+                            "startColumn": 55
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 30,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2279,
+                            "startColumn": 53
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 31,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2232,
+                            "startColumn": 63
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 32,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2232,
+                            "startColumn": 36
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 33,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2234,
+                            "startColumn": 21
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 34,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2235,
+                            "startColumn": 54
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 35,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2236,
+                            "startColumn": 57
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 36,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2238,
+                            "startColumn": 52
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 37,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2253,
+                            "startColumn": 21
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 38,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2254,
+                            "startColumn": 59
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 39,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2256,
+                            "startColumn": 38
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 40,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2257,
+                            "startColumn": 29
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 41,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2258,
+                            "startColumn": 54
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 42,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2262,
+                            "startColumn": 30
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 43,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2264,
+                            "startColumn": 29
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 44,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2266,
+                            "startColumn": 39
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 45,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2266,
+                            "startColumn": 48
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 46,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2277,
+                            "startColumn": 52
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 47,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2278,
+                            "startColumn": 55
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 48,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2279,
+                            "startColumn": 53
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 49,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2232,
+                            "startColumn": 63
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 50,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2232,
+                            "startColumn": 36
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 51,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2284,
+                            "startColumn": 17
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 52,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2286,
+                            "startColumn": 45
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 53,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2287,
+                            "startColumn": 20
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 54,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2290,
+                            "startColumn": 17
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 55,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2292,
+                            "startColumn": 27
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 56,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2292,
+                            "startColumn": 36
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 57,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2294,
+                            "startColumn": 63
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 58,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2296,
+                            "startColumn": 33
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 59,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2292,
+                            "startColumn": 63
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 60,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2292,
+                            "startColumn": 36
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 61,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2294,
+                            "startColumn": 63
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "index": 62,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2296,
+                            "startColumn": 33
+                          }
+                        },
+                        "message": {
+                          "text": "'*pParameters_1_0.DescriptorTable.pDescriptorRanges' is not initialized"
+                        }
+                      },
+                      "kind": "declaration",
+                      "importance": "essential"
+                    },
+                    {
+                      "index": 63,
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///E:/DX12/DXE/DXE/Tools/d3dx12.h"
+                          },
+                          "region": {
+                            "startLine": 2296,
+                            "startColumn": 55
+                          }
+                        },
+                        "message": {
+                          "text": "'*pParameters_1_0.DescriptorTable.pDescriptorRanges' is used, but may not have been initialized"
+                        }
+                      },
+                      "kind": "usage",
+                      "importance": "essential"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'DirectX::DDS_LOADER_FLAGS' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/DX12/DXE/DXE/Tools/DirectXTK12/Inc/DDSTextureLoader.h"
+                },
+                "region": {
+                  "startLine": 152,
+                  "startColumn": 5,
+                  "endLine": 152,
+                  "endColumn": 5
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'DirectX::WIC_LOADER_FLAGS' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/DX12/DXE/DXE/Tools/DirectXTK12/Inc/WICTextureLoader.h"
+                },
+                "region": {
+                  "startLine": 136,
+                  "startColumn": 5,
+                  "endLine": 136,
+                  "endColumn": 5
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "PREfast Code Analysis",
+          "version": "14.27.29112.0"
+        }
+      },
+      "invocations": [
+        {
+          "commandLine": "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.27.29110\\bin\\HostX86\\x64\\c1xx.dll\" -ACf{1F7B090C-16DB-4822-966A-A93D26ED4681} -ACpmspft140.dll -Alint -D_PREFAST_ -D_AST_FE_ -Analyze -zm0x00B57180 -il C:\\Users\\ZRoya\\AppData\\Local\\Temp\\_CL_69b76ea3ast -typedil -f Utils.cpp -Ze -D_MSC_EXTENSIONS -Zp16 -pc \\:/ -D_MSC_VER=1927 -D_MSC_FULL_VER=192729112 -D_MSC_BUILD=0 -D_M_AMD64=100 -ZILP448 -D_M_X64=100 -D_WIN64 -D_WIN32 -GR -D_CPPRTTI -nologo -W 3 -diagnostics:column -D_GUARDOVERFLOW_CRT_ALLOCATORS=1 -Ot -DCODE_ANALYSIS -D_DEBUG -D_CONSOLE -D_UNICODE -DUNICODE -EHs -D_CPPUNWIND -EHc -D__MSVC_RUNTIME_CHECKS -RTCs -RTCu -MDd -D_DEBUG -D_MT -D_DLL -GS -D_M_FP_PRECISE -permissive- -Zc:wchar_t -Zc:forScope -Fox64\\Debug\\Utils.obj -Fdx64\\Debug\\vc142.pdb -Gd -analyze:projectdirectory E:\\DX12\\DXE\\DXE\\DXE\\ -analyze:rulesetdirectory ;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Team Tools\\Static Analysis Tools\\\\Rule Sets; -analyze:ruleset C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Team Tools\\Static Analysis Tools\\Rule Sets\\NativeRecommendedRules.ruleset -analyze:quiet -analyze:plugin C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.27.29110\\bin\\HostX86\\x86\\EspXEngine.dll -FC -errorreport:prompt -I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.27.29110\\include -I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.27.29110\\atlmfc\\include -I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\VS\\include -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\ucrt -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\um -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\shared -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\winrt -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\cppwinrt -I C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8\\Include\\um",
+          "executionSuccessful": true,
+          "ruleConfigurationOverrides": [
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6001"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6011"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6029"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6031"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6053"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6054"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6059"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6063"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6064"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6066"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6067"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6101"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6200"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6201"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6214"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6215"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6216"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6217"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6220"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6226"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6230"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6235"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6236"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6237"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6242"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6248"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6250"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6255"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6258"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6259"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6260"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6262"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6263"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6268"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6269"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6270"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6271"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6272"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6273"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6274"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6276"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6277"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6278"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6279"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6280"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6281"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6282"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6283"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6284"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6285"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6286"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6287"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6288"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6289"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6290"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6291"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6292"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6293"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6294"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6295"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6296"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6297"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6299"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6302"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6303"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6305"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6306"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6308"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6310"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6312"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6314"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6317"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6318"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6319"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6324"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6328"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6331"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6332"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6333"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6335"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6381"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6383"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6384"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6385"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6386"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6387"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6388"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6500"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6501"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6503"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6504"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6505"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6506"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6508"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6509"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6510"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6511"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6513"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6514"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6515"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6516"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6517"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6518"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6522"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6525"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6527"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6530"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6540"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6551"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6552"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6701"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6702"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6703"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6704"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6705"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6706"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6993"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6995"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C6997"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26100"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26101"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26110"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26111"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26112"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26115"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26116"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26117"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26140"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26437"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26439"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26441"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26444"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26449"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26450"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26451"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26452"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26453"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26454"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26478"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26495"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26498"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26812"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26815"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26816"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26817"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26819"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C26820"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28020"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28021"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28022"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28023"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28024"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28039"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28112"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28113"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28125"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28137"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28138"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28159"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28160"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28163"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28164"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28182"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28183"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28193"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28196"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28202"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28203"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28205"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28206"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28207"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28209"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28210"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28211"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28212"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28213"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28214"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28215"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28216"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28217"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28218"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28219"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28220"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28221"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28222"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28223"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28224"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28225"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28226"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28227"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28228"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28229"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28230"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28231"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28232"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28233"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28234"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28235"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28236"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28237"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28238"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28239"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28240"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28241"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28243"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28244"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28245"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28246"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28250"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28251"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28252"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28253"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28254"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28262"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28263"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28267"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28272"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28273"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28275"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28279"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28280"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28282"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28285"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28286"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28287"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28288"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28289"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28290"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28291"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28300"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28301"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28302"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28303"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28304"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28305"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28306"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28307"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28308"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28309"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28350"
+              }
+            },
+            {
+              "configuration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "descriptor": {
+                "id": "C28351"
+              }
+            }
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///e:/dx12/dxe/dxe/tools/directxtk12/inc/wictextureloader.h"
+          },
+          "roles": [
+            "resultFile"
+          ]
+        },
+        {
+          "location": {
+            "uri": "file:///e:/dx12/dxe/dxe/dxe/utils.cpp"
+          },
+          "roles": [
+            "analysisTarget",
+            "resultFile"
+          ]
+        },
+        {
+          "location": {
+            "uri": "file:///e:/dx12/dxe/dxe/dxe/mathutils.h"
+          },
+          "roles": [
+            "resultFile"
+          ]
+        },
+        {
+          "location": {
+            "uri": "file:///e:/dx12/dxe/dxe/dxe/utils.h"
+          },
+          "roles": [
+            "resultFile"
+          ]
+        },
+        {
+          "location": {
+            "uri": "file:///e:/dx12/dxe/dxe/tools/directxtk12/inc/ddstextureloader.h"
+          },
+          "roles": [
+            "resultFile"
+          ]
+        },
+        {
+          "location": {
+            "uri": "file:///e:/dx12/dxe/dxe/tools/directxtk12/inc/resourceuploadbatch.h"
+          },
+          "roles": [
+            "resultFile"
+          ]
+        },
+        {
+          "location": {
+            "uri": "file:///e:/dx12/dxe/dxe/tools/d3dx12.h"
+          },
+          "roles": [
+            "resultFile"
+          ]
+        },
+        {
+          "location": {
+            "uri": "file:///e:/dx12/dxe/dxe/tools/directxtk12/inc/graphicsmemory.h"
+          },
+          "roles": [
+            "resultFile"
+          ]
+        }
+      ]
+    }
+  ]
+}
