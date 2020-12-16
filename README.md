@@ -1,7 +1,7 @@
 # DXE
 A voxel GI rendering engine in dx12, in progress
 
-## Gbuffer & deferred shawdow map
+## Gbuffer & deferred shawdow 
 ![](sc/gb.PNG)
 ![](sc/sm.PNG)
 
