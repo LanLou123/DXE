@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -160,6 +160,8 @@
     <ClInclude Include="Utilities\CommandObject.h" />
     <ClInclude Include="Utilities\DescriptorHeap.h" />
     <ClInclude Include="Utilities\MathUtils.h" />
+    <ClInclude Include="Utilities\RootSignature.h" />
+    <ClInclude Include="Utilities\ShaderProgram.h" />
     <ClInclude Include="Utilities\Timer.h" />
     <ClInclude Include="Utilities\Utils.h" />
   </ItemGroup>
@@ -179,6 +181,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Utilities\CommandObject.cpp" />
     <ClCompile Include="Utilities\MathUtils.cpp" />
+    <ClCompile Include="Utilities\RootSignature.cpp" />
+    <ClCompile Include="Utilities\ShaderProgram.cpp" />
     <ClCompile Include="Utilities\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -129,10 +129,13 @@ void DeferredRenderer::initDeferredRenderer() {
 	auto GbufferPosition = std::make_unique<GBuffer>(md3dDevice, mWidth, mHeight, GBUFFER_TYPE::POSITION);
 	auto GbufferAlbedo = std::make_unique<GBuffer>(md3dDevice, mWidth, mHeight, GBUFFER_TYPE::ALBEDO);
 	auto GbufferNormal = std::make_unique<GBuffer>(md3dDevice, mWidth, mHeight, GBUFFER_TYPE::NORMAL);
+	auto GbufferDepth = std::make_unique<GBuffer>(md3dDevice, mWidth, mHeight, GBUFFER_TYPE::DEPTH);
 	//auto GbufferDepth = std::make_unique<GBuffer>(md3dDevice, mWidth, mHeight, GBUFFER_TYPE::DEPTH);
 	mGBuffers[GBUFFER_TYPE::POSITION] = std::move(GbufferPosition);
 	mGBuffers[GBUFFER_TYPE::ALBEDO] = std::move(GbufferAlbedo);
 	mGBuffers[GBUFFER_TYPE::NORMAL] = std::move(GbufferNormal);
+	mGBuffers[GBUFFER_TYPE::DEPTH] = std::move(GbufferDepth);
+
 	//mGBuffers[GBUFFER_TYPE::DEPTH] = std::move(GbufferDepth);
 	for (auto& gbuffer: mGBuffers) {
 		gbuffer.second->initGBuffer();

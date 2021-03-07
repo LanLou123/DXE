@@ -73,6 +73,12 @@
     <ClInclude Include="Features\MeshVoxelizer.h">
       <Filter>Source Files\Features</Filter>
     </ClInclude>
+    <ClInclude Include="Utilities\RootSignature.h">
+      <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\ShaderProgram.h">
+      <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -122,6 +128,12 @@
     </ClCompile>
     <ClCompile Include="Features\MeshVoxelizer.cpp">
       <Filter>Source Files\Features</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\RootSignature.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\ShaderProgram.cpp">
+      <Filter>Source Files\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

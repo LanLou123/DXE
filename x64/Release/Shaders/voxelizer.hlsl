@@ -20,6 +20,32 @@ struct PS_INPUT {
     float2 TexC : TEXCOORD;
 };
 
+//void imageAtomicRGBA8Avg(RWTexture3D<float4> imgUI, uint3 coords, float4 val)
+//{
+//	val.rgb *= 255.0f;
+//	uint newVal = convVec4ToRGBA8(val);
+//	uint prevStoredVal = 0;
+//	uint curStoredVal = 0;
+//
+//
+//	[allow_uav_condition] do 
+//	{
+//		InterlockedCompareExchange(imgUI[coords], prevStoredVal, newVal, curStoredVal);
+//
+//		if (curStoredVal == prevStoredVal)
+//			break;
+//
+//		prevStoredVal = curStoredVal;
+//		float4 rval = convRGBA8ToVec4(curStoredVal);
+//		rval.xyz = (rval.xyz * rval.w); 
+//		float4 curValF = rval + val;
+//		curValF.xyz /= (curValF.w); 
+//		newVal = convVec4ToRGBA8(curValF);
+//
+//
+//	} while (true);
+//}
+
 GS_INPUT VS(VertexIn vin)
 {
     GS_INPUT gin;

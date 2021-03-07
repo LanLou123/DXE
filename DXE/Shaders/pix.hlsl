@@ -47,7 +47,7 @@ float4 PS(VertexOut pin) : SV_Target
     float4 Nor = gNormalMap.Sample(gsamLinearWrap, pin.Texc);
 
 
-    bool visulizevoxel = true;
+    bool visulizevoxel = false;
     float3 voxelPickColor = float3(0.0, 0.0, 0.0);
     // =======================================
     // ray marched for voxel visulization

@@ -4,7 +4,7 @@
 #include "Utilities/Utils.h"
 #include "Utilities/Timer.h"
 
-enum class GBUFFER_TYPE : int { POSITION = 0, ALBEDO, NORMAL, COUNT };
+enum class GBUFFER_TYPE : int { POSITION = 0, ALBEDO, NORMAL, DEPTH, COUNT };
 
 class GBuffer {
 public:

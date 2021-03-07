@@ -11,6 +11,115 @@ App::~App() {
         FlushCommandQueue();
 }
 
+// SRVdescHEAP : tex1, tex2, tex3, tex4 ... ... 
+// CPU handle     ch1   ch2   ch3   ch4  ... ... this goes to creation for srv
+// GPU handle     gh1   gh2   gh3   gh4  ... ... this goes to command list set up for shader inputs (createRootDescriptorTable)
+
+// unorderedmap of mesh textures
+// shadowMap texture
+void App::BuildDescriptorHeaps() {
+
+    auto mMainPassSrvHeap = std::make_unique<mDescriptorHeap>();
+    mMainPassSrvHeap->Create(md3dDevice.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+        (UINT)(mScene->getTexturesMap().size() + 1 + static_cast<UINT>(GBUFFER_TYPE::COUNT) + 2),
+        true); // + 1 for shadow map + gbuffer + 2 for mesh voxelizer
+    mSrvHeaps["MainPass"] = std::move(mMainPassSrvHeap);
+
+    UINT offset = 0;
+    for (auto& tex : mScene->getTexturesMap()) {
+        auto texture = tex.second->textureBuffer;
+        auto textureDesc = tex.second->getSRVDESC();
+        md3dDevice->CreateShaderResourceView(texture.Get(), &textureDesc, mSrvHeaps["MainPass"]->mCPUHandle(tex.second->textureID));
+        mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
+    }
+
+    // ================================================
+    // set descriptor heap addresses for shadowmap
+    // ================================================
+    auto shadowMapCPUSrvHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
+    auto shadowMapGPUSrvHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
+    mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
+    auto dsvCPUstart = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
+    UINT dsvOffset = 1;
+    auto shadowMapCPUDsvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(dsvCPUstart, dsvOffset, mDsvDescriptorSize);
+    mShadowMap->SetupCPUGPUDescOffsets(shadowMapCPUSrvHandle, shadowMapGPUSrvHandle, shadowMapCPUDsvHandle);
+
+    // ================================================
+    // set descriptor heap addresses for deferredrenderer
+    // ================================================
+
+    auto rtvCPUstart = mRtvHeap->GetCPUDescriptorHandleForHeapStart();
+    UINT rtvOffset = SwapChainBufferCount;
+   
+    for (auto& gbuffer : mDeferredRenderer->getGbuffersMap()) {
+        auto deferredRendererCPURtvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvCPUstart, rtvOffset, mRtvDescriptorSize);
+        auto deferredRendererCPUSrvHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
+        auto deferredRendererGPUSrvHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
+        gbuffer.second->SetupCPUGPUDescOffsets(deferredRendererCPUSrvHandle, deferredRendererGPUSrvHandle, deferredRendererCPURtvHandle);
+        mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
+        rtvOffset++;
+    }
+
+    // ================================================
+    // set descriptor heap addresses for deferredrenderer
+    // ================================================
+
+    auto meshVoxelizerCPUSrvHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
+    auto meshVoxelizerGPUSrvHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
+    mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
+    auto meshVoxelizerCPUUavHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
+    auto meshVoxelizerGPUUavHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
+    mMeshVoxelizer->SetupCPUGPUDescOffsets(meshVoxelizerCPUSrvHandle, meshVoxelizerGPUSrvHandle, meshVoxelizerCPUUavHandle, meshVoxelizerGPUUavHandle);
+}
+
+void App::BuildRootSignature()
+{
+
+    // =================================================
+    // main pass root signature 
+    // =================================================
+
+    // range means the location in HLSL shader
+    CD3DX12_DESCRIPTOR_RANGE texTable;
+    texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0
+    CD3DX12_DESCRIPTOR_RANGE texTableShadow;
+    texTableShadow.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); //t1
+    CD3DX12_DESCRIPTOR_RANGE gbufferTable;
+    gbufferTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4
+    CD3DX12_DESCRIPTOR_RANGE voxelTexTable;
+    voxelTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0); // u0
+    // Root parameter can be a table, root descriptor or root constants.
+    CD3DX12_ROOT_PARAMETER slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::COUNT];
+    // Perfomance TIP: Order from most frequent to least frequent.
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::DIFFUSE_TEX_TABLE].InitAsDescriptorTable(1, &texTable, D3D12_SHADER_VISIBILITY_PIXEL); // mesh textures
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE].InitAsDescriptorTable(1, &texTableShadow, D3D12_SHADER_VISIBILITY_PIXEL); // shadow map
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER].InitAsDescriptorTable(1, &gbufferTable, D3D12_SHADER_VISIBILITY_PIXEL);
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::VOXEL].InitAsDescriptorTable(1, &voxelTexTable, D3D12_SHADER_VISIBILITY_ALL);
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::OBJ_CBV].InitAsConstantBufferView(0); // obj const buffer
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV].InitAsConstantBufferView(1); // pass const buffer
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MATERIAL_CBV].InitAsConstantBufferView(2); // material const buffer
+    auto staticSamplers = GetStaticSamplers();
+    // A root signature is an array of root parameters.
+    CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(d3dUtil::MAIN_PASS_UNIFORM::COUNT, slotRootParameter, (UINT)staticSamplers.size(), staticSamplers.data(),
+        D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+    ComPtr<ID3DBlob> serializedRootSig = nullptr;
+    ComPtr<ID3DBlob> errorBlob = nullptr;
+    HRESULT hr = D3D12SerializeRootSignature(&rootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1,
+        serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+    if (errorBlob != nullptr)
+    {
+        ::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+    }
+    ThrowIfFailed(hr);
+
+    ThrowIfFailed(md3dDevice->CreateRootSignature(
+        0,
+        serializedRootSig->GetBufferPointer(),
+        serializedRootSig->GetBufferSize(),
+        IID_PPV_ARGS(mRootSignatures["MainPass"].GetAddressOf())));
+
+
+}
 
 
 
@@ -242,7 +351,7 @@ void App::Draw(const Timer& gt) {
     mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
     mCommandList->SetGraphicsRootSignature(mRootSignatures["MainPass"].Get());
     mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE, mShadowMap->getGPUHandle4SRV());
-    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER, mDeferredRenderer->getGBuffer(GBUFFER_TYPE::POSITION)->getGPUHandle4SRV());
+    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER, mDeferredRenderer->getGBuffer(GBUFFER_TYPE::POSITION)->getGPUHandle4SRV());// starting GPU handle location for all gbuffers
     mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::VOXEL, mMeshVoxelizer->getGPUHandle4UAV());
 
     DrawScene2GBuffers();
@@ -386,114 +495,6 @@ void App::CreateRtvAndDsvDescriptorHeaps()
         &dsvHeapDesc, IID_PPV_ARGS(mDsvHeap.GetAddressOf())));
 }
 
-// SRVdescHEAP : tex1, tex2, tex3, tex4 ... ... 
-// CPU handle     ch1   ch2   ch3   ch4  ... ... this goes to creation for srv
-// GPU handle     gh1   gh2   gh3   gh4  ... ... this goes to command list set up for shader inputs (createRootDescriptorTable)
-
-// unorderedmap of mesh textures
-// shadowMap texture
-void App::BuildDescriptorHeaps() {
-
-    auto mMainPassSrvHeap = std::make_unique<mDescriptorHeap>();
-    mMainPassSrvHeap->Create(md3dDevice.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-        (UINT)(mScene->getTexturesMap().size() + 1 + static_cast<UINT>(GBUFFER_TYPE::COUNT) + 2),
-        true); // + 1 for shadow map + gbuffer + 2 for mesh voxelizer
-    mSrvHeaps["MainPass"] = std::move(mMainPassSrvHeap);
-
-    UINT offset = 0;
-    for (auto& tex : mScene->getTexturesMap()) {
-        auto texture = tex.second->textureBuffer;
-        auto textureDesc = tex.second->getSRVDESC();
-        md3dDevice->CreateShaderResourceView(texture.Get(), &textureDesc, mSrvHeaps["MainPass"]->mCPUHandle(tex.second->textureID));
-        mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
-    }
-
-    // ================================================
-    // set descriptor heap addresses for shadowmap
-    // ================================================
-    auto shadowMapCPUSrvHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-    auto shadowMapGPUSrvHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-    mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
-    auto dsvCPUstart = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
-    UINT dsvOffset = 1;
-    auto shadowMapCPUDsvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(dsvCPUstart, dsvOffset, mDsvDescriptorSize);
-    mShadowMap->SetupCPUGPUDescOffsets(shadowMapCPUSrvHandle, shadowMapGPUSrvHandle, shadowMapCPUDsvHandle);
-
-    // ================================================
-    // set descriptor heap addresses for deferredrenderer
-    // ================================================
-
-    auto rtvCPUstart = mRtvHeap->GetCPUDescriptorHandleForHeapStart();
-    UINT rtvOffset = SwapChainBufferCount;
-   
-    for (auto& gbuffer : mDeferredRenderer->getGbuffersMap()) {
-        auto deferredRendererCPURtvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvCPUstart, rtvOffset, mRtvDescriptorSize);
-        auto deferredRendererCPUSrvHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-        auto deferredRendererGPUSrvHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-        gbuffer.second->SetupCPUGPUDescOffsets(deferredRendererCPUSrvHandle, deferredRendererGPUSrvHandle, deferredRendererCPURtvHandle);
-        mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
-        rtvOffset++;
-    }
-
-    // ================================================
-    // set descriptor heap addresses for deferredrenderer
-    // ================================================
-
-    auto meshVoxelizerCPUSrvHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-    auto meshVoxelizerGPUSrvHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-    mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
-    auto meshVoxelizerCPUUavHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-    auto meshVoxelizerGPUUavHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-    mMeshVoxelizer->SetupCPUGPUDescOffsets(meshVoxelizerCPUSrvHandle, meshVoxelizerGPUSrvHandle, meshVoxelizerCPUUavHandle, meshVoxelizerGPUUavHandle);
-}
-
-void App::BuildRootSignature()
-{
-
-    // =================================================
-    // main pass root signature
-    // =================================================
-
-    CD3DX12_DESCRIPTOR_RANGE texTable;
-    texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
-    CD3DX12_DESCRIPTOR_RANGE texTableShadow;
-    texTableShadow.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
-    CD3DX12_DESCRIPTOR_RANGE gbufferTable;;
-    gbufferTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2);
-    CD3DX12_DESCRIPTOR_RANGE voxelTexTable;
-    voxelTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0);
-    // Root parameter can be a table, root descriptor or root constants.
-    CD3DX12_ROOT_PARAMETER slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::COUNT];
-    // Perfomance TIP: Order from most frequent to least frequent.
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::DIFFUSE_TEX_TABLE].InitAsDescriptorTable(1, &texTable, D3D12_SHADER_VISIBILITY_PIXEL); // mesh textures
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE].InitAsDescriptorTable(1, &texTableShadow, D3D12_SHADER_VISIBILITY_PIXEL); // shadow map
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER].InitAsDescriptorTable(1, &gbufferTable, D3D12_SHADER_VISIBILITY_PIXEL);
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::VOXEL].InitAsDescriptorTable(1, &voxelTexTable, D3D12_SHADER_VISIBILITY_ALL);
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::OBJ_CBV].InitAsConstantBufferView(0); // obj const buffer
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV].InitAsConstantBufferView(1); // pass const buffer
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MATERIAL_CBV].InitAsConstantBufferView(2); // material const buffer
-    auto staticSamplers = GetStaticSamplers();
-    // A root signature is an array of root parameters.
-    CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(d3dUtil::MAIN_PASS_UNIFORM::COUNT, slotRootParameter, (UINT)staticSamplers.size(), staticSamplers.data(),
-        D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-    ComPtr<ID3DBlob> serializedRootSig = nullptr;
-    ComPtr<ID3DBlob> errorBlob = nullptr;
-    HRESULT hr = D3D12SerializeRootSignature(&rootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1,
-        serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
-    if (errorBlob != nullptr)
-    {
-        ::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
-    }
-    ThrowIfFailed(hr);
-
-    ThrowIfFailed(md3dDevice->CreateRootSignature(
-        0,
-        serializedRootSig->GetBufferPointer(),
-        serializedRootSig->GetBufferSize(),
-        IID_PPV_ARGS(mRootSignatures["MainPass"].GetAddressOf())));
-
-
-}
 
 void App::BuildShadersAndInputLayout()
 {
