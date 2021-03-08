@@ -29,6 +29,10 @@ public:
 		return mCurrentOffset;
 	}
 
+	void incrementCurrentOffset() {
+		mCurrentOffset++;
+	}
+
 	ID3D12DescriptorHeap* mPtr() const{
 		return mDH.Get();
 	}

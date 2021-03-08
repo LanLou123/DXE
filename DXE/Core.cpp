@@ -136,6 +136,7 @@ void Core::CreateRtvAndDsvDescriptorHeaps()
 
 void Core::OnResize()
 {
+
 	assert(md3dDevice);
 	assert(mSwapChain);
 	assert(mDirectCmdListAlloc);
@@ -165,7 +166,9 @@ void Core::OnResize()
 	{
 		ThrowIfFailed(mSwapChain->GetBuffer(i, IID_PPV_ARGS(&mSwapChainBuffer[i])));
 		md3dDevice->CreateRenderTargetView(mSwapChainBuffer[i].Get(), nullptr, mRtvHeap->mCPUHandle(i));
-
+		if (!mInitialized) {
+			mRtvHeap->incrementCurrentOffset();
+		}
 	}
 
 	// Create the depth/stencil buffer and view.
@@ -208,6 +211,9 @@ void Core::OnResize()
 	dsvDesc.Format = mDepthStencilFormat;
 	dsvDesc.Texture2D.MipSlice = 0;
 	md3dDevice->CreateDepthStencilView(mDepthStencilBuffer.Get(), &dsvDesc, DepthStencilView());
+	if (!mInitialized) {
+		mDsvHeap->incrementCurrentOffset();
+	}
 
 	// Transition the resource from its initial state to be used as a depth buffer.
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mDepthStencilBuffer.Get(),
@@ -230,6 +236,8 @@ void Core::OnResize()
 	mScreenViewport.MaxDepth = 1.0f;
 
 	mScissorRect = { 0, 0, mClientWidth, mClientHeight };
+
+	mInitialized = true;
 }
 
 LRESULT Core::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -566,7 +574,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE Core::CurrentBackBufferView()const
 		mRtvDescriptorSize);
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE Core::DepthStencilView()const
+D3D12_CPU_DESCRIPTOR_HANDLE Core::DepthStencilView()const 
 {
 	return mDsvHeap->mCPUHandle(0);
 }

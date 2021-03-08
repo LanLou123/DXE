@@ -4,6 +4,7 @@ App::App(HINSTANCE hInstance) : Core(hInstance) {
 
     NumRTVs = SwapChainBufferCount + static_cast<UINT>(GBUFFER_TYPE::COUNT); // back buffer + gbuffers
     NumDSVs = 2;                    // dsv for swapchain & shadowmap
+
 }
 
 App::~App() {
@@ -19,10 +20,13 @@ App::~App() {
 // shadowMap texture
 void App::BuildDescriptorHeaps() {
 
+
+    NumSRVs = mScene->getTexturesMap().size() + 1 + static_cast<UINT>(GBUFFER_TYPE::COUNT) + 2; // + 1 for shadow map + gbuffer + 2 for mesh voxelizer
+
     auto mMainPassSrvHeap = std::make_unique<mDescriptorHeap>();
     mMainPassSrvHeap->Create(md3dDevice.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-        (UINT)(mScene->getTexturesMap().size() + 1 + static_cast<UINT>(GBUFFER_TYPE::COUNT) + 2),
-        true); // + 1 for shadow map + gbuffer + 2 for mesh voxelizer
+        (UINT)(NumSRVs),
+        true);
     mSrvHeaps["MainPass"] = std::move(mMainPassSrvHeap);
 
     UINT offset = 0;
@@ -30,7 +34,7 @@ void App::BuildDescriptorHeaps() {
         auto texture = tex.second->textureBuffer;
         auto textureDesc = tex.second->getSRVDESC();
         md3dDevice->CreateShaderResourceView(texture.Get(), &textureDesc, mSrvHeaps["MainPass"]->mCPUHandle(tex.second->textureID));
-        mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
+        mSrvHeaps["MainPass"]->incrementCurrentOffset();
     }
 
     // ================================================
@@ -38,26 +42,28 @@ void App::BuildDescriptorHeaps() {
     // ================================================
     auto shadowMapCPUSrvHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
     auto shadowMapGPUSrvHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-    mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
-    auto dsvCPUstart = mDsvHeap->mCPUHandle(0);
-    UINT dsvOffset = 1;
-    auto shadowMapCPUDsvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(dsvCPUstart, dsvOffset, mDsvDescriptorSize);
+    mSrvHeaps["MainPass"]->incrementCurrentOffset();
+
+    auto shadowMapCPUDsvHandle = mDsvHeap->mCPUHandle(mDsvHeap->getCurrentOffsetRef());
+    mDsvHeap->incrementCurrentOffset();
     mShadowMap->SetupCPUGPUDescOffsets(shadowMapCPUSrvHandle, shadowMapGPUSrvHandle, shadowMapCPUDsvHandle);
 
     // ================================================
     // set descriptor heap addresses for deferredrenderer
     // ================================================
 
-    auto rtvCPUstart = mRtvHeap->mCPUHandle(0);
-    UINT rtvOffset = SwapChainBufferCount;
+
    
     for (auto& gbuffer : mDeferredRenderer->getGbuffersMap()) {
-        auto deferredRendererCPURtvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvCPUstart, rtvOffset, mRtvDescriptorSize);
+
+        auto deferredRendererCPURtvHandle = mRtvHeap->mCPUHandle(mRtvHeap->getCurrentOffsetRef());
+        mRtvHeap->incrementCurrentOffset();
+
         auto deferredRendererCPUSrvHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
         auto deferredRendererGPUSrvHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
         gbuffer.second->SetupCPUGPUDescOffsets(deferredRendererCPUSrvHandle, deferredRendererGPUSrvHandle, deferredRendererCPURtvHandle);
-        mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
-        rtvOffset++;
+        mSrvHeaps["MainPass"]->incrementCurrentOffset();
+
     }
 
     // ================================================
@@ -66,7 +72,7 @@ void App::BuildDescriptorHeaps() {
 
     auto meshVoxelizerCPUSrvHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
     auto meshVoxelizerGPUSrvHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-    mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
+    mSrvHeaps["MainPass"]->incrementCurrentOffset();
     auto meshVoxelizerCPUUavHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
     auto meshVoxelizerGPUUavHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
     mMeshVoxelizer->SetupCPUGPUDescOffsets(meshVoxelizerCPUSrvHandle, meshVoxelizerGPUSrvHandle, meshVoxelizerCPUUavHandle, meshVoxelizerGPUUavHandle);

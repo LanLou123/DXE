@@ -99,6 +99,7 @@ private:
 
     UINT NumRTVs;
     UINT NumDSVs;
+    UINT NumSRVs;
 
 
     //common camera

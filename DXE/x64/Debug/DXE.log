@@ -1,9 +1,13 @@
 ﻿  App.cpp
-E:\DX12\DXE\DXE\DXE\App.cpp(32,119): warning C4244: 'argument': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(24,95): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(36,119): warning C4244: 'argument': conversion from 'INT64' to 'UINT', possible loss of data
+  Scene.cpp
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(192,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(199,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(213,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(220,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+  Core.cpp
   DeferredRenderer.cpp
-  MeshVoxelizer.cpp
   main.cpp
-  RootSignature.cpp
-  ShaderProgram.cpp
   Generating Code...
   DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Debug\DXE.exe

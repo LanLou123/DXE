@@ -65,7 +65,8 @@ protected:
 
 	ID3D12Resource* CurrentBackBuffer()const;
 	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView()const;
-	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView()const;
+	// gives reference to first dsv in dsvHeap, which is the dsv for swapchain
+	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView()const; 
 
 	void CalculateFrameStats();
 
@@ -126,4 +127,5 @@ protected:
 	DXGI_FORMAT mDepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	int mClientWidth = 1920;
 	int mClientHeight = 1080;
+	bool mInitialized = false; // track if we have initialize and is resizing
 };
