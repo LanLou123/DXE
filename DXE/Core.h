@@ -8,6 +8,7 @@
 
 #include "Utilities/Utils.h"
 #include "Utilities/Timer.h"
+#include "Utilities/DescriptorHeap.h"
 
 #pragma comment(lib,"d3dcompiler.lib")
 #pragma comment(lib, "D3D12.lib")
@@ -107,8 +108,9 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> mSwapChainBuffer[SwapChainBufferCount];
 	Microsoft::WRL::ComPtr<ID3D12Resource> mDepthStencilBuffer;
 
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mRtvHeap;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mDsvHeap;
+
+	std::unique_ptr<mDescriptorHeap> mRtvHeap;
+	std::unique_ptr<mDescriptorHeap> mDsvHeap;
 
 	D3D12_VIEWPORT mScreenViewport;
 	D3D12_RECT mScissorRect;

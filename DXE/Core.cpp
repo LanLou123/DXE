@@ -121,22 +121,17 @@ bool Core::Initialize()
 
 void Core::CreateRtvAndDsvDescriptorHeaps()
 {
-	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc;
-	rtvHeapDesc.NumDescriptors = SwapChainBufferCount;
-	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	rtvHeapDesc.NodeMask = 0;
-	ThrowIfFailed(md3dDevice->CreateDescriptorHeap(
-		&rtvHeapDesc, IID_PPV_ARGS(mRtvHeap.GetAddressOf())));
 
+	mRtvHeap = std::make_unique<mDescriptorHeap>();
+	mRtvHeap->Create(md3dDevice.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
+		(UINT)(SwapChainBufferCount),
+		false); 
 
-	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc;
-	dsvHeapDesc.NumDescriptors = 1;
-	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-	dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	dsvHeapDesc.NodeMask = 0;
-	ThrowIfFailed(md3dDevice->CreateDescriptorHeap(
-		&dsvHeapDesc, IID_PPV_ARGS(mDsvHeap.GetAddressOf())));
+	mDsvHeap = std::make_unique<mDescriptorHeap>();
+	mDsvHeap->Create(md3dDevice.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV,
+		(UINT)(1),
+		false);
+
 }
 
 void Core::OnResize()
@@ -165,12 +160,12 @@ void Core::OnResize()
 	mCurrBackBuffer = 0;
 
 	// re/create RTV views
-	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle(mRtvHeap->GetCPUDescriptorHandleForHeapStart());
+
 	for (UINT i = 0; i < SwapChainBufferCount; i++)
 	{
 		ThrowIfFailed(mSwapChain->GetBuffer(i, IID_PPV_ARGS(&mSwapChainBuffer[i])));
-		md3dDevice->CreateRenderTargetView(mSwapChainBuffer[i].Get(), nullptr, rtvHeapHandle);
-		rtvHeapHandle.Offset(1, mRtvDescriptorSize);
+		md3dDevice->CreateRenderTargetView(mSwapChainBuffer[i].Get(), nullptr, mRtvHeap->mCPUHandle(i));
+
 	}
 
 	// Create the depth/stencil buffer and view.
@@ -566,14 +561,14 @@ ID3D12Resource* Core::CurrentBackBuffer()const
 D3D12_CPU_DESCRIPTOR_HANDLE Core::CurrentBackBufferView()const
 {
 	return CD3DX12_CPU_DESCRIPTOR_HANDLE(
-		mRtvHeap->GetCPUDescriptorHandleForHeapStart(),
+		mRtvHeap->mCPUHandle(0),
 		mCurrBackBuffer,
 		mRtvDescriptorSize);
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE Core::DepthStencilView()const
 {
-	return mDsvHeap->GetCPUDescriptorHandleForHeapStart();
+	return mDsvHeap->mCPUHandle(0);
 }
 
 void Core::CalculateFrameStats()

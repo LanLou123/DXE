@@ -39,7 +39,7 @@ void App::BuildDescriptorHeaps() {
     auto shadowMapCPUSrvHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
     auto shadowMapGPUSrvHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
     mSrvHeaps["MainPass"]->getCurrentOffsetRef()++;
-    auto dsvCPUstart = mDsvHeap->GetCPUDescriptorHandleForHeapStart();
+    auto dsvCPUstart = mDsvHeap->mCPUHandle(0);
     UINT dsvOffset = 1;
     auto shadowMapCPUDsvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(dsvCPUstart, dsvOffset, mDsvDescriptorSize);
     mShadowMap->SetupCPUGPUDescOffsets(shadowMapCPUSrvHandle, shadowMapGPUSrvHandle, shadowMapCPUDsvHandle);
@@ -48,7 +48,7 @@ void App::BuildDescriptorHeaps() {
     // set descriptor heap addresses for deferredrenderer
     // ================================================
 
-    auto rtvCPUstart = mRtvHeap->GetCPUDescriptorHandleForHeapStart();
+    auto rtvCPUstart = mRtvHeap->mCPUHandle(0);
     UINT rtvOffset = SwapChainBufferCount;
    
     for (auto& gbuffer : mDeferredRenderer->getGbuffersMap()) {
@@ -475,24 +475,35 @@ void App::OnKeyboardInput(const Timer& gt)
 // overriding function in core
 void App::CreateRtvAndDsvDescriptorHeaps()
 {
-    D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc;
-    rtvHeapDesc.NumDescriptors = NumRTVs;
-    rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-    rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-    rtvHeapDesc.NodeMask = 0;
-    ThrowIfFailed(md3dDevice->CreateDescriptorHeap(
-        &rtvHeapDesc, IID_PPV_ARGS(mRtvHeap.GetAddressOf())));
+    //D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc;
+    //rtvHeapDesc.NumDescriptors = NumRTVs;
+    //rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+    //rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+    //rtvHeapDesc.NodeMask = 0;
+    //ThrowIfFailed(md3dDevice->CreateDescriptorHeap(
+    //    &rtvHeapDesc, IID_PPV_ARGS(mRtvHeap.GetAddressOf())));
 
-    // 0 ==== dsv for default swapchain
-    // 1 ==== dsv for shadow map
+    //// 0 ==== dsv for default swapchain
+    //// 1 ==== dsv for shadow map
 
-    D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc;
-    dsvHeapDesc.NumDescriptors = NumDSVs;
-    dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-    dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-    dsvHeapDesc.NodeMask = 0;
-    ThrowIfFailed(md3dDevice->CreateDescriptorHeap(
-        &dsvHeapDesc, IID_PPV_ARGS(mDsvHeap.GetAddressOf())));
+    //D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc;
+    //dsvHeapDesc.NumDescriptors = NumDSVs;
+    //dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+    //dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+    //dsvHeapDesc.NodeMask = 0;
+    //ThrowIfFailed(md3dDevice->CreateDescriptorHeap(
+    //    &dsvHeapDesc, IID_PPV_ARGS(mDsvHeap.GetAddressOf())));
+
+    mRtvHeap = std::make_unique<mDescriptorHeap>();
+    mRtvHeap->Create(md3dDevice.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
+        (UINT)(NumRTVs),
+        false);
+
+    mDsvHeap = std::make_unique<mDescriptorHeap>();
+    mDsvHeap->Create(md3dDevice.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV,
+        (UINT)(NumDSVs),
+        false);
+
 }
 
 
