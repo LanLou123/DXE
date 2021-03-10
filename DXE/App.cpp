@@ -21,7 +21,7 @@ App::~App() {
 void App::BuildDescriptorHeaps() {
 
 
-    NumSRVs = mScene->getTexturesMap().size() + 1 + static_cast<UINT>(GBUFFER_TYPE::COUNT) + 1; // + 1 for shadow map + gbuffer + 2 for mesh voxelizer
+    NumSRVs = mScene->getTexturesMap().size() + 1 + static_cast<UINT>(GBUFFER_TYPE::COUNT) + 2; // + 1 for shadow map + gbuffer + 2 for mesh voxelizer (SRV & UAV)
 
     auto mMainPassSrvHeap = std::make_unique<mDescriptorHeap>();
     mMainPassSrvHeap->Create(md3dDevice.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
@@ -91,7 +91,7 @@ void App::BuildRootSignature()
     CD3DX12_DESCRIPTOR_RANGE texTableShadow;
     texTableShadow.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); //t1
     CD3DX12_DESCRIPTOR_RANGE gbufferTable;
-    gbufferTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4
+    gbufferTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4, t5
     CD3DX12_DESCRIPTOR_RANGE voxelTexTable;
     voxelTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0); // u0
     // Root parameter can be a table, root descriptor or root constants.
