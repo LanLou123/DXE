@@ -26,7 +26,7 @@ bool d3dUtil::IsKeyDown(int vkeyCode)
     return (GetAsyncKeyState(vkeyCode) & 0x8000) != 0;
 }
 
-int d3dUtil::gNumFrameResources = 3;
+int d3dUtil::gNumFrameResources = 1;
 
 ComPtr<ID3DBlob> d3dUtil::CompileShader(
 	const std::wstring& filename,

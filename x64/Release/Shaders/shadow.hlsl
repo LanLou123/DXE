@@ -19,10 +19,10 @@ struct VertexOut
 void PS(VertexOut pin)
 {
 
-    float4 diffuseAlbedo = 1.0f;
+    //float4 diffuseAlbedo = 1.0f;
 
-    // Dynamically look up the texture in the array.
-    diffuseAlbedo *= gDiffuseMap.Sample(gsamAnisotropicWrap, pin.TexC);
+    //// Dynamically look up the texture in the array.
+    //diffuseAlbedo *= gDiffuseMap.Sample(gsamAnisotropicWrap, pin.TexC);
 
 
 }

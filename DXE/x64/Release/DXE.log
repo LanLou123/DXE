@@ -1,9 +1,6 @@
-﻿  App.cpp
-E:\DX12\DXE\DXE\DXE\App.cpp(24,95): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(36,119): warning C4244: 'argument': conversion from 'INT64' to 'UINT', possible loss of data
-  Generating code
-  9 of 2987 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+﻿  Generating code
+  9 of 2988 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    9 functions had inline decision re-evaluated but remain unchanged
+    6 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Release\DXE.exe

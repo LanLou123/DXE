@@ -73,6 +73,7 @@ private:
     void DrawScene2ShadowMap();
     void DrawScene2GBuffers();
     void VoxelizeMesh();
+    void DrawScene();
 
     std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
 
