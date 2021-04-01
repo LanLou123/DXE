@@ -50,7 +50,7 @@ GS_INPUT VS(VertexIn vin)
 {
     GS_INPUT gin;
 
-    gin.PosL = mul(vin.PosL.xyz, gWorld);
+    gin.PosL = mul(float4(vin.PosL.xyz,1.0), gWorld).xyz;
 
     // Just pass vertex color into the pixel shader.
     gin.TexC = vin.TexC;
@@ -69,9 +69,9 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 
 	const float2 halfPixel = float2(1.0f, 1.0f) / 512.0f;
 
-	float3 posW0 = mul(float4(input[0].PosL, 1.0f), gWorld).xyz;
-	float3 posW1 = mul(float4(input[1].PosL, 1.0f), gWorld).xyz;
-	float3 posW2 = mul(float4(input[2].PosL, 1.0f), gWorld).xyz;
+	float3 posW0 = input[0].PosL.xyz;
+	float3 posW1 = input[1].PosL.xyz;
+	float3 posW2 = input[2].PosL.xyz;
 	float3 normal = cross(normalize(posW1 - posW0), normalize(posW2 - posW0)); //Get face normal
 
 	float axis[] = {
@@ -105,7 +105,7 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 			inputPosL = float4(input[i].PosL.yzx, 1.0f);
 			break;
 		case 1:
-			inputPosL = float4(input[i].PosL.zxy, 1.0f);
+			inputPosL = float4(input[i].PosL.xzy, 1.0f);
 			break;
 		case 2:
 			inputPosL = float4(input[i].PosL.xyz, 1.0f);
@@ -137,6 +137,9 @@ void PS(PS_INPUT pin)
 	uint3 texIndex = uint3(((pin.PosW.x * 0.5) + 0.5f) * texDimensions.x,
 		((pin.PosW.y * 0.5) + 0.5f) * texDimensions.y,
 		((pin.PosW.z * 0.5) + 0.5f) * texDimensions.z);
+
+
+	diffuseAlbedo.xyz += float3(0.1,0.1,0.1);
 
 	if (all(texIndex < texDimensions.xyz) && all(texIndex >= 0))
 	{

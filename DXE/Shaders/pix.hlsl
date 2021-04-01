@@ -47,13 +47,26 @@ float4 PS(VertexOut pin) : SV_Target
     float4 Nor = gNormalMap.Sample(gsamLinearWrap, pin.Texc);
 
 
-    bool visulizevoxel = false;
+    bool visulizevoxel = true;
     float3 voxelPickColor = float3(0.0, 0.0, 0.0);
     // =======================================
     // ray marched for voxel visulization
     // =======================================
+
+    float4 screen_space_pos = pin.PosH;
+    float sx = -(2.0 * screen_space_pos.x / gRenderTargetSize.x) + 1.0;
+    float sy =  - 1.0 + (2.0 * screen_space_pos.y / gRenderTargetSize.y);
+    float3 forward = normalize(camLookDir);
+    float3 ref = 2.0 * forward + gEyePosW;
+    float len = length(ref - gEyePosW);
+    float3 right = cross(forward, camUpDir);
+    float3 V = camUpDir * len * tan(45.0 / 2.0);
+    float3 H = right * len * (gRenderTargetSize.x / gRenderTargetSize.y) * tan(45.0 / 2.0);
+    float3 pp = ref + sx * H - sy * V;
+
+
     if (visulizevoxel) {
-        float3 raydr = normalize(PosW.xyz - gEyePosW);
+        float3 raydr = normalize(pp - gEyePosW);
         float3 rayori = gEyePosW;
         float step = 0.13f;
         float3 curloc = rayori;
@@ -70,7 +83,7 @@ float4 PS(VertexOut pin) : SV_Target
             }
             else {
                 voxelPickColor = gVoxelizer[texIndex];
-                step = -0.6 * step;
+                step = -0.1 * step;
                 curloc = curloc + raydr * step;
 
             }

@@ -47,6 +47,7 @@ private:
     void UpdateMaterialCBs(const Timer& gt);
     void UpdateShadowPassCB(const Timer& gt);
     void UpdateCBs(const Timer& gt);
+    void UpdateScenePhysics(const Timer& gt);
 
     void BuildDescriptorHeaps();
     void BuildRootSignature();

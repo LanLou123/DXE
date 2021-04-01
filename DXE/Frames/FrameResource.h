@@ -36,6 +36,10 @@ struct PassConstants
     DirectX::XMFLOAT4X4 VoxelView = MathUtils::Identity4x4();
     DirectX::XMFLOAT4X4 VoxelProj = MathUtils::Identity4x4();
     DirectX::XMFLOAT4X4 VoxelViewProj = MathUtils::Identity4x4();
+    DirectX::XMFLOAT3 camLookDir = { 0.f,0.f,0.f };
+    float cbPerObjectPad3 = 0.0f;
+    DirectX::XMFLOAT3 camUpDir = { 0.f,0.f,0.f };
+    float cbPerObjectPad4 = 0.0f;
 };
 
 // GPU material mapper

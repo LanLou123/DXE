@@ -76,7 +76,7 @@ public:
 	std::unordered_map<std::string, std::unique_ptr<Texture>>& getTexturesMap();
 	std::unordered_map<std::string, std::unique_ptr<Model>>& getModelsMap();
 	std::unordered_map<std::string, std::unique_ptr<Camera>>& getCamerasMap();
-	std::vector<std::unique_ptr<ObjectInfo>>& getObjectInfos();
+	std::unordered_map<std::string, std::unique_ptr<ObjectInfo>>& getObjectInfos();
 	const std::vector<std::vector<ObjectInfo*>>& getObjectInfoLayer();
 
 private:
@@ -102,7 +102,7 @@ private:
 	std::unordered_map<std::string, std::unique_ptr<Model>>																		mModels;
 	std::unordered_map<std::string, std::unique_ptr<Camera>>																	mCameras;
 
-	std::vector<std::unique_ptr<ObjectInfo>>																					mObjectInfos;
+	std::unordered_map<std::string, std::unique_ptr<ObjectInfo>>																mObjectInfos;
 	std::vector<std::vector<ObjectInfo*>>																						mObjectInfoLayer; // a vector of objinfo ptr vectors
 
 	UINT																														globalTextureSRVDescriptorHeapIndex = 0;

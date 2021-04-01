@@ -36,6 +36,9 @@ public:
 	D3D12_RECT ScissorRect()const;
 	MeshVoxelizerData& getUniformData();
 
+	void Clear3DTexture(ID3D12GraphicsCommandList* cmdList,
+		ID3D12PipelineState* pso);
+
 private:
 
 	void BuildDescriptors();

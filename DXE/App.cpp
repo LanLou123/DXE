@@ -188,6 +188,7 @@ void App::Update(const Timer& gt) {
     }
 
     UpdateCBs(gt);
+    //UpdateScenePhysics(gt);
 
 }
 
@@ -213,21 +214,27 @@ void App::UpdateObjectCBs(const Timer& gt) {
     {
         // Only update the cbuffer data if the constants have changed.  
         // This needs to be tracked per frame resource.
-        if (e->NumFramesDirty > 0)
+        if (e.second->NumFramesDirty > 0)
         {
-            XMMATRIX world = DirectX::XMLoadFloat4x4(&e->World);
-            XMMATRIX texTransform = DirectX::XMLoadFloat4x4(&e->texTransform);
+            XMMATRIX world = DirectX::XMLoadFloat4x4(&e.second->World);
+            XMMATRIX texTransform = DirectX::XMLoadFloat4x4(&e.second->texTransform);
 
             ObjectConstants objConstants;
             DirectX::XMStoreFloat4x4(&objConstants.World, DirectX::XMMatrixTranspose(world));
             DirectX::XMStoreFloat4x4(&objConstants.TexTransform, DirectX::XMMatrixTranspose(texTransform));
-            objConstants.Obj2VoxelScale = e->Obj2VoxelScale;
-            currObjectCB->CopyData(e->ObjCBIndex, objConstants);
+            objConstants.Obj2VoxelScale = e.second->Obj2VoxelScale;
+            currObjectCB->CopyData(e.second->ObjCBIndex, objConstants);
 
             // Next FrameResource need to be updated too.
-            e->NumFramesDirty--;
+            e.second->NumFramesDirty--;
         }
     }
+}
+
+void App::UpdateScenePhysics(const Timer& gt) {
+   
+    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["model1"]->World, DirectX::XMMatrixScaling(5.0f, 5.0f, 5.0f) * DirectX::XMMatrixTranslation(0.0f, 15.0f, 5.0 * std::sin(float(gt.TotalTime()))));
+    mScene->getObjectInfos()["model1"]->NumFramesDirty = d3dUtil::gNumFrameResources;
 }
 
 void App::UpdateMaterialCBs(const Timer& gt) {
@@ -267,7 +274,7 @@ void App::UpdateMainPassCB(const Timer& gt)
     XMMATRIX shadowTransform = XMLoadFloat4x4(&mShadowMap->mShadowMapData.mShadowTransform);
     XMMATRIX voxelView = XMLoadFloat4x4(&mMeshVoxelizer->getUniformData().mVoxelView); 
     XMMATRIX voxelProj = XMLoadFloat4x4(&mMeshVoxelizer->getUniformData().mVoxelProj);
-    XMMATRIX voxelViewProj = XMMatrixMultiply(voxelView, voxelProj);
+    XMMATRIX voxelViewProj = DirectX::XMMatrixMultiply(voxelView, voxelProj);
 
     // use transpose to make sure we go from row - major on cpu to colume major on gpu
     DirectX::XMStoreFloat4x4(&mMainPassCB.View, DirectX::XMMatrixTranspose(view));
@@ -288,6 +295,8 @@ void App::UpdateMainPassCB(const Timer& gt)
     mMainPassCB.FarZ = 1000.0f;
     mMainPassCB.TotalTime = gt.TotalTime();
     mMainPassCB.DeltaTime = gt.DeltaTime();
+    mMainPassCB.camLookDir = mScene->getCamerasMap()["MainCam"]->GetLook3f();
+    mMainPassCB.camUpDir = mScene->getCamerasMap()["MainCam"]->GetUp3f();
 
     auto currPassCB = mCurrFrameResource->PassCB.get();
     currPassCB->CopyData(0, mMainPassCB);
@@ -678,13 +687,14 @@ void App::BuildPSOs() {
     // =====================================
     // PSO for voxelizer renderer pass
     // =====================================
-
+    auto voxelRasterDesc = rasterDesc;
+    voxelRasterDesc.CullMode = D3D12_CULL_MODE_NONE;
     CreatePSO(
         mPSOs["voxelizer"].GetAddressOf(),
         mRootSignatures["MainPass"].Get(),
         D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
         CD3DX12_BLEND_DESC(D3D12_DEFAULT),
-        rasterDesc,
+        voxelRasterDesc,
         dsvDesc,
         0,
         DXGI_FORMAT_UNKNOWN,

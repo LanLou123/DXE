@@ -118,6 +118,12 @@ void MeshVoxelizer::PopulateUniformData() {
 	DirectX::XMStoreFloat4x4(&mData.mVoxelProj, VoxelProj);
 }
 
+
+void MeshVoxelizer::Clear3DTexture(ID3D12GraphicsCommandList* cmdList,
+	ID3D12PipelineState* pso) {
+
+}
+
 MeshVoxelizerData& MeshVoxelizer::getUniformData() {
 	return mData;
 }

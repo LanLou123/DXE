@@ -32,6 +32,7 @@ cbuffer cbPass : register(b1)
     float4x4 gInvViewProj;
     float4x4 gShadowTransform;
     float3 gEyePosW;
+    float cbPerObjectPad0;
     float3 gLightPosW;
     float cbPerObjectPad1;
     float2 gRenderTargetSize;
@@ -43,6 +44,10 @@ cbuffer cbPass : register(b1)
     float4x4 gVoxelView;
     float4x4 gVoxelProj;
     float4x4 gVoxelViewProj;
+    float3 camLookDir;
+    float cbPerObjectPad2;
+    float3 camUpDir;
+    float cbPerObjectPad3;
 };
 
 float4 convRGBA8ToVec4(uint val)

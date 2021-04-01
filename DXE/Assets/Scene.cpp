@@ -27,7 +27,7 @@ std::unordered_map<std::string, std::unique_ptr<Camera>>& Scene::getCamerasMap()
 }
 
 
-std::vector<std::unique_ptr<ObjectInfo>>& Scene::getObjectInfos() {
+std::unordered_map<std::string, std::unique_ptr<ObjectInfo>>& Scene::getObjectInfos() {
     return mObjectInfos;
 }
 
@@ -67,7 +67,7 @@ void Scene::populateMeshInfos() {
         else {
             mObjectInfoLayer[(int)RenderLayer::Default].push_back(curObjectInfo.get());
         }
-        mObjectInfos.push_back(std::move(curObjectInfo));
+        mObjectInfos[curModel.first] = (std::move(curObjectInfo));
         
         curObjectIndex++;
     }
@@ -129,6 +129,7 @@ void Scene::loadModels() {
     mymodel1->InitModel(md3dDevice, cpyCommandObject.get());
     mymodel1->setObj2VoxelScale(200.0f);
     mModels["model1"] = std::move(mymodel1);
+
 
     auto myquad = std::make_unique<Model>(ModelType::QUAD_MODEL);
     myquad->Name = "quad";
