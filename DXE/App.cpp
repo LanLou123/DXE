@@ -144,7 +144,7 @@ bool App::Initialize() {
     mDeferredRenderer = std::make_unique<DeferredRenderer>(md3dDevice.Get(), mClientWidth, mClientHeight);
     mDeferredRenderer->initDeferredRenderer();
 
-    mMeshVoxelizer = std::make_unique<MeshVoxelizer>(md3dDevice.Get(), 256, 256, 256);
+    mMeshVoxelizer = std::make_unique<MeshVoxelizer>(md3dDevice.Get(), 512, 512, 512);
     mMeshVoxelizer->init3DVoxelTexture();
 
     BuildDescriptorHeaps();

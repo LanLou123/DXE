@@ -9,4 +9,4 @@ A voxel GI rendering engine in dx12, in progress
 ![](sc/voxeltex.PNG)
 
 ## Voxels visulized in screen space with ray marching
-![](sc/ssvoxel.PNG)
+![](sc/svoxel.PNG)
