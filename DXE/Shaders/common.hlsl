@@ -47,7 +47,7 @@ cbuffer cbPass : register(b1)
     float3 camLookDir;
     float cbPerObjectPad2;
     float3 camUpDir;
-    float cbPerObjectPad3;
+    int showVoxel;
 };
 
 float4 convRGBA8ToVec4(uint val)

@@ -37,6 +37,7 @@ public:
 	MeshVoxelizerData& getUniformData();
 
 	void Clear3DTexture(ID3D12GraphicsCommandList* cmdList,
+		ID3D12RootSignature* rootSig,
 		ID3D12PipelineState* pso);
 
 private:

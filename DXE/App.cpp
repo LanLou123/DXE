@@ -125,6 +125,34 @@ void App::BuildRootSignature()
         IID_PPV_ARGS(mRootSignatures["MainPass"].GetAddressOf())));
 
 
+    // =================================================
+    // compute reset pass root signature 
+    // =================================================
+
+    CD3DX12_DESCRIPTOR_RANGE voxelTexTableComp;
+    voxelTexTableComp.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0); // u0
+
+    CD3DX12_ROOT_PARAMETER slotRootParameterComp[1];
+    slotRootParameterComp[0].InitAsDescriptorTable(1, &voxelTexTableComp, D3D12_SHADER_VISIBILITY_ALL);
+
+    CD3DX12_ROOT_SIGNATURE_DESC rootSigDescComp(1, slotRootParameterComp, 0, nullptr,
+        D3D12_ROOT_SIGNATURE_FLAG_NONE);
+    ComPtr<ID3DBlob> serializedRootSigComp = nullptr;
+    ComPtr<ID3DBlob> errorBlobComp = nullptr;
+    hr = D3D12SerializeRootSignature(&rootSigDescComp, D3D_ROOT_SIGNATURE_VERSION_1,
+        serializedRootSigComp.GetAddressOf(), errorBlobComp.GetAddressOf());
+    if (errorBlobComp != nullptr)
+    {
+        ::OutputDebugStringA((char*)errorBlobComp->GetBufferPointer());
+    }
+    ThrowIfFailed(hr);
+
+    ThrowIfFailed(md3dDevice->CreateRootSignature(
+        0,
+        serializedRootSigComp->GetBufferPointer(),
+        serializedRootSigComp->GetBufferSize(),
+        IID_PPV_ARGS(mRootSignatures["CompResetPass"].GetAddressOf())));
+
 }
 
 
@@ -188,7 +216,7 @@ void App::Update(const Timer& gt) {
     }
 
     UpdateCBs(gt);
-    //UpdateScenePhysics(gt);
+    UpdateScenePhysics(gt);
 
 }
 
@@ -233,7 +261,7 @@ void App::UpdateObjectCBs(const Timer& gt) {
 
 void App::UpdateScenePhysics(const Timer& gt) {
    
-    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["model1"]->World, DirectX::XMMatrixScaling(5.0f, 5.0f, 5.0f) * DirectX::XMMatrixTranslation(0.0f, 15.0f, 5.0 * std::sin(float(gt.TotalTime()))));
+    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["model1"]->World, DirectX::XMMatrixScaling(10.0f, 10.0f, 10.0f) * DirectX::XMMatrixTranslation(0.0f, 15.0f, 5.0 * std::sin(float(gt.TotalTime()))));
     mScene->getObjectInfos()["model1"]->NumFramesDirty = d3dUtil::gNumFrameResources;
 }
 
@@ -297,6 +325,7 @@ void App::UpdateMainPassCB(const Timer& gt)
     mMainPassCB.DeltaTime = gt.DeltaTime();
     mMainPassCB.camLookDir = mScene->getCamerasMap()["MainCam"]->GetLook3f();
     mMainPassCB.camUpDir = mScene->getCamerasMap()["MainCam"]->GetUp3f();
+    mMainPassCB.showVoxel = mShowVoxel;
 
     auto currPassCB = mCurrFrameResource->PassCB.get();
     currPassCB->CopyData(0, mMainPassCB);
@@ -371,6 +400,7 @@ void App::Draw(const Timer& gt) {
 
     DrawScene2GBuffers();
     DrawScene2ShadowMap();
+    mMeshVoxelizer->Clear3DTexture(mCommandList.Get(), mRootSignatures["CompResetPass"].Get(), mPSOs["CompReset"].Get());
     VoxelizeMesh();
     DrawScene();
 
@@ -452,6 +482,12 @@ void App::OnKeyboardInput(const Timer& gt)
         mIsWireframe = true;
     else
         mIsWireframe = false;
+    if (GetAsyncKeyState('Q') & 0x8000) {
+        mShowVoxel = true;
+    }
+    else {
+        mShowVoxel = false;
+    }
     if (GetAsyncKeyState('W') & 0x8000)
         mScene->getCamerasMap()["MainCam"]->Walk(speed * dt);
 
@@ -517,6 +553,7 @@ void App::BuildShadersAndInputLayout()
     mShaders["voxelizerVS"] = d3dUtil::CompileShader(L"Shaders/voxelizer.hlsl", nullptr, "VS", "vs_5_1");
     mShaders["voxelizerGS"] = d3dUtil::CompileShader(L"Shaders/voxelizer.hlsl", nullptr, "GS", "gs_5_1");
     mShaders["voxelizerPS"] = d3dUtil::CompileShader(L"Shaders/voxelizer.hlsl", nullptr, "PS", "ps_5_1");
+    mShaders["voxelizerCompReset"] = d3dUtil::CompileShader(L"Shaders/voxelizer.hlsl", nullptr, "CompReset", "cs_5_1");
 
     mInputLayout =
     {
@@ -703,6 +740,18 @@ void App::BuildPSOs() {
         mShaders["voxelizerPS"].Get(),
         mShaders["voxelizerGS"].Get()
     );
+
+    // =====================================
+    // PSO for compute reset pass
+    // =====================================
+    D3D12_COMPUTE_PIPELINE_STATE_DESC CompResetDesc = {};
+    CompResetDesc.pRootSignature = mRootSignatures["CompResetPass"].Get();
+    CompResetDesc.CS = {
+        reinterpret_cast<BYTE*>(mShaders["voxelizerCompReset"]->GetBufferPointer()),
+        mShaders["voxelizerCompReset"]->GetBufferSize()
+    };
+    CompResetDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+    ThrowIfFailed(md3dDevice->CreateComputePipelineState(&CompResetDesc, IID_PPV_ARGS(&mPSOs["CompReset"])));
 }
 
 

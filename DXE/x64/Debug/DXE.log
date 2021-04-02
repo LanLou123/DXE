@@ -1,8 +1,5 @@
-﻿  App.cpp
-E:\DX12\DXE\DXE\DXE\App.cpp(24,95): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(36,119): warning C4244: 'argument': conversion from 'INT64' to 'UINT', possible loss of data
-  MeshVoxelizer.cpp
-  FrameResource.cpp
-  main.cpp
-  Generating Code...
+﻿  MeshVoxelizer.cpp
+E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(128,43): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(128,33): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(128,23): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
   DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Debug\DXE.exe

@@ -116,6 +116,7 @@ private:
     POINT mLastMousePos;
 
     bool mIsWireframe = false;
+    bool mShowVoxel = true;
   
 };
 

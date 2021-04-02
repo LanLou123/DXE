@@ -39,7 +39,8 @@ struct PassConstants
     DirectX::XMFLOAT3 camLookDir = { 0.f,0.f,0.f };
     float cbPerObjectPad3 = 0.0f;
     DirectX::XMFLOAT3 camUpDir = { 0.f,0.f,0.f };
-    float cbPerObjectPad4 = 0.0f;
+    int showVoxel = 1;
+    
 };
 
 // GPU material mapper
