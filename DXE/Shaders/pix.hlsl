@@ -78,11 +78,11 @@ float4 PS(VertexOut pin) : SV_Target
             uint3 texIndex = uint3(((mappedloc.x * 0.5) + 0.5f) * texDimensions.x,
                 ((mappedloc.y * 0.5) + 0.5f) * texDimensions.y,
                 ((mappedloc.z * 0.5) + 0.5f) * texDimensions.z);
-            if (all(gVoxelizer[texIndex] == 0)) {
+            if (gVoxelizer[texIndex] == 0) {
                 curloc = curloc + raydr * step;
             }
             else {
-                voxelPickColor = gVoxelizer[texIndex];
+                voxelPickColor = convRGBA8ToVec4(gVoxelizer[texIndex]).xyz / 255.0;
                 step = -0.1 * step;
                 curloc = curloc + raydr * step;
 

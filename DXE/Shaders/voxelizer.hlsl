@@ -20,31 +20,33 @@ struct PS_INPUT {
     float2 TexC : TEXCOORD;
 };
 
-//void imageAtomicRGBA8Avg(RWTexture3D<float4> imgUI, uint3 coords, float4 val)
-//{
-//	val.rgb *= 255.0f;
-//	uint newVal = convVec4ToRGBA8(val);
-//	uint prevStoredVal = 0;
-//	uint curStoredVal = 0;
-//
-//
-//	[allow_uav_condition] do 
-//	{
-//		InterlockedCompareExchange(imgUI[coords], prevStoredVal, newVal, curStoredVal);
-//
-//		if (curStoredVal == prevStoredVal)
-//			break;
-//
-//		prevStoredVal = curStoredVal;
-//		float4 rval = convRGBA8ToVec4(curStoredVal);
-//		rval.xyz = (rval.xyz * rval.w); 
-//		float4 curValF = rval + val;
-//		curValF.xyz /= (curValF.w); 
-//		newVal = convVec4ToRGBA8(curValF);
-//
-//
-//	} while (true);
-//}
+
+// reference https://www.seas.upenn.edu/~pcozzi/OpenGLInsights/OpenGLInsights-SparseVoxelization.pdf & https://github.com/LeifNode/Novus-Engine 
+void imageAtomicRGBA8Avg(RWTexture3D<uint> imgUI, uint3 coords, float4 val)
+{
+	val.rgb *= 255.0f;
+	uint newVal = convVec4ToRGBA8(val);
+	uint prevStoredVal = 0;
+	uint curStoredVal = 0;
+
+
+	[allow_uav_condition] do 
+	{
+		InterlockedCompareExchange(imgUI[coords], prevStoredVal, newVal, curStoredVal);
+
+		if (curStoredVal == prevStoredVal)
+			break;
+
+		prevStoredVal = curStoredVal;
+		float4 rval = convRGBA8ToVec4(curStoredVal);
+		rval.xyz = (rval.xyz * rval.w); 
+		float4 curValF = rval + val;
+		curValF.xyz /= (curValF.w); 
+		newVal = convVec4ToRGBA8(curValF);
+
+
+	} while (true);
+}
 
 GS_INPUT VS(VertexIn vin)
 {
@@ -139,11 +141,12 @@ void PS(PS_INPUT pin)
 		((pin.PosW.z * 0.5) + 0.5f) * texDimensions.z);
 
 
-	diffuseAlbedo.xyz += float3(0.1,0.1,0.1);
+	//diffuseAlbedo.xyz += float3(0.1,0.1,0.1);
 
 	if (all(texIndex < texDimensions.xyz) && all(texIndex >= 0))
 	{
-		gVoxelizer[texIndex] = diffuseAlbedo;
+		imageAtomicRGBA8Avg(gVoxelizer, texIndex, diffuseAlbedo);
+		//gVoxelizer[texIndex] = convVec4ToRGBA8(float4(diffuseAlbedo.xyz, 1.0) * 255.0f);
 	}
 
      
@@ -154,5 +157,5 @@ void CompReset(int3 dispatchThreadID : SV_DispatchThreadID) {
 	int x = dispatchThreadID.x;
 	int y = dispatchThreadID.y;
 	int z = dispatchThreadID.z;
-	gVoxelizer[int3(x, y, z)] = float4(0.0, 0.0, 0.0, 0.0);
+	gVoxelizer[int3(x, y, z)] = 0;
 }

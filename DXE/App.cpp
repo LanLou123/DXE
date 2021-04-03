@@ -172,7 +172,7 @@ bool App::Initialize() {
     mDeferredRenderer = std::make_unique<DeferredRenderer>(md3dDevice.Get(), mClientWidth, mClientHeight);
     mDeferredRenderer->initDeferredRenderer();
 
-    mMeshVoxelizer = std::make_unique<MeshVoxelizer>(md3dDevice.Get(), 512, 512, 512);
+    mMeshVoxelizer = std::make_unique<MeshVoxelizer>(md3dDevice.Get(), 256, 256, 256);
     mMeshVoxelizer->init3DVoxelTexture();
 
     BuildDescriptorHeaps();
@@ -261,7 +261,7 @@ void App::UpdateObjectCBs(const Timer& gt) {
 
 void App::UpdateScenePhysics(const Timer& gt) {
    
-    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["model1"]->World, DirectX::XMMatrixScaling(10.0f, 10.0f, 10.0f) * DirectX::XMMatrixTranslation(0.0f, 15.0f, 5.0 * std::sin(float(gt.TotalTime()))));
+    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["model1"]->World, DirectX::XMMatrixScaling(10.0f, 10.0f, 10.0f) * DirectX::XMMatrixTranslation(10.0f * std::sin(float(gt.TotalTime())), 15.0f, 0.0 ));
     mScene->getObjectInfos()["model1"]->NumFramesDirty = d3dUtil::gNumFrameResources;
 }
 
@@ -791,6 +791,9 @@ void App::DrawScene() {
 
 void App::VoxelizeMesh() {
 
+    //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getResourcePtr(),
+    //    D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
+
     UINT passCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(PassConstants));
     mCommandList->RSSetViewports(1, &mMeshVoxelizer->Viewport());
     mCommandList->RSSetScissorRects(1, &mMeshVoxelizer->ScissorRect());
@@ -800,6 +803,8 @@ void App::VoxelizeMesh() {
     mCommandList->SetPipelineState(mPSOs["voxelizer"].Get());
     DrawRenderItems(mCommandList.Get(), mScene->getObjectInfoLayer()[(int)RenderLayer::Default]);
 
+    //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getResourcePtr(),
+    //    D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS ));
 }
 
 void App::DrawScene2GBuffers() {
