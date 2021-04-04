@@ -6,7 +6,10 @@ Texture2D    gAlbedoMap : register(t3);
 Texture2D    gNormalMap : register(t4);
 Texture2D    gDepthMap : register(t5);
 
-RWTexture3D<uint> gVoxelizer : register(u0);
+RWTexture3D<uint> gVoxelizerAlbedo : register(u0);
+RWTexture3D<uint> gVoxelizerNormal : register(u1);
+RWTexture3D<uint> gVoxelizerEmissive : register(u2);
+RWTexture3D<uint> gVoxelizerRadiance : register(u3);
 
 SamplerState gsamPointWrap        : register(s0);
 SamplerState gsamPointClamp       : register(s1);

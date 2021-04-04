@@ -6,7 +6,10 @@ Texture2D    gAlbedoMap : register(t3);
 Texture2D    gNormalMap : register(t4);
 Texture2D    gDepthMap : register(t5);
 
-RWTexture3D<float4> gVoxelizer : register(u0);
+RWTexture3D<uint> gVoxelizerAlbedo : register(u0);
+RWTexture3D<uint> gVoxelizerNormal : register(u1);
+RWTexture3D<uint> gVoxelizerEmissive : register(u2);
+RWTexture3D<uint> gVoxelizerRadiance : register(u3);
 
 SamplerState gsamPointWrap        : register(s0);
 SamplerState gsamPointClamp       : register(s1);
@@ -52,7 +55,8 @@ cbuffer cbPass : register(b1)
 
 float4 convRGBA8ToVec4(uint val)
 {
-    return float4(float((val & 0x000000FF)), float((val & 0x0000FF00) >> 8U), float((val & 0x00FF0000) >> 16U), float((val & 0xFF000000) >> 24U));
+    float4 re = float4(float((val & 0x000000FF)), float((val & 0x0000FF00) >> 8U), float((val & 0x00FF0000) >> 16U), float((val & 0xFF000000) >> 24U));
+    return clamp(re, float4(0.0,0.0,0.0,0.0), float4(255.0,255.0,255.0,255.0));
 }
 
 uint convVec4ToRGBA8(float4 val)

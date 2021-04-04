@@ -46,6 +46,7 @@ private:
     void UpdateMainPassCB(const Timer& gt);
     void UpdateMaterialCBs(const Timer& gt);
     void UpdateShadowPassCB(const Timer& gt);
+    void UpdateRadiancePassCB(const Timer& gt);
     void UpdateCBs(const Timer& gt);
     void UpdateScenePhysics(const Timer& gt);
 
@@ -74,6 +75,7 @@ private:
     void DrawScene2ShadowMap();
     void DrawScene2GBuffers();
     void VoxelizeMesh();
+    void InjectRadiance();
     void DrawScene();
 
     std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
