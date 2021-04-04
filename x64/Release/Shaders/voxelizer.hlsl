@@ -147,7 +147,7 @@ void PS(PS_INPUT pin)
 	{
 		//imageAtomicRGBA8Avg(gVoxelizerAlbedo, texIndex, diffuseAlbedo);
 		gVoxelizerAlbedo[texIndex] = convVec4ToRGBA8(float4(diffuseAlbedo.xyz, 1.0) * 255.0f);
-		gVoxelizerEmissive[texIndex] = convVec4ToRGBA8(float4((pin.Normal.xyz + float3(0.5, 0.5, 0.5)) / 2.0 , 1.0) * 255.0f);
+		gVoxelizerNormal[texIndex] = convVec4ToRGBA8(float4((pin.Normal.xyz + float3(0.5, 0.5, 0.5)) / 2.0 , 1.0) * 255.0f);
 	}
 
      

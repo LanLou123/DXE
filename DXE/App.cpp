@@ -167,11 +167,12 @@ void App::BuildRootSignature()
     CD3DX12_DESCRIPTOR_RANGE texTableShadowRadiance;
     texTableShadowRadiance.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t1
 
-    CD3DX12_ROOT_PARAMETER slotRootParameterCompRadiance[2];
+    CD3DX12_ROOT_PARAMETER slotRootParameterCompRadiance[3];
     slotRootParameterCompRadiance[0].InitAsDescriptorTable(1, &voxelTexTableComp, D3D12_SHADER_VISIBILITY_ALL);
     slotRootParameterCompRadiance[1].InitAsDescriptorTable(1, &texTableShadowRadiance, D3D12_SHADER_VISIBILITY_ALL);
+    slotRootParameterCompRadiance[2].InitAsConstantBufferView(0);
 
-    CD3DX12_ROOT_SIGNATURE_DESC rootSigDescCompRadiance(2, slotRootParameterCompRadiance, (UINT)staticSamplers.size(), staticSamplers.data(),
+    CD3DX12_ROOT_SIGNATURE_DESC rootSigDescCompRadiance(3, slotRootParameterCompRadiance, (UINT)staticSamplers.size(), staticSamplers.data(),
         D3D12_ROOT_SIGNATURE_FLAG_NONE);
     ComPtr<ID3DBlob> serializedRootSigCompRadiance = nullptr;
     ComPtr<ID3DBlob> errorBlobCompRadiance = nullptr;
@@ -226,7 +227,7 @@ void App::UpdateCBs(const Timer& gt) {
     UpdateMaterialCBs(gt);
     UpdateMainPassCB(gt);
     UpdateShadowPassCB(gt);
-
+    UpdateRadiancePassCB(gt);
 }
 
 void App::Update(const Timer& gt) {
@@ -543,10 +544,13 @@ void App::OnKeyboardInput(const Timer& gt)
     else
         mIsWireframe = false;
     if (GetAsyncKeyState('Q') & 0x8000) {
-        mShowVoxel = true;
+        mShowVoxel = 1;
+    }
+    else if(GetAsyncKeyState('R') & 0x8000){
+        mShowVoxel = 2;
     }
     else {
-        mShowVoxel = false;
+        mShowVoxel = 0;
     }
     if (GetAsyncKeyState('W') & 0x8000)
         mScene->getCamerasMap()["MainCam"]->Walk(speed * dt);
@@ -852,6 +856,7 @@ void App::DrawScene() {
     // Clear the back buffer and depth buffer.
     mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::LightSteelBlue, 0, nullptr);
     mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, nullptr);
+    mCommandList->SetGraphicsRootSignature(mRootSignatures["MainPass"].Get());
     auto passCB = mCurrFrameResource->PassCB->Resource();
     mCommandList->SetGraphicsRootConstantBufferView(d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV, passCB->GetGPUVirtualAddress());
     mCommandList->SetPipelineState(mPSOs["deferredPost"].Get());
@@ -869,6 +874,8 @@ void App::InjectRadiance() {
     mCommandList->SetComputeRootSignature(mRootSignatures["CompRadiance"].Get());
     mCommandList->SetComputeRootDescriptorTable(0, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getGPUHandle4UAV());
     mCommandList->SetComputeRootDescriptorTable(1, mShadowMap->getGPUHandle4SRV());
+    auto radianceCB = mCurrFrameResource->RadianceCB->Resource();
+    mCommandList->SetComputeRootConstantBufferView(2, radianceCB->GetGPUVirtualAddress());
     mCommandList->Dispatch(mShadowMap->Width() / 16.0, mShadowMap->Height() / 16.0, 1.0);
 
 }
@@ -878,7 +885,7 @@ void App::VoxelizeMesh() {
     //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getResourcePtr(),
     //    D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
 
-
+    mCommandList->SetGraphicsRootSignature(mRootSignatures["MainPass"].Get());
     mCommandList->RSSetViewports(1, &mMeshVoxelizer->Viewport());
     mCommandList->RSSetScissorRects(1, &mMeshVoxelizer->ScissorRect());
     mCommandList->OMSetRenderTargets(0, nullptr, false, nullptr);
@@ -893,6 +900,7 @@ void App::VoxelizeMesh() {
 
 void App::DrawScene2GBuffers() {
 
+    mCommandList->SetGraphicsRootSignature(mRootSignatures["MainPass"].Get());
     UINT passCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(PassConstants));
     mCommandList->RSSetViewports(1, &mDeferredRenderer->Viewport());
     mCommandList->RSSetScissorRects(1, &mDeferredRenderer->ScissorRect());
@@ -920,7 +928,7 @@ void App::DrawScene2ShadowMap() {
 
     mCommandList->RSSetViewports(1, &mShadowMap->Viewport());
     mCommandList->RSSetScissorRects(1, &mShadowMap->ScissorRect());
-
+    mCommandList->SetGraphicsRootSignature(mRootSignatures["MainPass"].Get());
     // Change to DEPTH_WRITE.
     mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mShadowMap->getResourcePtr(),
         D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_DEPTH_WRITE));

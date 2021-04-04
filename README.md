@@ -10,3 +10,6 @@ A voxel GI rendering engine in dx12, in progress
 
 ## Voxels visulized in screen space with ray marching
 ![](sc/svoxel.PNG)
+
+## Radiance Map
+![](sc/radiancemap.PNG)

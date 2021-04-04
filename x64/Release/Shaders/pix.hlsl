@@ -85,7 +85,7 @@ float4 PS(VertexOut pin) : SV_Target
             else {
 
                 voxelPickColor = convRGBA8ToVec4(gVoxelizerAlbedo[texIndex]).xyz / 255.0;
-                voxelNormal = convRGBA8ToVec4(gVoxelizerEmissive[texIndex]).xyz / 255.0;
+                voxelNormal = convRGBA8ToVec4(gVoxelizerNormal[texIndex]).xyz / 255.0;
                 step = -0.1 * step;
                 curloc = curloc + raydr * step;
 
