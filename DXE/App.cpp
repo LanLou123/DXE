@@ -791,6 +791,7 @@ void App::BuildPSOs() {
     // =====================================
     auto voxelRasterDesc = rasterDesc;
     voxelRasterDesc.CullMode = D3D12_CULL_MODE_NONE;
+    //voxelRasterDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_ON;
     CreatePSO(
         mPSOs["voxelizer"].GetAddressOf(),
         mRootSignatures["MainPass"].Get(),

@@ -1,5 +1,6 @@
 
 
+
 cbuffer cbRadiance : register(b0)
 {
     float3 gLightDir;
@@ -21,6 +22,31 @@ uint convVec4ToRGBA8(float4 val)
     return (uint (val.w) & 0x000000FF) << 24U | (uint(val.z) & 0x000000FF) << 16U | (uint(val.y) & 0x000000FF) << 8U | (uint(val.x) & 0x000000FF);
 }
 
+void imageAtomicRGBA8Avg(RWTexture3D<uint> imgUI, uint3 coords, float4 val)
+{
+    val.rgb *= 255.0f;
+    uint newVal = convVec4ToRGBA8(val);
+    uint prevStoredVal = 0;
+    uint curStoredVal = 0;
+
+
+    [allow_uav_condition] do
+    {
+        InterlockedCompareExchange(imgUI[coords], prevStoredVal, newVal, curStoredVal);
+
+        if (curStoredVal == prevStoredVal)
+            break;
+
+        prevStoredVal = curStoredVal;
+        float4 rval = convRGBA8ToVec4(curStoredVal);
+        rval.xyz = (rval.xyz * rval.w);
+        float4 curValF = rval + val;
+        curValF.xyz /= (curValF.w);
+        newVal = convVec4ToRGBA8(curValF);
+
+
+    } while (true);
+}
 
 RWTexture3D<uint> gVoxelizerAlbedo : register(u0);
 RWTexture3D<uint> gVoxelizerNormal : register(u1);
@@ -49,20 +75,21 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
     float4 volumeSpacePos = mul(screenSpacePos, gLight2World);
     volumeSpacePos.xyz /= (voxelScale);
 
-    uint3 texIndex = uint3(((volumeSpacePos.x * 0.5) + 0.5f) * volTexDimensions.x + 1,
-        ((volumeSpacePos.y * 0.5) + 0.5f) * volTexDimensions.y + 1,
+    uint3 texIndex = uint3(((volumeSpacePos.x * 0.5) + 0.5f) * volTexDimensions.x,
+        ((volumeSpacePos.y * 0.5) + 0.5f) * volTexDimensions.y + 1, // not sre why, but need to offset y value to match accurate result, weird
         ((volumeSpacePos.z * 0.5) + 0.5f) * volTexDimensions.z );
 
     float4 col = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex]).xyz / 255.0, 1.0f);
 
     float3 nor = float3(convRGBA8ToVec4(gVoxelizerNormal[texIndex]).xyz / 255.0);
-    nor = nor * 2.0 - float3(0.5, 0.5, 0.5);
+    nor = 2.0 * (nor  - float3(0.5, 0.5, 0.5));
 
-    //col.xyz *= dot(nor, -gLightDir) * gLightCol;
+    col.xyz *= (abs(dot(nor, -gLightDir))) * gLightCol;
 
     //col.xyz = float3(1.0, 1.0, 1.0);
 
     col *= 255.0f;
 
+    //imageAtomicRGBA8Avg(gVoxelizerRadiance, texIndex, col);
     gVoxelizerRadiance[int3(texIndex)] = convVec4ToRGBA8(col);
 }

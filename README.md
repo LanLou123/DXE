@@ -12,4 +12,4 @@ A voxel GI rendering engine in dx12, in progress
 ![](sc/svoxel.PNG)
 
 ## Radiance Map
-![](sc/radiancemap.PNG)
+![](sc/radiance.PNG)
