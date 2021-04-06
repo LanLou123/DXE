@@ -46,7 +46,7 @@ private:
 	void BuildResources();
 
 
-private:
+protected:
 
 	ID3D12Device* device;
 	UINT mX, mY, mZ;
@@ -64,6 +64,54 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> m3DTexture;
 	D3D12_VIEWPORT mViewPort;
 	D3D12_RECT mScissorRect;
+};
+
+class RadianceMipMapedVolumeTexture {
+public:
+
+	RadianceMipMapedVolumeTexture(ID3D12Device* _device, UINT _x, UINT _y, UINT _z);
+	RadianceMipMapedVolumeTexture(const RadianceMipMapedVolumeTexture& rhs) = delete;
+	RadianceMipMapedVolumeTexture& operator=(const RadianceMipMapedVolumeTexture& rhs) = delete;
+	~RadianceMipMapedVolumeTexture() = default;
+
+	// getters 
+	ID3D12Resource* getResourcePtr();
+	D3D12_CPU_DESCRIPTOR_HANDLE getCPUHandle4UAV(int mipLevel) const;
+	D3D12_GPU_DESCRIPTOR_HANDLE getGPUHandle4UAV(int mipLevel) const;
+	UINT getNumDescriptors();
+
+	// setters
+	void SetupUAVCPUGPUDescOffsets(mDescriptorHeap* heapPtr);
+	void SetupSRVCPUGPUDescOffsets(mDescriptorHeap* heapPtr);
+
+
+	void Init();
+	void OnResize(UINT newX, UINT newY, UINT newZ);
+
+private:
+
+	void BuildUAVDescriptors();
+	void BuildSRVDescriptors();
+	void BuildResources();
+
+private:
+
+	ID3D12Device* device;
+	UINT mX, mY, mZ;
+	UINT mNumDescriptors;
+
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> mhCPUuavs;
+	std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> mhGPUuavs;
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> mhCPUsrvs;
+	std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> mhGPUsrvs;
+
+
+	UINT mNumMipLevels;
+	DXGI_FORMAT mFormat = DXGI_FORMAT_R8G8B8A8_TYPELESS;
+	DXGI_FORMAT mSRVFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+	DXGI_FORMAT mUAVFormat = DXGI_FORMAT_R32_UINT;
+	Microsoft::WRL::ComPtr<ID3D12Resource> m3DTexture;
+
 };
 
 class MeshVoxelizer {

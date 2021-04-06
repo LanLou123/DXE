@@ -59,6 +59,18 @@ D3D12_SHADER_BYTECODE d3dUtil::getShaderBytecode(ID3DBlob* blob) {
     return byteCode;
 }
 
+
+int d3dUtil::GetNumMipmaps(int w, int h, int d) {
+    int count = 0;
+    while (w >= 1 && h >= 1 && d >= 1) {
+        count++;
+        w /= 2;
+        h /= 2;
+        d /= 2;
+    }
+    return count;
+}
+
 Microsoft::WRL::ComPtr<ID3D12Resource> d3dUtil::CreateDefaultBuffer(
     ID3D12Device* device,
     ID3D12GraphicsCommandList* cmdList,

@@ -791,6 +791,8 @@ void App::BuildPSOs() {
     // =====================================
     auto voxelRasterDesc = rasterDesc;
     voxelRasterDesc.CullMode = D3D12_CULL_MODE_NONE;
+    auto voxelDepthStencilDesc = dsvDesc;
+    voxelDepthStencilDesc.DepthEnable = false;
     //voxelRasterDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_ON;
     CreatePSO(
         mPSOs["voxelizer"].GetAddressOf(),
@@ -798,7 +800,7 @@ void App::BuildPSOs() {
         D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
         CD3DX12_BLEND_DESC(D3D12_DEFAULT),
         voxelRasterDesc,
-        dsvDesc,
+        voxelDepthStencilDesc,
         0,
         DXGI_FORMAT_UNKNOWN,
         DXGI_FORMAT_UNKNOWN,

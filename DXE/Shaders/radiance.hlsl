@@ -22,31 +22,7 @@ uint convVec4ToRGBA8(float4 val)
     return (uint (val.w) & 0x000000FF) << 24U | (uint(val.z) & 0x000000FF) << 16U | (uint(val.y) & 0x000000FF) << 8U | (uint(val.x) & 0x000000FF);
 }
 
-void imageAtomicRGBA8Avg(RWTexture3D<uint> imgUI, uint3 coords, float4 val)
-{
-    val.rgb *= 255.0f;
-    uint newVal = convVec4ToRGBA8(val);
-    uint prevStoredVal = 0;
-    uint curStoredVal = 0;
 
-
-    [allow_uav_condition] do
-    {
-        InterlockedCompareExchange(imgUI[coords], prevStoredVal, newVal, curStoredVal);
-
-        if (curStoredVal == prevStoredVal)
-            break;
-
-        prevStoredVal = curStoredVal;
-        float4 rval = convRGBA8ToVec4(curStoredVal);
-        rval.xyz = (rval.xyz * rval.w);
-        float4 curValF = rval + val;
-        curValF.xyz /= (curValF.w);
-        newVal = convVec4ToRGBA8(curValF);
-
-
-    } while (true);
-}
 
 RWTexture3D<uint> gVoxelizerAlbedo : register(u0);
 RWTexture3D<uint> gVoxelizerNormal : register(u1);
@@ -69,7 +45,7 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
         return;
 
     float2 uv = DTid.xy / float2(shadowTexDimensions);
-    float4 screenSpacePos = float4(uv * 2.0 - 1.0, gShadowMap.Load(int3(DTid.xy, 0)).x , 1.0);
+    float4 screenSpacePos = float4(uv * 2.0 - 1.0, gShadowMap.Load(int3(DTid.xy, 0)).x - 0.001 , 1.0);
     screenSpacePos.y = -screenSpacePos.y;
 
     float4 volumeSpacePos = mul(screenSpacePos, gLight2World);

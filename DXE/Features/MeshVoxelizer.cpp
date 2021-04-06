@@ -1,8 +1,121 @@
 #include "MeshVoxelizer.h"
 
+RadianceMipMapedVolumeTexture::RadianceMipMapedVolumeTexture(ID3D12Device* _device, UINT _x, UINT _y, UINT _z) {
+	mNumMipLevels = d3dUtil::GetNumMipmaps(mX, mY, mZ);
+	mNumDescriptors = 2;
+
+}
+
+void RadianceMipMapedVolumeTexture::BuildResources() {
+	D3D12_RESOURCE_DESC texDesc;
+	ZeroMemory(&texDesc, sizeof(D3D12_RESOURCE_DESC));
+	texDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE3D;
+	texDesc.Alignment = 0;
+	texDesc.Width = (mX / 2) * 6; // each anistropic mipmaping voxel needs 6 directions in total
+	texDesc.Height = mY / 2;
+	texDesc.DepthOrArraySize = mZ / 2;
+	texDesc.MipLevels = mNumMipLevels;
+	texDesc.Format = mFormat;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+	texDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+
+	ThrowIfFailed(device->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&texDesc,
+		D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
+		nullptr,
+		IID_PPV_ARGS(m3DTexture.GetAddressOf())
+	));
+}
+
+void RadianceMipMapedVolumeTexture::BuildSRVDescriptors() {
+	for (int i = 0; i < mNumMipLevels; ++i)
+	{
+		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+		srvDesc.Format = mSRVFormat;
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
+		srvDesc.Texture3D.MostDetailedMip = i;
+		srvDesc.Texture3D.MipLevels = 1;
+		srvDesc.Texture3D.ResourceMinLODClamp = 0.0f;
+		device->CreateShaderResourceView(m3DTexture.Get(), &srvDesc, mhCPUsrvs[i]);
+	}
+}
+
+void RadianceMipMapedVolumeTexture::BuildUAVDescriptors() {
+	for (int i = 0; i < mNumMipLevels; ++i) {
+		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+		uavDesc.Format = mUAVFormat;
+		uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE3D;
+		uavDesc.Texture3D.MipSlice = i;
+		uavDesc.Texture3D.FirstWSlice = 0;
+		uavDesc.Texture3D.WSize = -1;
+		device->CreateUnorderedAccessView(m3DTexture.Get(), nullptr, &uavDesc, mhCPUuavs[i]);
+	}
+}
+
+ID3D12Resource* RadianceMipMapedVolumeTexture::getResourcePtr() {
+	return m3DTexture.Get();
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE RadianceMipMapedVolumeTexture::getCPUHandle4UAV(int mipLevel) const {
+	return mhCPUuavs[mipLevel];
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE RadianceMipMapedVolumeTexture::getGPUHandle4UAV(int mipLevel) const {
+	return mhGPUsrvs[mipLevel];
+}
+
+UINT RadianceMipMapedVolumeTexture::getNumDescriptors() {
+	return mNumDescriptors;
+}
+
+void RadianceMipMapedVolumeTexture::SetupUAVCPUGPUDescOffsets(mDescriptorHeap* heapPtr) {
+	for (int i = 0; i < mNumMipLevels; ++i) {
+		auto curCPUHandle = heapPtr->mCPUHandle(heapPtr->getCurrentOffsetRef());
+		auto curGPUHandle = heapPtr->mGPUHandle(heapPtr->getCurrentOffsetRef());
+		mhCPUuavs.push_back(curCPUHandle);
+		mhGPUuavs.push_back(curGPUHandle);
+		heapPtr->incrementCurrentOffset();
+	}
+	BuildUAVDescriptors();
+}
+
+void RadianceMipMapedVolumeTexture::SetupSRVCPUGPUDescOffsets(
+	mDescriptorHeap* heapPtr
+) {
+	for (int i = 0; i < mNumMipLevels; ++i) {
+		auto curCPUHandle = heapPtr->mCPUHandle(heapPtr->getCurrentOffsetRef());
+		auto curGPUHandle = heapPtr->mGPUHandle(heapPtr->getCurrentOffsetRef());
+		mhCPUsrvs.push_back(curCPUHandle);
+		mhGPUsrvs.push_back(curGPUHandle);
+		heapPtr->incrementCurrentOffset();
+	}
+	BuildSRVDescriptors();
+}
+
+void RadianceMipMapedVolumeTexture::Init() {
+	BuildResources();
+}
+void RadianceMipMapedVolumeTexture::OnResize(UINT newX, UINT newY, UINT newZ) {
+	if ((mX != newX) || (mY != newY) || (mZ != newZ)) {
+		mX = newX;
+		mY = newY;
+		mZ = newZ;
+
+		BuildResources();
+		BuildUAVDescriptors();
+	}
+}
+
+
 
 VolumeTexture::VolumeTexture(ID3D12Device* _device, UINT _x, UINT _y, UINT _z) :device(_device), mX(_x), mY(_y), mZ(_z) {
 	mNumDescriptors = 2;
+	
 	mViewPort = { 0.0f, 0.0f, (float)mX, (float)mY, 0.0f, 1.0f };
 	mScissorRect = { 0,0,(int)mX, (int)mY };
 }

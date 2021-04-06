@@ -79,6 +79,8 @@ public:
 
     static D3D12_SHADER_BYTECODE getShaderBytecode(ID3DBlob* blob);
 
+    static int GetNumMipmaps(int w, int h, int d);
+
     static int gNumFrameResources;
 
     enum MAIN_PASS_UNIFORM {
