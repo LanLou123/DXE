@@ -145,6 +145,20 @@ void DeferredRenderer::initDeferredRenderer() {
 	}
 }
 
+void DeferredRenderer::setUpDescriptors4GBuffers(mDescriptorHeap* heapSrvUavPtr, mDescriptorHeap* heapRtvPtr) {
+	for (auto& gbuffer : getGbuffersMap()) {
+
+		auto deferredRendererCPURtvHandle = heapRtvPtr->mCPUHandle(heapRtvPtr->getCurrentOffsetRef());
+		heapRtvPtr->incrementCurrentOffset();
+
+		auto deferredRendererCPUSrvHandle = heapSrvUavPtr->mCPUHandle(heapSrvUavPtr->getCurrentOffsetRef());
+		auto deferredRendererGPUSrvHandle = heapSrvUavPtr->mGPUHandle(heapSrvUavPtr->getCurrentOffsetRef());
+		gbuffer.second->SetupCPUGPUDescOffsets(deferredRendererCPUSrvHandle, deferredRendererGPUSrvHandle, deferredRendererCPURtvHandle);
+		heapSrvUavPtr->incrementCurrentOffset();
+
+	}
+}
+
 void DeferredRenderer::onResize(UINT newWidth, UINT newHeight) {
 	if ((mWidth != newWidth) || (mHeight != newHeight)) {
 		mHeight = newHeight;

@@ -31,6 +31,22 @@ RWTexture3D<uint> gVoxelizerRadiance : register(u3);
 
 Texture2D    gShadowMap : register(t0);
 
+
+float4 getAvgCol(uint3 texIndex) {
+    float4 c = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex]).xyz / 255.0, 1.0f);
+    float4 t = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex + uint3(0,1,0)]).xyz / 255.0, 1.0f);
+    float4 b = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex + uint3(0, -1, 0)]).xyz / 255.0, 1.0f);
+    float4 l = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex + uint3(-1, 0, 0)]).xyz / 255.0, 1.0f);
+    float4 r = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex + uint3(1, 0, 0)]).xyz / 255.0, 1.0f);
+    float4 o = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex + uint3(0, 0, 1)]).xyz / 255.0, 1.0f);
+    float4 i = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex + uint3(0, 0, -1)]).xyz / 255.0, 1.0f);
+    return (c + t + b + l + r + o + i) / 7;
+}
+
+float3 getAvgNor(uint3 idx) {
+
+}
+
 [numthreads(16, 16, 1)]
 void Radiance( uint3 DTid : SV_DispatchThreadID )
 {
@@ -52,10 +68,11 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
     volumeSpacePos.xyz /= (voxelScale);
 
     uint3 texIndex = uint3(((volumeSpacePos.x * 0.5) + 0.5f) * volTexDimensions.x,
-        ((volumeSpacePos.y * 0.5) + 0.5f) * volTexDimensions.y + 1, // not sre why, but need to offset y value to match accurate result, weird
+        ((volumeSpacePos.y * 0.5) + 0.5f) * volTexDimensions.y + 1.1, // not sre why, but need to offset y value to match accurate result, weird
         ((volumeSpacePos.z * 0.5) + 0.5f) * volTexDimensions.z );
 
     float4 col = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex]).xyz / 255.0, 1.0f);
+    //float4 col = getAvgCol(texIndex);
 
     float3 nor = float3(convRGBA8ToVec4(gVoxelizerNormal[texIndex]).xyz / 255.0);
     nor = 2.0 * (nor  - float3(0.5, 0.5, 0.5));

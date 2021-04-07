@@ -11,6 +11,11 @@ struct MeshVoxelizerData {
 
 };
 
+struct MipVoxelData {
+	MipVoxelData(int _dim) : mipDim(_dim) {}
+	int mipDim;
+};
+
 enum class VOLUME_TEXTURE_TYPE : int { ALBEDO = 0, NORMAL, EMISSIVE, RADIANCE, COUNT };
 
 class VolumeTexture {
@@ -128,13 +133,24 @@ public:
 
 	MeshVoxelizerData& getUniformData();
 	UINT getNumDescriptors();
+	UINT getDimensionX();
+	UINT getDimensionY();
+	UINT getDimensionZ();
+	VolumeTexture* getVolumeTexture(VOLUME_TEXTURE_TYPE _type);
+	RadianceMipMapedVolumeTexture* getRadianceMipMapedVolumeTexture();
+	std::unordered_map<VOLUME_TEXTURE_TYPE, std::unique_ptr<VolumeTexture>>& getVoxelTexturesMap();
+
 
 	void Clear3DTexture(ID3D12GraphicsCommandList* cmdList,
 		ID3D12RootSignature* rootSig,
 		ID3D12PipelineState* pso);
 
-	VolumeTexture* getVolumeTexture(VOLUME_TEXTURE_TYPE _type);
-	std::unordered_map<VOLUME_TEXTURE_TYPE, std::unique_ptr<VolumeTexture>>& getVoxelTexturesMap();
+
+	void setUpDescriptors4Voxels(mDescriptorHeap* heapPtr);
+	void setUpDescriptors4RadianceMipMaped(mDescriptorHeap* heapPtr);
+
+
+
 
 private:
 
@@ -146,7 +162,7 @@ private:
 	UINT mNumDescriptors;
 
 	std::unordered_map<VOLUME_TEXTURE_TYPE, std::unique_ptr<VolumeTexture>> mVolumeTextures;
-
+	std::unique_ptr<RadianceMipMapedVolumeTexture> mRadianceMipMapedTexture;
 
 	D3D12_VIEWPORT mViewPort;
 	D3D12_RECT mScissorRect;

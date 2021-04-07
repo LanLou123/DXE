@@ -104,7 +104,7 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 		switch (index)
 		{
 		case 0:
-			inputPosL = float4(input[i].PosL.yzx, 1.0f);
+			inputPosL = float4(input[i].PosL.zyx, 1.0f);
 			break;
 		case 1:
 			inputPosL = float4(input[i].PosL.xzy, 1.0f);
@@ -114,6 +114,7 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 			break;
 		}
 
+		inputPosL.z = 1.0;
 	 
 		outputPosH[i] = mul(inputPosL, gVoxelViewProj);
 
@@ -147,7 +148,8 @@ void PS(PS_INPUT pin)
 	{
 		//imageAtomicRGBA8Avg(gVoxelizerAlbedo, texIndex, diffuseAlbedo);
 		gVoxelizerAlbedo[texIndex] = convVec4ToRGBA8(float4(diffuseAlbedo.xyz, 1.0) * 255.0f);
-		gVoxelizerNormal[texIndex] = convVec4ToRGBA8(float4((pin.Normal.xyz + float3(0.5, 0.5, 0.5)) / 2.0 , 1.0) * 255.0f);
+		imageAtomicRGBA8Avg(gVoxelizerNormal, texIndex, float4((pin.Normal.xyz / 2.0 + float3(0.5, 0.5, 0.5)), 1.0));
+		//gVoxelizerNormal[texIndex] = convVec4ToRGBA8(float4((pin.Normal.xyz/ 2.0 + float3(0.5, 0.5, 0.5))  , 1.0) * 255.0f);
 	}
 
      
@@ -158,6 +160,12 @@ void CompReset(int3 dispatchThreadID : SV_DispatchThreadID) {
 	int x = dispatchThreadID.x;
 	int y = dispatchThreadID.y;
 	int z = dispatchThreadID.z;
+
+	int oldAlbedo = gVoxelizerAlbedo[int3(x, y, z)];
+	int oldNormal = gVoxelizerNormal[int3(x, y, z)];
+	int oldEmissive = gVoxelizerEmissive[int3(x, y, z)];
+	int oldRadiance = gVoxelizerRadiance[int3(x, y, z)];
+
 	gVoxelizerAlbedo[int3(x, y, z)] = 0;
 	gVoxelizerNormal[int3(x, y, z)] = 0;
 	gVoxelizerEmissive[int3(x, y, z)] = 0;

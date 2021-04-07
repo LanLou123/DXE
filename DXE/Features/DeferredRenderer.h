@@ -3,6 +3,8 @@
 
 #include "Utilities/Utils.h"
 #include "Utilities/Timer.h"
+#include "Utilities/DescriptorHeap.h"
+
 
 enum class GBUFFER_TYPE : int { POSITION = 0, ALBEDO, NORMAL, DEPTH, COUNT };
 
@@ -63,6 +65,9 @@ public:
 
 	GBuffer* getGBuffer(GBUFFER_TYPE _type);
 	std::unordered_map<GBUFFER_TYPE, std::unique_ptr<GBuffer>>& getGbuffersMap();
+
+	void setUpDescriptors4GBuffers(mDescriptorHeap* heapSrvUavPtr, mDescriptorHeap* heapRtvPtr);
+
 	UINT Width()const;
 	UINT Height()const;
 	D3D12_VIEWPORT Viewport()const;

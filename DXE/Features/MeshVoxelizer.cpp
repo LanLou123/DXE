@@ -1,8 +1,8 @@
 #include "MeshVoxelizer.h"
 
-RadianceMipMapedVolumeTexture::RadianceMipMapedVolumeTexture(ID3D12Device* _device, UINT _x, UINT _y, UINT _z) {
-	mNumMipLevels = d3dUtil::GetNumMipmaps(mX, mY, mZ);
-	mNumDescriptors = 2;
+RadianceMipMapedVolumeTexture::RadianceMipMapedVolumeTexture(ID3D12Device* _device, UINT _x, UINT _y, UINT _z) : device(_device), mX(_x), mY(_y), mZ(_z) {
+	mNumMipLevels = d3dUtil::GetNumMipmaps(mX / 2, mY / 2, mZ / 2);
+	mNumDescriptors = 2 * mNumMipLevels;
 
 }
 
@@ -66,7 +66,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE RadianceMipMapedVolumeTexture::getCPUHandle4UAV(int 
 }
 
 D3D12_GPU_DESCRIPTOR_HANDLE RadianceMipMapedVolumeTexture::getGPUHandle4UAV(int mipLevel) const {
-	return mhGPUsrvs[mipLevel];
+	return mhGPUuavs[mipLevel];
 }
 
 UINT RadianceMipMapedVolumeTexture::getNumDescriptors() {
@@ -84,9 +84,7 @@ void RadianceMipMapedVolumeTexture::SetupUAVCPUGPUDescOffsets(mDescriptorHeap* h
 	BuildUAVDescriptors();
 }
 
-void RadianceMipMapedVolumeTexture::SetupSRVCPUGPUDescOffsets(
-	mDescriptorHeap* heapPtr
-) {
+void RadianceMipMapedVolumeTexture::SetupSRVCPUGPUDescOffsets(mDescriptorHeap* heapPtr) {
 	for (int i = 0; i < mNumMipLevels; ++i) {
 		auto curCPUHandle = heapPtr->mCPUHandle(heapPtr->getCurrentOffsetRef());
 		auto curGPUHandle = heapPtr->mGPUHandle(heapPtr->getCurrentOffsetRef());
@@ -250,6 +248,14 @@ void MeshVoxelizer::initVoxelizer() {
 		m.second->Init();
 		mNumDescriptors += m.second->getNumDescriptors();
 	}
+
+	mRadianceMipMapedTexture = std::make_unique<RadianceMipMapedVolumeTexture>(device, mX, mY, mZ);
+	mRadianceMipMapedTexture->Init();
+	mNumDescriptors += mRadianceMipMapedTexture->getNumDescriptors();
+}
+
+RadianceMipMapedVolumeTexture* MeshVoxelizer::getRadianceMipMapedVolumeTexture() {
+	return mRadianceMipMapedTexture.get();
 }
 
 void MeshVoxelizer::OnResize(UINT newX, UINT newY, UINT newZ) {
@@ -289,8 +295,30 @@ void MeshVoxelizer::PopulateUniformData() {
 	DirectX::XMStoreFloat4x4(&mData.mVoxelProj, VoxelProj);
 }
 
+void MeshVoxelizer::setUpDescriptors4Voxels(mDescriptorHeap* heapPtr) {
 
-void MeshVoxelizer::Clear3DTexture(ID3D12GraphicsCommandList* cmdList,
+	for (auto& voxelTex : getVoxelTexturesMap()) {
+		auto meshVoxelizerCPUUavHandle = heapPtr->mCPUHandle(heapPtr->getCurrentOffsetRef());
+		auto meshVoxelizerGPUUavHandle = heapPtr->mGPUHandle(heapPtr->getCurrentOffsetRef());
+		heapPtr->incrementCurrentOffset();
+		voxelTex.second->SetupUAVCPUGPUDescOffsets(meshVoxelizerCPUUavHandle, meshVoxelizerGPUUavHandle);
+	}
+	for (auto& voxelTex : getVoxelTexturesMap()) {
+		auto meshVoxelizerCPUUavHandle = heapPtr->mCPUHandle(heapPtr->getCurrentOffsetRef());
+		auto meshVoxelizerGPUUavHandle = heapPtr->mGPUHandle(heapPtr->getCurrentOffsetRef());
+		heapPtr->incrementCurrentOffset();
+		voxelTex.second->SetupSRVCPUGPUDescOffsets(meshVoxelizerCPUUavHandle, meshVoxelizerGPUUavHandle);
+	}
+
+}
+
+void MeshVoxelizer::setUpDescriptors4RadianceMipMaped(mDescriptorHeap* heapPtr) {
+	mRadianceMipMapedTexture->SetupUAVCPUGPUDescOffsets(heapPtr);
+	mRadianceMipMapedTexture->SetupSRVCPUGPUDescOffsets(heapPtr);
+}
+
+void MeshVoxelizer::Clear3DTexture(
+	ID3D12GraphicsCommandList* cmdList,
 	ID3D12RootSignature* rootSig,
 	ID3D12PipelineState* pso) {
 
@@ -299,8 +327,25 @@ void MeshVoxelizer::Clear3DTexture(ID3D12GraphicsCommandList* cmdList,
 	cmdList->SetComputeRootDescriptorTable(0, mVolumeTextures[VOLUME_TEXTURE_TYPE::ALBEDO]->getGPUHandle4UAV());
 
 	cmdList->Dispatch(mX / 8.0, mY / 8.0, mZ / 8.0);
- 
 
+	std::vector<D3D12_RESOURCE_BARRIER> barriers;
+	for (auto& m : mVolumeTextures) {
+		barriers.push_back(CD3DX12_RESOURCE_BARRIER::UAV(getVolumeTexture(m.first)->getResourcePtr()));
+	}
+	cmdList->ResourceBarrier(barriers.size(), barriers.data());
+
+}
+
+
+UINT MeshVoxelizer::getDimensionX() {
+	return mX;
+}
+
+UINT MeshVoxelizer::getDimensionY() {
+	return mY;
+}
+UINT MeshVoxelizer::getDimensionZ() {
+	return mZ;
 }
 
 UINT MeshVoxelizer::getNumDescriptors() {

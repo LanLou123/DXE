@@ -60,6 +60,7 @@ struct RadianceConstants {
     float pad1;
     DirectX::XMFLOAT4X4 gLight2World;
     float voxelScale;
+    int mipDim;
    // DirectX::XMFLOAT4X4
 
 };

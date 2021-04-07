@@ -158,5 +158,8 @@
     <FxCompile Include="Shaders\radiance.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="Shaders\baseMipRadiance.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

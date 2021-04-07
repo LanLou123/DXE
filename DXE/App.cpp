@@ -51,36 +51,19 @@ void App::BuildDescriptorHeaps() {
     // ================================================
     // set descriptor heap addresses for deferredrenderer
     // ================================================
-
-
    
-    for (auto& gbuffer : mDeferredRenderer->getGbuffersMap()) {
-
-        auto deferredRendererCPURtvHandle = mRtvHeap->mCPUHandle(mRtvHeap->getCurrentOffsetRef());
-        mRtvHeap->incrementCurrentOffset();
-
-        auto deferredRendererCPUSrvHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-        auto deferredRendererGPUSrvHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-        gbuffer.second->SetupCPUGPUDescOffsets(deferredRendererCPUSrvHandle, deferredRendererGPUSrvHandle, deferredRendererCPURtvHandle);
-        mSrvHeaps["MainPass"]->incrementCurrentOffset();
-
-    }
+    mDeferredRenderer->setUpDescriptors4GBuffers(mSrvHeaps["MainPass"].get(), mRtvHeap.get());
 
     // ================================================
-    // set descriptor heap addresses for voxelizer
+    // set descriptor heap addresses for voxelizer's volume gbuffers
     // ================================================
-    for (auto& voxelTex : mMeshVoxelizer->getVoxelTexturesMap()) {
-        auto meshVoxelizerCPUUavHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-        auto meshVoxelizerGPUUavHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-        mSrvHeaps["MainPass"]->incrementCurrentOffset();
-        voxelTex.second->SetupUAVCPUGPUDescOffsets( meshVoxelizerCPUUavHandle, meshVoxelizerGPUUavHandle);
-    }
-    for (auto& voxelTex : mMeshVoxelizer->getVoxelTexturesMap()) {
-        auto meshVoxelizerCPUUavHandle = mSrvHeaps["MainPass"]->mCPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-        auto meshVoxelizerGPUUavHandle = mSrvHeaps["MainPass"]->mGPUHandle(mSrvHeaps["MainPass"]->getCurrentOffsetRef());
-        mSrvHeaps["MainPass"]->incrementCurrentOffset();
-        voxelTex.second->SetupSRVCPUGPUDescOffsets(meshVoxelizerCPUUavHandle, meshVoxelizerGPUUavHandle);
-    }
+    mMeshVoxelizer->setUpDescriptors4Voxels(mSrvHeaps["MainPass"].get());
+
+
+    // ================================================
+    // set descriptor heap addresses for voxelizer's radiance mipmapped volume buffers
+    // ================================================
+    mMeshVoxelizer->setUpDescriptors4RadianceMipMaped(mSrvHeaps["MainPass"].get());
 }
 
 void App::BuildRootSignature()
@@ -142,20 +125,19 @@ void App::BuildRootSignature()
 
     CD3DX12_ROOT_SIGNATURE_DESC rootSigDescComp(1, slotRootParameterComp, 0, nullptr,
         D3D12_ROOT_SIGNATURE_FLAG_NONE);
-    ComPtr<ID3DBlob> serializedRootSigComp = nullptr;
-    ComPtr<ID3DBlob> errorBlobComp = nullptr;
+
     hr = D3D12SerializeRootSignature(&rootSigDescComp, D3D_ROOT_SIGNATURE_VERSION_1,
-        serializedRootSigComp.GetAddressOf(), errorBlobComp.GetAddressOf());
-    if (errorBlobComp != nullptr)
+        serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+    if (errorBlob != nullptr)
     {
-        ::OutputDebugStringA((char*)errorBlobComp->GetBufferPointer());
+        ::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
     }
     ThrowIfFailed(hr);
 
     ThrowIfFailed(md3dDevice->CreateRootSignature(
         0,
-        serializedRootSigComp->GetBufferPointer(),
-        serializedRootSigComp->GetBufferSize(),
+        serializedRootSig->GetBufferPointer(),
+        serializedRootSig->GetBufferSize(),
         IID_PPV_ARGS(mRootSignatures["CompResetPass"].GetAddressOf())));
 
     // =================================================
@@ -172,24 +154,53 @@ void App::BuildRootSignature()
     slotRootParameterCompRadiance[1].InitAsDescriptorTable(1, &texTableShadowRadiance, D3D12_SHADER_VISIBILITY_ALL);
     slotRootParameterCompRadiance[2].InitAsConstantBufferView(0);
 
-    CD3DX12_ROOT_SIGNATURE_DESC rootSigDescCompRadiance(3, slotRootParameterCompRadiance, (UINT)staticSamplers.size(), staticSamplers.data(),
+    CD3DX12_ROOT_SIGNATURE_DESC rootSigDescCompRadiance(3, slotRootParameterCompRadiance, 0, nullptr,
         D3D12_ROOT_SIGNATURE_FLAG_NONE);
-    ComPtr<ID3DBlob> serializedRootSigCompRadiance = nullptr;
-    ComPtr<ID3DBlob> errorBlobCompRadiance = nullptr;
+
     hr = D3D12SerializeRootSignature(&rootSigDescCompRadiance, D3D_ROOT_SIGNATURE_VERSION_1,
-        serializedRootSigCompRadiance.GetAddressOf(), errorBlobCompRadiance.GetAddressOf());
-    if (errorBlobCompRadiance != nullptr)
+        serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+    if (errorBlob != nullptr)
     {
-        ::OutputDebugStringA((char*)errorBlobCompRadiance->GetBufferPointer());
+        ::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
     }
     ThrowIfFailed(hr);
 
     ThrowIfFailed(md3dDevice->CreateRootSignature(
         0,
-        serializedRootSigCompRadiance->GetBufferPointer(),
-        serializedRootSigCompRadiance->GetBufferSize(),
+        serializedRootSig->GetBufferPointer(),
+        serializedRootSig->GetBufferSize(),
         IID_PPV_ARGS(mRootSignatures["CompRadiance"].GetAddressOf())));
 
+    // =================================================
+    // compute base mip generation pass root signature 
+    // =================================================
+
+    CD3DX12_DESCRIPTOR_RANGE radianceVolTextureRange;
+    radianceVolTextureRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0); // u0
+    CD3DX12_DESCRIPTOR_RANGE radianceMipVolTextureRange;
+    radianceMipVolTextureRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 1); // u1
+
+    CD3DX12_ROOT_PARAMETER slotRootParameterCompMipRadiance[3];
+    slotRootParameterCompMipRadiance[0].InitAsDescriptorTable(1, &radianceVolTextureRange, D3D12_SHADER_VISIBILITY_ALL);
+    slotRootParameterCompMipRadiance[1].InitAsDescriptorTable(1, &radianceMipVolTextureRange, D3D12_SHADER_VISIBILITY_ALL);
+    slotRootParameterCompMipRadiance[2].InitAsConstants(1 ,0);
+
+    CD3DX12_ROOT_SIGNATURE_DESC rootSigDescCompMipRadiance(3, slotRootParameterCompMipRadiance, 0, nullptr,
+        D3D12_ROOT_SIGNATURE_FLAG_NONE);
+
+    hr = D3D12SerializeRootSignature(&rootSigDescCompMipRadiance, D3D_ROOT_SIGNATURE_VERSION_1,
+        serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+    if (errorBlob != nullptr)
+    {
+        ::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+    }
+    ThrowIfFailed(hr);
+
+    ThrowIfFailed(md3dDevice->CreateRootSignature(
+        0,
+        serializedRootSig->GetBufferPointer(),
+        serializedRootSig->GetBufferSize(),
+        IID_PPV_ARGS(mRootSignatures["CompFillBaseMip"].GetAddressOf())));
 }
 
 
@@ -463,6 +474,7 @@ void App::Draw(const Timer& gt) {
     mMeshVoxelizer->Clear3DTexture(mCommandList.Get(), mRootSignatures["CompResetPass"].Get(), mPSOs["CompReset"].Get());
     VoxelizeMesh();
     InjectRadiance();
+    FillBaseMip();
     DrawScene();
 
     // Done recording commands.
@@ -619,6 +631,7 @@ void App::BuildShadersAndInputLayout()
     mShaders["voxelizerPS"] = d3dUtil::CompileShader(L"Shaders/voxelizer.hlsl", nullptr, "PS", "ps_5_1");
     mShaders["voxelizerCompReset"] = d3dUtil::CompileShader(L"Shaders/voxelizer.hlsl", nullptr, "CompReset", "cs_5_1");
     mShaders["radianceCS"] = d3dUtil::CompileShader(L"Shaders/radiance.hlsl", nullptr, "Radiance", "cs_5_1");
+    mShaders["CompFillBaseMip"] = d3dUtil::CompileShader(L"Shaders/baseMipRadiance.hlsl", nullptr, "BaseMipRadiance", "cs_5_1");
 
     mInputLayout =
     {
@@ -832,6 +845,18 @@ void App::BuildPSOs() {
     };
     RadianceDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
     ThrowIfFailed(md3dDevice->CreateComputePipelineState(&RadianceDesc, IID_PPV_ARGS(&mPSOs["CompRadiance"])));
+
+    // ============================================
+    // PSO for base mip generation for radiance pass
+    // ============================================
+    D3D12_COMPUTE_PIPELINE_STATE_DESC MipRadianceDesc = {};
+    MipRadianceDesc.pRootSignature = mRootSignatures["CompFillBaseMip"].Get();
+    MipRadianceDesc.CS = {
+        reinterpret_cast<BYTE*>(mShaders["CompFillBaseMip"]->GetBufferPointer()),
+        mShaders["CompFillBaseMip"]->GetBufferSize()
+    };
+    MipRadianceDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+    ThrowIfFailed(md3dDevice->CreateComputePipelineState(&MipRadianceDesc, IID_PPV_ARGS(&mPSOs["CompFillBaseMip"])));
 }
 
 
@@ -880,6 +905,24 @@ void App::InjectRadiance() {
     auto radianceCB = mCurrFrameResource->RadianceCB->Resource();
     mCommandList->SetComputeRootConstantBufferView(2, radianceCB->GetGPUVirtualAddress());
     mCommandList->Dispatch(mShadowMap->Width() / 16.0, mShadowMap->Height() / 16.0, 1.0);
+
+    mCommandList->ResourceBarrier((int)1, &CD3DX12_RESOURCE_BARRIER::UAV(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getResourcePtr()));
+}
+
+void App::FillBaseMip() {
+
+    UINT mipPow = 2;
+
+    int dispatchX = mMeshVoxelizer->getDimensionX() / mipPow / 8 ;
+    int dispatchY = mMeshVoxelizer->getDimensionY() / mipPow / 8 ;
+    int dispatchZ = mMeshVoxelizer->getDimensionZ() / mipPow / 8 ;
+
+    mCommandList->SetPipelineState(mPSOs["CompFillBaseMip"].Get());
+    mCommandList->SetComputeRootSignature(mRootSignatures["CompFillBaseMip"].Get());
+    mCommandList->SetComputeRootDescriptorTable(0, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getGPUHandle4UAV());
+    mCommandList->SetComputeRootDescriptorTable(1, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4UAV(0));
+    mCommandList->SetComputeRoot32BitConstant(2, mMeshVoxelizer->getDimensionX() / mipPow, 0);
+    mCommandList->Dispatch(dispatchX, dispatchY, dispatchZ);
 
 }
 

@@ -100,12 +100,12 @@ void Scene::buildMaterials() {
 }
 
 void Scene::loadTextures() {
-    auto mytex1 = std::make_unique<Texture>(L"../Resources/Textures/ss.png", 0);
+    auto mytex1 = std::make_unique<Texture>(L"../Resources/Textures/r1.png", 0);
     mytex1->Name = "tex1";
     mytex1->initializeTextureBuffer(md3dDevice, cpyCommandObject.get());
     globalTextureSRVDescriptorHeapIndex++;
 
-    auto mytex2 = std::make_unique <Texture>(L"../Resources/Textures/gem1.jpg", 1);
+    auto mytex2 = std::make_unique <Texture>(L"../Resources/Textures/r1.png", 1);
     mytex2->Name = "tex2";
     mytex2->initializeTextureBuffer(md3dDevice, cpyCommandObject.get());
     globalTextureSRVDescriptorHeapIndex++;

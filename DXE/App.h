@@ -1,6 +1,8 @@
 #ifndef APP_H
 #define APP_H
 
+
+
 #include "Core.h"
 #include "Utilities/DescriptorHeap.h"
 #include "Utilities/MathUtils.h"
@@ -76,6 +78,7 @@ private:
     void DrawScene2GBuffers();
     void VoxelizeMesh();
     void InjectRadiance();
+    void FillBaseMip();
     void DrawScene();
 
     std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
