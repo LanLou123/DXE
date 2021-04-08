@@ -4,4 +4,14 @@ E:\DX12\DXE\DXE\DXE\App.cpp(36,119): warning C4244: 'argument': conversion from 
 E:\DX12\DXE\DXE\DXE\App.cpp(907,85): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
 E:\DX12\DXE\DXE\DXE\App.cpp(907,77): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
 E:\DX12\DXE\DXE\DXE\App.cpp(907,48): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+  MeshVoxelizer.cpp
+E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(35,20): warning C4018: '<': signed/unsigned mismatch
+E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(49,20): warning C4018: '<': signed/unsigned mismatch
+E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(77,20): warning C4018: '<': signed/unsigned mismatch
+E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(88,20): warning C4018: '<': signed/unsigned mismatch
+E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(329,43): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(329,33): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(329,23): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(335,59): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
+  Generating Code...
   DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Debug\DXE.exe

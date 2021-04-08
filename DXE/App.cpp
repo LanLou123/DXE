@@ -919,10 +919,12 @@ void App::FillBaseMip() {
 
     mCommandList->SetPipelineState(mPSOs["CompFillBaseMip"].Get());
     mCommandList->SetComputeRootSignature(mRootSignatures["CompFillBaseMip"].Get());
-    mCommandList->SetComputeRootDescriptorTable(0, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getGPUHandle4UAV());
+    mCommandList->SetComputeRootDescriptorTable(0, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getGPUHandle4UAV());
     mCommandList->SetComputeRootDescriptorTable(1, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4UAV(0));
     mCommandList->SetComputeRoot32BitConstant(2, mMeshVoxelizer->getDimensionX() / mipPow, 0);
     mCommandList->Dispatch(dispatchX, dispatchY, dispatchZ);
+
+    mCommandList->ResourceBarrier((int)1, &CD3DX12_RESOURCE_BARRIER::UAV(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr()));
 
 }
 
