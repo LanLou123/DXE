@@ -88,6 +88,7 @@ public:
         SHADOWMAP_TEX_TABLE,
         G_BUFFER, // pos, albedo, normal, depth
         VOXEL,
+        RADIANCEMIP,
         OBJ_CBV,
         MAINPASS_CBV,
         MATERIAL_CBV,

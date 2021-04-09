@@ -84,6 +84,7 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE getCPUHandle4UAV(int mipLevel) const;
 	D3D12_GPU_DESCRIPTOR_HANDLE getGPUHandle4UAV(int mipLevel) const;
 	UINT getNumDescriptors();
+	UINT getNumMipLevels();
 
 	// setters
 	void SetupUAVCPUGPUDescOffsets(mDescriptorHeap* heapPtr);

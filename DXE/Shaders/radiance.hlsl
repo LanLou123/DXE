@@ -81,8 +81,14 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
 
     //col.xyz = float3(1.0, 1.0, 1.0);
 
-    col *= 255.0f;
+
 
     //imageAtomicRGBA8Avg(gVoxelizerRadiance, texIndex, col);
+
+    int oldRadiance = gVoxelizerRadiance[int3(texIndex)];
+    float4 oldRadianceCol = convRGBA8ToVec4(oldRadiance) / 255.0;
+    col.a = oldRadianceCol.a; // preserve the alpha
+    col *= 255.0f;
+
     gVoxelizerRadiance[int3(texIndex)] = convVec4ToRGBA8(col);
 }

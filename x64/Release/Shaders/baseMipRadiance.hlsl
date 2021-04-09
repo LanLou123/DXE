@@ -145,3 +145,138 @@ void BaseMipRadiance( uint3 DTid : SV_DispatchThreadID )
 	gVoxelizerMipedRadiance[curMipIdx] = convVec4ToRGBA8(colNZ * 255.0);
 
 }
+
+[numthreads(8, 8, 8)]
+void AllMipRadiance(uint3 DTid : SV_DispatchThreadID)
+{
+	int3 biggerMipIdx = DTid * 2;
+	uint3 curMipIdx = DTid;
+
+	int biggerMipIncrement = mipDim * 2;
+	int curMipIncrement = mipDim;
+
+
+	float4 filteredCol[8];
+	[unroll]
+	for (int i = 0; i < 8; ++i) {
+		filteredCol[i] = float4(0.0, 0.0, 0.0, 0.0);
+	}
+
+	//+x
+	[unroll]
+	for (int i = 0; i < 2; i++)
+	{
+		[unroll]
+		for (int j = 0; j < 2; j++)
+		{
+			[unroll]
+			for (int k = 0; k < 2; k++)
+			{
+				int3 curIdx = biggerMipIdx + int3(i, j, k);
+				filteredCol[4 * i + 2 * j + 1 * k] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;
+			}
+		}
+	}
+	float4 colPX = filterAnsiotropicVoxelDirection(filteredCol[0], filteredCol[1], filteredCol[2], filteredCol[3], filteredCol[4], filteredCol[5], filteredCol[6], filteredCol[7]);
+	gVoxelizerMipedRadiance[curMipIdx] = convVec4ToRGBA8(colPX * 255.0);
+	curMipIdx.x += curMipIncrement;
+	biggerMipIdx.x += biggerMipIncrement;
+
+	// -x
+	[unroll]
+	for (int i = 0; i < 2; i++)
+	{
+		[unroll]
+		for (int j = 0; j < 2; j++)
+		{
+			[unroll]
+			for (int k = 0; k < 2; k++)
+			{
+				int3 curIdx = biggerMipIdx + int3(i, j, k);
+				filteredCol[- 4 * i + 2 * j + 1 * k + 4] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;
+			}
+		}
+	}
+	float4 colNX = filterAnsiotropicVoxelDirection(filteredCol[0], filteredCol[1], filteredCol[2], filteredCol[3], filteredCol[4], filteredCol[5], filteredCol[6], filteredCol[7]);
+	gVoxelizerMipedRadiance[curMipIdx] = convVec4ToRGBA8(colNX * 255.0);
+	curMipIdx.x += curMipIncrement;
+	biggerMipIdx.x += biggerMipIncrement;
+
+	// +y
+	[unroll]
+	for (int i = 0; i < 2; i++)
+	{
+		[unroll]
+		for (int j = 0; j < 2; j++)
+		{
+			[unroll]
+			for (int k = 0; k < 2; k++)
+			{
+				int3 curIdx = biggerMipIdx + int3(i, j, k);
+				filteredCol[1 * i + 4 * j + 2 * k] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;
+			}
+		}
+	}
+	float4 colPY = filterAnsiotropicVoxelDirection(filteredCol[0], filteredCol[1], filteredCol[2], filteredCol[3], filteredCol[4], filteredCol[5], filteredCol[6], filteredCol[7]);
+	gVoxelizerMipedRadiance[curMipIdx] = convVec4ToRGBA8(colPY * 255.0);
+	curMipIdx.x += curMipIncrement;
+	biggerMipIdx.x += biggerMipIncrement;
+
+	// -y
+	[unroll]
+	for (int i = 0; i < 2; i++)
+	{
+		[unroll]
+		for (int j = 0; j < 2; j++)
+		{
+			[unroll]
+			for (int k = 0; k < 2; k++)
+			{
+				int3 curIdx = biggerMipIdx + int3(i, j, k);
+				filteredCol[1 * i - 4 * j + 2 * k + 4] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;
+			}
+		}
+	}
+	float4 colNY = filterAnsiotropicVoxelDirection(filteredCol[0], filteredCol[1], filteredCol[2], filteredCol[3], filteredCol[4], filteredCol[5], filteredCol[6], filteredCol[7]);
+	gVoxelizerMipedRadiance[curMipIdx] = convVec4ToRGBA8(colNY * 255.0);
+	curMipIdx.x += curMipIncrement;
+	biggerMipIdx.x += biggerMipIncrement;
+
+	// +z
+	[unroll]
+	for (int i = 0; i < 2; i++)
+	{
+		[unroll]
+		for (int j = 0; j < 2; j++)
+		{
+			[unroll]
+			for (int k = 0; k < 2; k++)
+			{
+				int3 curIdx = biggerMipIdx + int3(i, j, k);
+				filteredCol[1 * i + 2 * j + 4 * k] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;
+			}
+		}
+	}
+	float4 colPZ = filterAnsiotropicVoxelDirection(filteredCol[0], filteredCol[1], filteredCol[2], filteredCol[3], filteredCol[4], filteredCol[5], filteredCol[6], filteredCol[7]);
+	gVoxelizerMipedRadiance[curMipIdx] = convVec4ToRGBA8(colPZ * 255.0);
+	curMipIdx.x += curMipIncrement;
+	biggerMipIdx.x += biggerMipIncrement;
+
+	// -z
+	[unroll]
+	for (int i = 0; i < 2; i++)
+	{
+		[unroll]
+		for (int j = 0; j < 2; j++)
+		{
+			[unroll]
+			for (int k = 0; k < 2; k++)
+			{
+				int3 curIdx = biggerMipIdx + int3(i, j, k);
+				filteredCol[1 * i + 2 * j - 4 * k + 4] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;
+			}
+		}
+	}
+	float4 colNZ = filterAnsiotropicVoxelDirection(filteredCol[0], filteredCol[1], filteredCol[2], filteredCol[3], filteredCol[4], filteredCol[5], filteredCol[6], filteredCol[7]);
+	gVoxelizerMipedRadiance[curMipIdx] = convVec4ToRGBA8(colNZ * 255.0);
+}

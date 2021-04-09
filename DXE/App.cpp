@@ -82,6 +82,8 @@ void App::BuildRootSignature()
     gbufferTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4, t5
     CD3DX12_DESCRIPTOR_RANGE voxelTexTable;
     voxelTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, (int)VOLUME_TEXTURE_TYPE::COUNT, 0); // u0
+    CD3DX12_DESCRIPTOR_RANGE radianceTexTable;
+    radianceTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 4); // u4
     // Root parameter can be a table, root descriptor or root constants.
     CD3DX12_ROOT_PARAMETER slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::COUNT];
     // Perfomance TIP: Order from most frequent to least frequent.
@@ -89,6 +91,7 @@ void App::BuildRootSignature()
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE].InitAsDescriptorTable(1, &texTableShadow, D3D12_SHADER_VISIBILITY_PIXEL); // shadow map
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER].InitAsDescriptorTable(1, &gbufferTable, D3D12_SHADER_VISIBILITY_PIXEL);
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::VOXEL].InitAsDescriptorTable(1, &voxelTexTable, D3D12_SHADER_VISIBILITY_ALL);
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP].InitAsDescriptorTable(1, &radianceTexTable, D3D12_SHADER_VISIBILITY_ALL);
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::OBJ_CBV].InitAsConstantBufferView(0); // obj const buffer
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV].InitAsConstantBufferView(1); // pass const buffer
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MATERIAL_CBV].InitAsConstantBufferView(2); // material const buffer
@@ -468,6 +471,7 @@ void App::Draw(const Timer& gt) {
     mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE, mShadowMap->getGPUHandle4SRV());
     mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER, mDeferredRenderer->getGBuffer(GBUFFER_TYPE::POSITION)->getGPUHandle4SRV());// starting GPU handle location for all gbuffers
     mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::VOXEL, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getGPUHandle4UAV());
+    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4UAV(0));
 
     DrawScene2GBuffers();
     DrawScene2ShadowMap();
@@ -475,6 +479,9 @@ void App::Draw(const Timer& gt) {
     VoxelizeMesh();
     InjectRadiance();
     FillBaseMip();
+    for (int i = 1; i < mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getNumMipLevels(); ++i) {
+        FillMipLevel(i);
+    }
     DrawScene();
 
     // Done recording commands.
@@ -632,7 +639,7 @@ void App::BuildShadersAndInputLayout()
     mShaders["voxelizerCompReset"] = d3dUtil::CompileShader(L"Shaders/voxelizer.hlsl", nullptr, "CompReset", "cs_5_1");
     mShaders["radianceCS"] = d3dUtil::CompileShader(L"Shaders/radiance.hlsl", nullptr, "Radiance", "cs_5_1");
     mShaders["CompFillBaseMip"] = d3dUtil::CompileShader(L"Shaders/baseMipRadiance.hlsl", nullptr, "BaseMipRadiance", "cs_5_1");
-
+    mShaders["CompFillAllMip"] = d3dUtil::CompileShader(L"Shaders/baseMipRadiance.hlsl", nullptr, "AllMipRadiance", "cs_5_1");
     mInputLayout =
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
@@ -857,6 +864,18 @@ void App::BuildPSOs() {
     };
     MipRadianceDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
     ThrowIfFailed(md3dDevice->CreateComputePipelineState(&MipRadianceDesc, IID_PPV_ARGS(&mPSOs["CompFillBaseMip"])));
+
+    // ============================================
+    // PSO for all level mip generation for radiance pass
+    // ============================================
+    D3D12_COMPUTE_PIPELINE_STATE_DESC AllMipRadianceDesc = {};
+    AllMipRadianceDesc.pRootSignature = mRootSignatures["CompFillBaseMip"].Get(); //we share the same root signature with base here
+    AllMipRadianceDesc.CS = {
+        reinterpret_cast<BYTE*>(mShaders["CompFillAllMip"]->GetBufferPointer()),
+        mShaders["CompFillAllMip"]->GetBufferSize()
+    };
+    AllMipRadianceDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+    ThrowIfFailed(md3dDevice->CreateComputePipelineState(&AllMipRadianceDesc, IID_PPV_ARGS(&mPSOs["CompFillAllMip"])));
 }
 
 
@@ -919,13 +938,30 @@ void App::FillBaseMip() {
 
     mCommandList->SetPipelineState(mPSOs["CompFillBaseMip"].Get());
     mCommandList->SetComputeRootSignature(mRootSignatures["CompFillBaseMip"].Get());
-    mCommandList->SetComputeRootDescriptorTable(0, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getGPUHandle4UAV());
+    mCommandList->SetComputeRootDescriptorTable(0, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getGPUHandle4UAV());
     mCommandList->SetComputeRootDescriptorTable(1, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4UAV(0));
     mCommandList->SetComputeRoot32BitConstant(2, mMeshVoxelizer->getDimensionX() / mipPow, 0);
     mCommandList->Dispatch(dispatchX, dispatchY, dispatchZ);
 
     mCommandList->ResourceBarrier((int)1, &CD3DX12_RESOURCE_BARRIER::UAV(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr()));
 
+}
+
+void App::FillMipLevel(int level) {
+    if (level == 0 || level >= mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getNumMipLevels())
+        return;
+    UINT mipPow = (UINT)(pow(2, level));
+    int dispatchX = (mMeshVoxelizer->getDimensionX() / (mipPow * 2) + 8 - 1)/ 8;
+    int dispatchY = (mMeshVoxelizer->getDimensionY() / (mipPow * 2) + 8 - 1)/ 8;
+    int dispatchZ = (mMeshVoxelizer->getDimensionZ() / (mipPow * 2) + 8 - 1)/ 8;
+
+    mCommandList->SetPipelineState(mPSOs["CompFillAllMip"].Get());
+    mCommandList->SetComputeRootSignature(mRootSignatures["CompFillBaseMip"].Get());//we share the same root signature with base here
+    mCommandList->SetComputeRootDescriptorTable(0, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4UAV(level - 1)); // previous/upper level mip
+    mCommandList->SetComputeRootDescriptorTable(1, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4UAV(level)); // current level mip
+    mCommandList->SetComputeRoot32BitConstant(2, mMeshVoxelizer->getDimensionX() / (mipPow * 2), 0);
+    mCommandList->Dispatch(dispatchX, dispatchY, dispatchZ);
+    mCommandList->ResourceBarrier((int)1, &CD3DX12_RESOURCE_BARRIER::UAV(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr()));
 }
 
 void App::VoxelizeMesh() {

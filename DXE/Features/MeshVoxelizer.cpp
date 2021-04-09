@@ -73,6 +73,10 @@ UINT RadianceMipMapedVolumeTexture::getNumDescriptors() {
 	return mNumDescriptors;
 }
 
+UINT RadianceMipMapedVolumeTexture::getNumMipLevels() {
+	return mNumMipLevels;
+}
+
 void RadianceMipMapedVolumeTexture::SetupUAVCPUGPUDescOffsets(mDescriptorHeap* heapPtr) {
 	for (int i = 0; i < mNumMipLevels; ++i) {
 		auto curCPUHandle = heapPtr->mCPUHandle(heapPtr->getCurrentOffsetRef());

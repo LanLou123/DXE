@@ -79,6 +79,7 @@ private:
     void VoxelizeMesh();
     void InjectRadiance();
     void FillBaseMip();
+    void FillMipLevel(int level);
     void DrawScene();
 
     std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();

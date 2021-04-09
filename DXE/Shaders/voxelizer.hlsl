@@ -147,7 +147,7 @@ void PS(PS_INPUT pin)
 	if (all(texIndex < texDimensions.xyz) && all(texIndex >= 0))
 	{
 		//imageAtomicRGBA8Avg(gVoxelizerAlbedo, texIndex, diffuseAlbedo);
-		gVoxelizerAlbedo[texIndex] = convVec4ToRGBA8(float4(diffuseAlbedo.xyz, 1.0) * 255.0f);
+		gVoxelizerAlbedo[texIndex] = convVec4ToRGBA8(float4(diffuseAlbedo.xyzw) * 255.0f);
 		imageAtomicRGBA8Avg(gVoxelizerNormal, texIndex, float4((pin.Normal.xyz / 2.0 + float3(0.5, 0.5, 0.5)), 1.0));
 		//gVoxelizerNormal[texIndex] = convVec4ToRGBA8(float4((pin.Normal.xyz/ 2.0 + float3(0.5, 0.5, 0.5))  , 1.0) * 255.0f);
 	}
@@ -162,6 +162,10 @@ void CompReset(int3 dispatchThreadID : SV_DispatchThreadID) {
 	int z = dispatchThreadID.z;
 
 	int oldAlbedo = gVoxelizerAlbedo[int3(x, y, z)];
+	float4 AlbCol = convRGBA8ToVec4(oldAlbedo) / 255.0f;
+	float4 newRadianceCol = float4(0.0, 0.0, 0.0, AlbCol.a); // olny copy alhpa value
+	int newRadiance = convVec4ToRGBA8(newRadianceCol * 255.0f);
+
 	int oldNormal = gVoxelizerNormal[int3(x, y, z)];
 	int oldEmissive = gVoxelizerEmissive[int3(x, y, z)];
 	int oldRadiance = gVoxelizerRadiance[int3(x, y, z)];
@@ -169,5 +173,5 @@ void CompReset(int3 dispatchThreadID : SV_DispatchThreadID) {
 	gVoxelizerAlbedo[int3(x, y, z)] = 0;
 	gVoxelizerNormal[int3(x, y, z)] = 0;
 	gVoxelizerEmissive[int3(x, y, z)] = 0;
-	gVoxelizerRadiance[int3(x, y, z)] = 0;
+	gVoxelizerRadiance[int3(x, y, z)] = newRadiance;
 }
