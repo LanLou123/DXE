@@ -1,4 +1,12 @@
 #include "common.hlsl"
+
+Texture2D    gDiffuseMap : register(t0);
+
+RWTexture3D<uint> gVoxelizerAlbedo : register(u0);
+RWTexture3D<uint> gVoxelizerNormal : register(u1);
+RWTexture3D<uint> gVoxelizerEmissive : register(u2);
+RWTexture3D<uint> gVoxelizerRadiance : register(u3);
+
 struct VertexIn
 {
     float3 PosL  : POSITION;
@@ -19,6 +27,7 @@ struct PS_INPUT {
     float3 Normal : NORMAL;
     float2 TexC : TEXCOORD;
 };
+
 
 
 // reference https://www.seas.upenn.edu/~pcozzi/OpenGLInsights/OpenGLInsights-SparseVoxelization.pdf & https://github.com/LeifNode/Novus-Engine 
@@ -147,6 +156,7 @@ void PS(PS_INPUT pin)
 	if (all(texIndex < texDimensions.xyz) && all(texIndex >= 0))
 	{
 		//imageAtomicRGBA8Avg(gVoxelizerAlbedo, texIndex, diffuseAlbedo);
+		//diffuseAlbedo = float4(1, 1, 1, 1);
 		gVoxelizerAlbedo[texIndex] = convVec4ToRGBA8(float4(diffuseAlbedo.xyzw) * 255.0f);
 		imageAtomicRGBA8Avg(gVoxelizerNormal, texIndex, float4((pin.Normal.xyz / 2.0 + float3(0.5, 0.5, 0.5)), 1.0));
 		//gVoxelizerNormal[texIndex] = convVec4ToRGBA8(float4((pin.Normal.xyz/ 2.0 + float3(0.5, 0.5, 0.5))  , 1.0) * 255.0f);

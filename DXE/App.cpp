@@ -81,20 +81,22 @@ void App::BuildRootSignature()
     CD3DX12_DESCRIPTOR_RANGE gbufferTable;
     gbufferTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4, t5
     CD3DX12_DESCRIPTOR_RANGE voxelTexTable;
-    voxelTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, (int)VOLUME_TEXTURE_TYPE::COUNT, 0); // u0
+    voxelTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)VOLUME_TEXTURE_TYPE::COUNT, 6); // t6 t7 t8 t9
     CD3DX12_DESCRIPTOR_RANGE radianceTexTable;
-    radianceTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 4); // u4
+    radianceTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getNumMipLevels(), 10); // t10
     // Root parameter can be a table, root descriptor or root constants.
     CD3DX12_ROOT_PARAMETER slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::COUNT];
-    // Perfomance TIP: Order from most frequent to least frequent.
+    // Perfomance TIP: Order from most frequent to least frequent.   
+    
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::OBJ_CBV].InitAsConstantBufferView(0); // obj const buffer
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV].InitAsConstantBufferView(1); // pass const buffer
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MATERIAL_CBV].InitAsConstantBufferView(2); // material const buffer
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::DIFFUSE_TEX_TABLE].InitAsDescriptorTable(1, &texTable, D3D12_SHADER_VISIBILITY_PIXEL); // mesh textures
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE].InitAsDescriptorTable(1, &texTableShadow, D3D12_SHADER_VISIBILITY_PIXEL); // shadow map
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER].InitAsDescriptorTable(1, &gbufferTable, D3D12_SHADER_VISIBILITY_PIXEL);
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::VOXEL].InitAsDescriptorTable(1, &voxelTexTable, D3D12_SHADER_VISIBILITY_ALL);
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP].InitAsDescriptorTable(1, &radianceTexTable, D3D12_SHADER_VISIBILITY_ALL);
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::OBJ_CBV].InitAsConstantBufferView(0); // obj const buffer
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV].InitAsConstantBufferView(1); // pass const buffer
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MATERIAL_CBV].InitAsConstantBufferView(2); // material const buffer
+
     auto staticSamplers = GetStaticSamplers();
     // A root signature is an array of root parameters.
     CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(d3dUtil::MAIN_PASS_UNIFORM::COUNT, slotRootParameter, (UINT)staticSamplers.size(), staticSamplers.data(),
@@ -115,6 +117,52 @@ void App::BuildRootSignature()
         serializedRootSig->GetBufferSize(),
         IID_PPV_ARGS(mRootSignatures["MainPass"].GetAddressOf())));
 
+
+    // =================================================
+    // voxelizer pass root signature 
+    // =================================================
+
+    // range means the location in HLSL shader
+    CD3DX12_DESCRIPTOR_RANGE texTableVoxelizer;
+    texTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0
+    CD3DX12_DESCRIPTOR_RANGE texTableShadowVoxelizer;
+    texTableShadowVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); //t1
+    CD3DX12_DESCRIPTOR_RANGE gbufferTableVoxelizer;
+    gbufferTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4, t5
+    CD3DX12_DESCRIPTOR_RANGE voxelTexTableVoxelizer;
+    voxelTexTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, (int)VOLUME_TEXTURE_TYPE::COUNT, 0); // u0 u1 u2 u3
+    CD3DX12_DESCRIPTOR_RANGE radianceTexTableVoxelizer;
+    radianceTexTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 4); // u4
+    // Root parameter can be a table, root descriptor or root constants.
+
+    CD3DX12_ROOT_PARAMETER slotRootParameterVoxelizer[8];
+    // Perfomance TIP: Order from most frequent to least frequent. 
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::OBJ_CBV].InitAsConstantBufferView(0); // obj const buffer
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV].InitAsConstantBufferView(1); // pass const buffer
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::MATERIAL_CBV].InitAsConstantBufferView(2); // material const buffer
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::DIFFUSE_TEX_TABLE].InitAsDescriptorTable(1, &texTableVoxelizer, D3D12_SHADER_VISIBILITY_PIXEL); // mesh textures
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE].InitAsDescriptorTable(1, &texTableShadowVoxelizer, D3D12_SHADER_VISIBILITY_PIXEL); // shadow map
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER].InitAsDescriptorTable(1, &gbufferTableVoxelizer, D3D12_SHADER_VISIBILITY_PIXEL);
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::VOXEL].InitAsDescriptorTable(1, &voxelTexTableVoxelizer, D3D12_SHADER_VISIBILITY_PIXEL);
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP].InitAsDescriptorTable(1, &radianceTexTableVoxelizer, D3D12_SHADER_VISIBILITY_PIXEL);
+
+
+    CD3DX12_ROOT_SIGNATURE_DESC rootSigDescVoxelizer(8, slotRootParameterVoxelizer, (UINT)staticSamplers.size(), staticSamplers.data(),
+        D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+    hr = D3D12SerializeRootSignature(&rootSigDescVoxelizer, D3D_ROOT_SIGNATURE_VERSION_1,
+        serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+    if (errorBlob != nullptr)
+    {
+        ::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+    }
+    ThrowIfFailed(hr);
+
+    ThrowIfFailed(md3dDevice->CreateRootSignature(
+        0,
+        serializedRootSig->GetBufferPointer(),
+        serializedRootSig->GetBufferSize(),
+        IID_PPV_ARGS(mRootSignatures["VoxelizerPass"].GetAddressOf())));
 
     // =================================================
     // compute reset pass root signature 
@@ -467,21 +515,14 @@ void App::Draw(const Timer& gt) {
     // only need to set SRV CBV UAV here, since RTV and DSV will never be accessed inside a shader (only written to)
     ID3D12DescriptorHeap* descriptorHeaps[] = { mSrvHeaps["MainPass"]->mPtr() };
     mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-    mCommandList->SetGraphicsRootSignature(mRootSignatures["MainPass"].Get());
-    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE, mShadowMap->getGPUHandle4SRV());
-    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER, mDeferredRenderer->getGBuffer(GBUFFER_TYPE::POSITION)->getGPUHandle4SRV());// starting GPU handle location for all gbuffers
-    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::VOXEL, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getGPUHandle4UAV());
-    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4UAV(0));
+ 
 
     DrawScene2GBuffers();
     DrawScene2ShadowMap();
     mMeshVoxelizer->Clear3DTexture(mCommandList.Get(), mRootSignatures["CompResetPass"].Get(), mPSOs["CompReset"].Get());
     VoxelizeMesh();
     InjectRadiance();
-    FillBaseMip();
-    for (int i = 1; i < mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getNumMipLevels(); ++i) {
-        FillMipLevel(i);
-    }
+    FillMip();
     DrawScene();
 
     // Done recording commands.
@@ -583,6 +624,7 @@ void App::OnKeyboardInput(const Timer& gt)
     if (GetAsyncKeyState('D') & 0x8000)
         mScene->getCamerasMap()["MainCam"]->Strafe(speed * dt);
     mScene->getCamerasMap()["MainCam"]->UpdateViewMatrix();
+    //std::cout << mScene->getCamerasMap()["MainCam"]->GetPosition().m128_f32[0] << " " << mScene->getCamerasMap()["MainCam"]->GetPosition().m128_f32[1] << " " << mScene->getCamerasMap()["MainCam"]->GetPosition().m128_f32[2] << std::endl;
 }
 
 
@@ -816,7 +858,7 @@ void App::BuildPSOs() {
     //voxelRasterDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_ON;
     CreatePSO(
         mPSOs["voxelizer"].GetAddressOf(),
-        mRootSignatures["MainPass"].Get(),
+        mRootSignatures["VoxelizerPass"].Get(),
         D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
         CD3DX12_BLEND_DESC(D3D12_DEFAULT),
         voxelRasterDesc,
@@ -900,10 +942,21 @@ void App::DrawScene() {
     mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
         D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
+    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getResourcePtr(),
+        D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
+    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getResourcePtr(),
+        D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
+    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr(),
+        D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
+
     // Clear the back buffer and depth buffer.
     mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::LightSteelBlue, 0, nullptr);
     mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, nullptr);
     mCommandList->SetGraphicsRootSignature(mRootSignatures["MainPass"].Get());
+    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE, mShadowMap->getGPUHandle4SRV());
+    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER, mDeferredRenderer->getGBuffer(GBUFFER_TYPE::POSITION)->getGPUHandle4SRV());// starting GPU handle location for all gbuffers
+    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::VOXEL, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getGPUHandle4SRV());
+    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4SRV());
     auto passCB = mCurrFrameResource->PassCB->Resource();
     mCommandList->SetGraphicsRootConstantBufferView(d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV, passCB->GetGPUVirtualAddress());
     mCommandList->SetPipelineState(mPSOs["deferredPost"].Get());
@@ -911,6 +964,14 @@ void App::DrawScene() {
     mCommandList->SetPipelineState(mPSOs["debug"].Get());
     DrawRenderItems(mCommandList.Get(), mScene->getObjectInfoLayer()[(int)RenderLayer::Debug]);
     // Indicate a state transition on the resource usage.
+
+    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getResourcePtr(),
+        D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS ));
+    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getResourcePtr(),
+        D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
+    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr(),
+        D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS ));
+
     mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
         D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 }
@@ -928,9 +989,12 @@ void App::InjectRadiance() {
     mCommandList->ResourceBarrier((int)1, &CD3DX12_RESOURCE_BARRIER::UAV(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getResourcePtr()));
 }
 
-void App::FillBaseMip() {
+void App::FillMip() {
+
 
     UINT mipPow = 2;
+
+
 
     int dispatchX = mMeshVoxelizer->getDimensionX() / mipPow / 8 ;
     int dispatchY = mMeshVoxelizer->getDimensionY() / mipPow / 8 ;
@@ -944,6 +1008,11 @@ void App::FillBaseMip() {
     mCommandList->Dispatch(dispatchX, dispatchY, dispatchZ);
 
     mCommandList->ResourceBarrier((int)1, &CD3DX12_RESOURCE_BARRIER::UAV(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr()));
+
+    for (int i = 1; i < mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getNumMipLevels(); ++i) {
+        FillMipLevel(i);
+    }
+
 
 }
 
@@ -969,7 +1038,11 @@ void App::VoxelizeMesh() {
     //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getResourcePtr(),
     //    D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
 
-    mCommandList->SetGraphicsRootSignature(mRootSignatures["MainPass"].Get());
+    mCommandList->SetGraphicsRootSignature(mRootSignatures["VoxelizerPass"].Get());
+
+    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::VOXEL, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getGPUHandle4UAV());
+    mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4UAV(0));
+
     mCommandList->RSSetViewports(1, &mMeshVoxelizer->Viewport());
     mCommandList->RSSetScissorRects(1, &mMeshVoxelizer->ScissorRect());
     mCommandList->OMSetRenderTargets(0, nullptr, false, nullptr);
@@ -985,6 +1058,10 @@ void App::VoxelizeMesh() {
 void App::DrawScene2GBuffers() {
 
     mCommandList->SetGraphicsRootSignature(mRootSignatures["MainPass"].Get());
+    //mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE, mShadowMap->getGPUHandle4SRV());
+    //mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER, mDeferredRenderer->getGBuffer(GBUFFER_TYPE::POSITION)->getGPUHandle4SRV());// starting GPU handle location for all gbuffers
+    //mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::VOXEL, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getGPUHandle4SRV());
+    //mCommandList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4SRV(0));
     UINT passCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(PassConstants));
     mCommandList->RSSetViewports(1, &mDeferredRenderer->Viewport());
     mCommandList->RSSetScissorRects(1, &mDeferredRenderer->ScissorRect());

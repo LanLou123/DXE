@@ -78,7 +78,7 @@ private:
     void DrawScene2GBuffers();
     void VoxelizeMesh();
     void InjectRadiance();
-    void FillBaseMip();
+    void FillMip();
     void FillMipLevel(int level);
     void DrawScene();
 

@@ -1,4 +1,18 @@
 #include "common.hlsl"
+
+Texture2D    gDiffuseMap : register(t0);
+Texture2D    gShadowMap : register(t1);
+Texture2D    gPositionMap : register(t2);
+Texture2D    gAlbedoMap : register(t3);
+Texture2D    gNormalMap : register(t4);
+Texture2D    gDepthMap : register(t5);
+
+Texture3D<float4> gVoxelizerAlbedo : register(t6);
+Texture3D<float4> gVoxelizerNormal : register(t7);
+Texture3D<float4> gVoxelizerEmissive : register(t8);
+Texture3D<float4> gVoxelizerRadiance : register(t9);
+Texture3D<float4> gVoxelizerRadianceMip : register(t10);
+
 struct VertexIn
 {
     float3 PosL  : POSITION;
@@ -76,32 +90,39 @@ float4 PS(VertexOut pin) : SV_Target
         
         for (int i = 0; i < 1500; ++i) {
             float3 mappedloc = curloc / 200.0f;
-            uint3 texIndex = uint3(((mappedloc.x * 0.5) + 0.5f) * texDimensions.x,
+            float3 texIndex = float3(((mappedloc.x * 0.5) + 0.5f),
+                ((mappedloc.y * 0.5) + 0.5f) ,
+                ((mappedloc.z * 0.5) + 0.5f));
+
+            float3 texMiped = texIndex;
+            texMiped.x /= 6.0;
+
+            int3 itexIndex = int3(((mappedloc.x * 0.5) + 0.5f) * texDimensions.x,
                 ((mappedloc.y * 0.5) + 0.5f) * texDimensions.y,
-                ((mappedloc.z * 0.5) + 0.5f) * texDimensions.z);
+                ((mappedloc.z * 0.5) + 0.5f)) * texDimensions.z;
+
             if (visulizevoxel == 2) {
-                if (gVoxelizerRadianceMip[texIndex] == 0) {
+                if (all(gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 5) == 0)) {
                     curloc = curloc + raydr * step;
                 }
                 else {
 
-                    voxelPickColor = convRGBA8ToVec4(gVoxelizerAlbedo[texIndex]).xyz / 255.0;
-                    voxelNormal = convRGBA8ToVec4(gVoxelizerRadiance[texIndex]).xyzw / 255.0;
-                    voxelNormal = convRGBA8ToVec4(gVoxelizerRadianceMip[texIndex]).xyzw / 255.0;
+        
+                    voxelNormal = gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 5) * 100.0;
                     step = -0.1 * step;
                     curloc = curloc + raydr * step;
 
                 }
             }
             else {
-                if (gVoxelizerAlbedo[texIndex] == 0) {
+                if (all(gVoxelizerAlbedo.Sample(gsamPointClamp, texIndex) == 0)) {
                     curloc = curloc + raydr * step;
                 }
 
                 else {
 
-                    voxelPickColor = convRGBA8ToVec4(gVoxelizerAlbedo[texIndex]).xyz / 255.0;
-                    voxelNormal = convRGBA8ToVec4(gVoxelizerRadiance[texIndex]).xyzw / 255.0;
+                    voxelPickColor = gVoxelizerAlbedo.Sample(gsamPointClamp, texIndex).xyz * 1.0 ;
+                    voxelNormal = gVoxelizerRadiance.Sample(gsamPointClamp, texIndex).xyzw ;
                     step = -0.1 * step;
                     curloc = curloc + raydr * step;
 

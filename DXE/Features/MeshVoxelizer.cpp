@@ -32,17 +32,16 @@ void RadianceMipMapedVolumeTexture::BuildResources() {
 }
 
 void RadianceMipMapedVolumeTexture::BuildSRVDescriptors() {
-	for (int i = 0; i < mNumMipLevels; ++i)
-	{
+
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		srvDesc.Format = mSRVFormat;
 		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
-		srvDesc.Texture3D.MostDetailedMip = i;
-		srvDesc.Texture3D.MipLevels = 1;
+		srvDesc.Texture3D.MostDetailedMip = 0;
+		srvDesc.Texture3D.MipLevels = mNumMipLevels;
 		srvDesc.Texture3D.ResourceMinLODClamp = 0.0f;
-		device->CreateShaderResourceView(m3DTexture.Get(), &srvDesc, mhCPUsrvs[i]);
-	}
+		device->CreateShaderResourceView(m3DTexture.Get(), &srvDesc, mhCPUsrv);
+	
 }
 
 void RadianceMipMapedVolumeTexture::BuildUAVDescriptors() {
@@ -69,6 +68,14 @@ D3D12_GPU_DESCRIPTOR_HANDLE RadianceMipMapedVolumeTexture::getGPUHandle4UAV(int 
 	return mhGPUuavs[mipLevel];
 }
 
+D3D12_CPU_DESCRIPTOR_HANDLE RadianceMipMapedVolumeTexture::getCPUHandle4SRV() const {
+	return mhCPUsrv;
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE RadianceMipMapedVolumeTexture::getGPUHandle4SRV() const {
+	return mhGPUsrv;
+}
+
 UINT RadianceMipMapedVolumeTexture::getNumDescriptors() {
 	return mNumDescriptors;
 }
@@ -89,13 +96,13 @@ void RadianceMipMapedVolumeTexture::SetupUAVCPUGPUDescOffsets(mDescriptorHeap* h
 }
 
 void RadianceMipMapedVolumeTexture::SetupSRVCPUGPUDescOffsets(mDescriptorHeap* heapPtr) {
-	for (int i = 0; i < mNumMipLevels; ++i) {
-		auto curCPUHandle = heapPtr->mCPUHandle(heapPtr->getCurrentOffsetRef());
-		auto curGPUHandle = heapPtr->mGPUHandle(heapPtr->getCurrentOffsetRef());
-		mhCPUsrvs.push_back(curCPUHandle);
-		mhGPUsrvs.push_back(curGPUHandle);
-		heapPtr->incrementCurrentOffset();
-	}
+
+	auto curCPUHandle = heapPtr->mCPUHandle(heapPtr->getCurrentOffsetRef());
+	auto curGPUHandle = heapPtr->mGPUHandle(heapPtr->getCurrentOffsetRef());
+	mhCPUsrv = curCPUHandle;
+	mhGPUsrv = curGPUHandle;
+	heapPtr->incrementCurrentOffset();
+
 	BuildSRVDescriptors();
 }
 
@@ -135,6 +142,15 @@ D3D12_CPU_DESCRIPTOR_HANDLE VolumeTexture::getCPUHandle4UAV() const {
 }
 D3D12_GPU_DESCRIPTOR_HANDLE VolumeTexture::getGPUHandle4UAV() const {
 	return mhGPUuav;
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE VolumeTexture::getCPUHandle4SRV() const {
+	return mhCPUsrv;
+}
+
+
+D3D12_GPU_DESCRIPTOR_HANDLE VolumeTexture::getGPUHandle4SRV() const {
+	return mhGPUsrv;
 }
 
 UINT VolumeTexture::getNumDescriptors() {

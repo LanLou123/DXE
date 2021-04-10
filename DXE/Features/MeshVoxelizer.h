@@ -28,6 +28,8 @@ public:
 	ID3D12Resource* getResourcePtr();
 	D3D12_CPU_DESCRIPTOR_HANDLE getCPUHandle4UAV() const;
 	D3D12_GPU_DESCRIPTOR_HANDLE getGPUHandle4UAV() const;
+	D3D12_CPU_DESCRIPTOR_HANDLE getCPUHandle4SRV() const;
+	D3D12_GPU_DESCRIPTOR_HANDLE getGPUHandle4SRV() const;
 	UINT getNumDescriptors();
 	void SetupUAVCPUGPUDescOffsets(
 		D3D12_CPU_DESCRIPTOR_HANDLE hCPUUav,
@@ -83,6 +85,8 @@ public:
 	ID3D12Resource* getResourcePtr();
 	D3D12_CPU_DESCRIPTOR_HANDLE getCPUHandle4UAV(int mipLevel) const;
 	D3D12_GPU_DESCRIPTOR_HANDLE getGPUHandle4UAV(int mipLevel) const;
+	D3D12_CPU_DESCRIPTOR_HANDLE getCPUHandle4SRV() const;
+	D3D12_GPU_DESCRIPTOR_HANDLE getGPUHandle4SRV() const;
 	UINT getNumDescriptors();
 	UINT getNumMipLevels();
 
@@ -108,8 +112,8 @@ private:
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> mhCPUuavs;
 	std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> mhGPUuavs;
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> mhCPUsrvs;
-	std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> mhGPUsrvs;
+	D3D12_CPU_DESCRIPTOR_HANDLE mhCPUsrv;
+	D3D12_GPU_DESCRIPTOR_HANDLE mhGPUsrv;
 
 
 	UINT mNumMipLevels;

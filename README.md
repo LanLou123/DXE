@@ -1,5 +1,10 @@
 # DXE
-A voxel GI rendering engine in dx12, in progress
+# A voxel GI rendering engine in dx12, currently in progress
+
+# Buggy rendering
+![](sc/vxbuggy.PNG)
+### finally got the whole pipeline working, need a lot of fixing, and the performance isn't good since no optimization have been done at all yet, but I can feel I'm getting there
+
 
 ## Gbuffer & deferred shawdow 
 ![](sc/gb.PNG)
@@ -13,3 +18,5 @@ A voxel GI rendering engine in dx12, in progress
 
 ## Radiance Map
 ![](sc/radiance.PNG)
+
+

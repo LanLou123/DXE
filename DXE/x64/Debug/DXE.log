@@ -1,9 +1,9 @@
 ﻿  App.cpp
 E:\DX12\DXE\DXE\DXE\App.cpp(24,129): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
 E:\DX12\DXE\DXE\DXE\App.cpp(36,119): warning C4244: 'argument': conversion from 'INT64' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(482,23): warning C4018: '<': signed/unsigned mismatch
-E:\DX12\DXE\DXE\DXE\App.cpp(926,85): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(926,77): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(926,48): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(951,29): warning C4018: '>=': signed/unsigned mismatch
+E:\DX12\DXE\DXE\DXE\App.cpp(982,85): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(982,77): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(982,48): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(1007,23): warning C4018: '<': signed/unsigned mismatch
+E:\DX12\DXE\DXE\DXE\App.cpp(1015,29): warning C4018: '>=': signed/unsigned mismatch
   DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Debug\DXE.exe

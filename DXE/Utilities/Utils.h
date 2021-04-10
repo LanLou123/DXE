@@ -83,15 +83,15 @@ public:
 
     static int gNumFrameResources;
 
-    enum MAIN_PASS_UNIFORM {
+    enum MAIN_PASS_UNIFORM { 
+        OBJ_CBV,
+        MAINPASS_CBV,
+        MATERIAL_CBV,
         DIFFUSE_TEX_TABLE,
         SHADOWMAP_TEX_TABLE,
         G_BUFFER, // pos, albedo, normal, depth
         VOXEL,
         RADIANCEMIP,
-        OBJ_CBV,
-        MAINPASS_CBV,
-        MATERIAL_CBV,
         COUNT
     };
 
