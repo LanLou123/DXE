@@ -996,15 +996,15 @@ void App::FillMip() {
 
 
 
-    int dispatchX = mMeshVoxelizer->getDimensionX() / mipPow / 8 ;
-    int dispatchY = mMeshVoxelizer->getDimensionY() / mipPow / 8 ;
-    int dispatchZ = mMeshVoxelizer->getDimensionZ() / mipPow / 8 ;
+    int dispatchX = mMeshVoxelizer->getDimensionX()  / 8 ;
+    int dispatchY = mMeshVoxelizer->getDimensionY()  / 8 ;
+    int dispatchZ = mMeshVoxelizer->getDimensionZ()  / 8 ;
 
     mCommandList->SetPipelineState(mPSOs["CompFillBaseMip"].Get());
     mCommandList->SetComputeRootSignature(mRootSignatures["CompFillBaseMip"].Get());
     mCommandList->SetComputeRootDescriptorTable(0, mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getGPUHandle4UAV());
     mCommandList->SetComputeRootDescriptorTable(1, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4UAV(0));
-    mCommandList->SetComputeRoot32BitConstant(2, mMeshVoxelizer->getDimensionX() / mipPow, 0);
+    mCommandList->SetComputeRoot32BitConstant(2, mMeshVoxelizer->getDimensionX() , 0);
     mCommandList->Dispatch(dispatchX, dispatchY, dispatchZ);
 
     mCommandList->ResourceBarrier((int)1, &CD3DX12_RESOURCE_BARRIER::UAV(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr()));
@@ -1020,15 +1020,15 @@ void App::FillMipLevel(int level) {
     if (level == 0 || level >= mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getNumMipLevels())
         return;
     UINT mipPow = (UINT)(pow(2, level));
-    int dispatchX = (mMeshVoxelizer->getDimensionX() / (mipPow * 2) + 8 - 1)/ 8;
-    int dispatchY = (mMeshVoxelizer->getDimensionY() / (mipPow * 2) + 8 - 1)/ 8;
-    int dispatchZ = (mMeshVoxelizer->getDimensionZ() / (mipPow * 2) + 8 - 1)/ 8;
+    int dispatchX = (mMeshVoxelizer->getDimensionX() / (mipPow ) + 8 - 1)/ 8;
+    int dispatchY = (mMeshVoxelizer->getDimensionY() / (mipPow ) + 8 - 1)/ 8;
+    int dispatchZ = (mMeshVoxelizer->getDimensionZ() / (mipPow ) + 8 - 1)/ 8;
 
     mCommandList->SetPipelineState(mPSOs["CompFillAllMip"].Get());
     mCommandList->SetComputeRootSignature(mRootSignatures["CompFillBaseMip"].Get());//we share the same root signature with base here
     mCommandList->SetComputeRootDescriptorTable(0, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4UAV(level - 1)); // previous/upper level mip
     mCommandList->SetComputeRootDescriptorTable(1, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getGPUHandle4UAV(level)); // current level mip
-    mCommandList->SetComputeRoot32BitConstant(2, mMeshVoxelizer->getDimensionX() / (mipPow * 2), 0);
+    mCommandList->SetComputeRoot32BitConstant(2, mMeshVoxelizer->getDimensionX() / (mipPow), 0);
     mCommandList->Dispatch(dispatchX, dispatchY, dispatchZ);
     mCommandList->ResourceBarrier((int)1, &CD3DX12_RESOURCE_BARRIER::UAV(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr()));
 }

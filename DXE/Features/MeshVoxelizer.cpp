@@ -1,7 +1,7 @@
 #include "MeshVoxelizer.h"
 
 RadianceMipMapedVolumeTexture::RadianceMipMapedVolumeTexture(ID3D12Device* _device, UINT _x, UINT _y, UINT _z) : device(_device), mX(_x), mY(_y), mZ(_z) {
-	mNumMipLevels = d3dUtil::GetNumMipmaps(mX / 2, mY / 2, mZ / 2);
+	mNumMipLevels = d3dUtil::GetNumMipmaps(mX , mY , mZ );
 	mNumDescriptors = 2 * mNumMipLevels;
 
 }
@@ -11,9 +11,9 @@ void RadianceMipMapedVolumeTexture::BuildResources() {
 	ZeroMemory(&texDesc, sizeof(D3D12_RESOURCE_DESC));
 	texDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE3D;
 	texDesc.Alignment = 0;
-	texDesc.Width = (mX / 2) * 6; // each anistropic mipmaping voxel needs 6 directions in total
-	texDesc.Height = mY / 2;
-	texDesc.DepthOrArraySize = mZ / 2;
+	texDesc.Width = (mX ) * 6; // each anistropic mipmaping voxel needs 6 directions in total
+	texDesc.Height = mY ;
+	texDesc.DepthOrArraySize = mZ ;
 	texDesc.MipLevels = mNumMipLevels;
 	texDesc.Format = mFormat;
 	texDesc.SampleDesc.Count = 1;
