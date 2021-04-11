@@ -2,11 +2,15 @@
 # A voxel GI rendering engine in dx12, currently in progress
 
 # Buggy rendering
-![](sc/vxbuggy1.PNG)
+![](sc/vxbuggy.PNG)
 ### finally got the whole pipeline working, need a lot of fixing, and the performance isn't good since no optimization have been done at all yet, but I can feel I'm getting there
 
 ## diffuse light only for now
-![](sc/diff.PNG)
+![](sc/diff1.PNG)
+
+![](sc/snibk.PNG)
+
+![](sc/out.PNG)
 
 ## Gbuffer & deferred shawdow 
 ![](sc/gb.PNG)

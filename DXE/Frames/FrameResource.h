@@ -40,6 +40,7 @@ struct PassConstants
     float cbPerObjectPad3 = 0.0f;
     DirectX::XMFLOAT3 camUpDir = { 0.f,0.f,0.f };
     int showVoxel = 1;
+    int showDirect = 0;
     
 };
 

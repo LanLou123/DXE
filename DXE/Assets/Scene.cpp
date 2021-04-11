@@ -152,7 +152,7 @@ void Scene::loadAssetFromAssimp(const std::string filepath) {
     //===========================================
 
     Assimp::Importer importer;
-    const aiScene* aiscene = importer.ReadFile(filepath, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_CalcTangentSpace);
+    const aiScene* aiscene = importer.ReadFile(filepath, aiProcessPreset_TargetRealtime_Quality  | aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_CalcTangentSpace | aiProcess_GenNormals );
 
     if (!aiscene || aiscene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !aiscene->mRootNode) {
  
@@ -263,6 +263,11 @@ void Scene::initScene() {
     buildMaterials();
     loadTextures(); 
     loadAssetFromAssimp("../Resources/Models/sponza/sponza.obj");
+    //loadAssetFromAssimp("../Resources/Models/sibenik/sibenik.obj"); 
+    //loadAssetFromAssimp("../Resources/Models/city/wildtown.obj");
+
+    //loadAssetFromAssimp("../Resources/Models/room/room.obj");
+    
 
     cpyCommandObject->endCommandRecording();
     cpyCommandObject->FlushCommandQueue();

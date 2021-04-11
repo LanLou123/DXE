@@ -264,6 +264,9 @@ bool App::Initialize() {
 
     mScene = std::make_unique<Scene>(md3dDevice.Get(), mClientWidth, mClientHeight);
     mScene->initScene();
+ 
+    float modelScale = 8.0;
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["sibenik.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
 
     mShadowMap = std::make_unique<ShadowMap>(md3dDevice.Get(), 2048, 2048);
     mShadowMap->initShadowMap();
@@ -361,7 +364,7 @@ void App::UpdateObjectCBs(const Timer& gt) {
 
 void App::UpdateScenePhysics(const Timer& gt) {
    
-    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["model1"]->World, DirectX::XMMatrixScaling(10.0f, 10.0f, 10.0f) * DirectX::XMMatrixTranslation(10.0f * std::sin(float(gt.TotalTime())), 15.0f, 0.0 ));
+    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["model1"]->World, DirectX::XMMatrixScaling(6.0f, 6.0f, 6.0f) * DirectX::XMMatrixTranslation(10.0f * std::sin(float(gt.TotalTime())), 15.0f, 0.0 ));
     mScene->getObjectInfos()["model1"]->NumFramesDirty = d3dUtil::gNumFrameResources;
 }
 
@@ -427,6 +430,7 @@ void App::UpdateMainPassCB(const Timer& gt)
     mMainPassCB.camLookDir = mScene->getCamerasMap()["MainCam"]->GetLook3f();
     mMainPassCB.camUpDir = mScene->getCamerasMap()["MainCam"]->GetUp3f();
     mMainPassCB.showVoxel = mShowVoxel;
+    mMainPassCB.showDirect = mShowDirect;
 
     auto currPassCB = mCurrFrameResource->PassCB.get();
     currPassCB->CopyData(0, mMainPassCB);
@@ -611,6 +615,12 @@ void App::OnKeyboardInput(const Timer& gt)
     }
     else {
         mShowVoxel = 0;
+    }
+    if (GetAsyncKeyState('F') & 0x8000) {
+        mShowDirect = 1;
+    }
+    else {
+        mShowDirect = 0;
     }
     if (GetAsyncKeyState('W') & 0x8000)
         mScene->getCamerasMap()["MainCam"]->Walk(speed * dt);

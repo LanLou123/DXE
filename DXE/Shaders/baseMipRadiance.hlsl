@@ -63,6 +63,8 @@ void AllMipRadiance(uint3 DTid : SV_DispatchThreadID)
 		filteredCol[i] = float4(0.0, 0.0, 0.0, 0.0);
 	}
 
+
+
 	//+x
 	[unroll]
 	for (int i = 0; i < 2; i++)

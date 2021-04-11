@@ -61,8 +61,9 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
         return;
 
     float2 uv = DTid.xy / float2(shadowTexDimensions);
-    float4 screenSpacePos = float4(uv * 2.0 - 1.0, gShadowMap.Load(int3(DTid.xy, 0)).x - 0.001 , 1.0);
+    float4 screenSpacePos = float4(uv * 2.0 - 1.0, gShadowMap.Load(int3(DTid.xy, 0)).x - 0.0001 , 1.0);
     screenSpacePos.y = -screenSpacePos.y;
+ 
 
     float4 volumeSpacePos = mul(screenSpacePos, gLight2World);
     volumeSpacePos.xyz /= (voxelScale);
@@ -77,7 +78,7 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
     float3 nor = float3(convRGBA8ToVec4(gVoxelizerNormal[texIndex]).xyz / 255.0);
     nor = 2.0 * (nor  - float3(0.5, 0.5, 0.5));
 
-    col.xyz *= (abs(dot(nor, -gLightDir))) * gLightCol;
+    col.xyz *= (abs(dot(nor, -gLightDir)) + 0.3) * gLightCol * 1.0;
 
     //col.xyz = float3(1.0, 1.0, 1.0);
 
