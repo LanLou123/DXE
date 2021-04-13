@@ -11,7 +11,7 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 
-enum ModelType{ TEMPLATE_MODEL = 0, ASSIMP_MODEL = 1, QUAD_MODEL = 2};
+enum ModelType{ TEMPLATE_MODEL = 0, ASSIMP_MODEL = 1, QUAD_MODEL = 2, GRID_MODEL = 3, CUBE_MODEL = 4, SPHERE_MODEL = 5, CYLINDER_MODEL = 6};
 
 // Defines a subrange of geometry in a MeshGeometry.  This is for when multiple
 // geometries are stored in one vertex and index buffer.  It provides the offsets
@@ -62,6 +62,11 @@ protected:
 	void buildGeometry();
 	void buildQuadGeometry();
 	void buildGeometryAssimp();
+
+	void buildSphereGeometry();
+	void buildCubeGeometry();
+	void buildGridGeometry();
+	void buildCylinderGeometry();
 
 
 

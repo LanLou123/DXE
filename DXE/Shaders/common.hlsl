@@ -15,7 +15,7 @@ cbuffer cbPerObject : register(b0)
     float gObj2VoxelScale;
 };
 
-#define VOXELSCALE 1.2
+#define VOXELSCALE 1.6
 #define VOXELMIPCOUNT 9
 #define PI 3.1415926
 
@@ -59,7 +59,7 @@ uint convVec4ToRGBA8(float4 val)
     return (uint (val.w) & 0x000000FF) << 24U | (uint(val.z) & 0x000000FF) << 16U | (uint(val.y) & 0x000000FF) << 8U | (uint(val.x) & 0x000000FF);
 }
 
-static const float3 cVXGIConeSampleDirections[] =
+static const float3 ConeSampleDirections[] =
 {
     float3(0.0f, 1.0f, 0.0f),
     float3(0.0f, 0.5f, 0.866025f),
@@ -83,7 +83,7 @@ static const float cMipDirectionalOffsets[] = {
     5.0f / 6.0f
 };
 
-static const float cVXGIConeSampleWeights[] =
+static const float ConeSampleWeights[] =
 {
     PI / 4.0f,
     3 * PI / 20.0f,
@@ -129,7 +129,8 @@ float4 sampleVoxelVolumeAnisotropic(Texture3D<float4> voxelTexture, Texture3D<fl
    // }
 
 
-    filteredColor.rgb *= 10.0f;
+    filteredColor.rgb *= 2.0f;
+    //filteredColor.a *= 0.8;
 
     return filteredColor;
 }

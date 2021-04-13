@@ -1,21 +1,15 @@
 ﻿  App.cpp
 E:\DX12\DXE\DXE\DXE\App.cpp(24,129): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
 E:\DX12\DXE\DXE\DXE\App.cpp(36,119): warning C4244: 'argument': conversion from 'INT64' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(997,85): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(997,77): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(997,48): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(1022,23): warning C4018: '<': signed/unsigned mismatch
-E:\DX12\DXE\DXE\DXE\App.cpp(1030,29): warning C4018: '>=': signed/unsigned mismatch
-  Scene.cpp
-E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(193,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(200,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(214,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(221,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
-  ShadowMap.cpp
-  main.cpp
+E:\DX12\DXE\DXE\DXE\App.cpp(270,163): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(999,85): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(999,77): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(999,48): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(1024,23): warning C4018: '<': signed/unsigned mismatch
+E:\DX12\DXE\DXE\DXE\App.cpp(1032,29): warning C4018: '>=': signed/unsigned mismatch
   Generating code
-  4 of 3468 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+  2 of 3495 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    20 functions had inline decision re-evaluated but remain unchanged
+    7 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Release\DXE.exe

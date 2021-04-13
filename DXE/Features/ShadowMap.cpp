@@ -147,10 +147,10 @@ void ShadowMap::Update(const Timer& gt) {
 		lightDir = DirectX::XMVector3TransformNormal(lightDir, R);
 		DirectX::XMStoreFloat3(&mShadowMapData.mRotatedLightDirections[i], lightDir);
 	}
-
+	//mShadowMapData.mRotatedLightDirections[0] = DirectX::XMFLOAT3(cos(mShadowMapData.mLightRotationAngle) * 2.0, -0.5, 0.0 );
 	// Only the first "main" light casts a shadow.
 	XMFLOAT3 sceneCenter(0.0f, 0.0f, 0.0f);
-	float sceneRadius = 200.f;
+	float sceneRadius = 250.f;
 
 	XMVECTOR lightDir = DirectX::XMLoadFloat3(&mShadowMapData.mRotatedLightDirections[0]);
 	lightDir = DirectX::XMVector3Normalize(lightDir);

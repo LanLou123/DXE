@@ -51,6 +51,7 @@ void imageAtomicRGBA8Avg(RWTexture3D<uint> imgUI, uint3 coords, float4 val)
 		rval.xyz = (rval.xyz * rval.w); 
 		float4 curValF = rval + val;
 		curValF.xyz /= (curValF.w); 
+		curValF.w = 255.0;
 		newVal = convVec4ToRGBA8(curValF);
 
 

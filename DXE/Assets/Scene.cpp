@@ -105,7 +105,7 @@ void Scene::loadTextures() {
     mytex1->initializeTextureBuffer(md3dDevice, cpyCommandObject.get());
     globalTextureSRVDescriptorHeapIndex++;
 
-    auto mytex2 = std::make_unique <Texture>(L"../Resources/Textures/r1.png", 1);
+    auto mytex2 = std::make_unique <Texture>(L"../Resources/Textures/fall.jpg", 1);
     mytex2->Name = "tex2";
     mytex2->initializeTextureBuffer(md3dDevice, cpyCommandObject.get());
     globalTextureSRVDescriptorHeapIndex++;
@@ -129,6 +129,12 @@ void Scene::loadModels() {
     mymodel1->InitModel(md3dDevice, cpyCommandObject.get());
     mymodel1->setObj2VoxelScale(200.0f);
     mModels["model1"] = std::move(mymodel1);
+
+    auto mymodel2 = std::make_unique<Model>(ModelType::SPHERE_MODEL);
+    mymodel2->Name = "area";
+    mymodel2->InitModel(md3dDevice, cpyCommandObject.get());
+    mymodel2->setObj2VoxelScale(200.0f);
+    mModels["area"] = std::move(mymodel2);
 
 
     auto myquad = std::make_unique<Model>(ModelType::QUAD_MODEL);

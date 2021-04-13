@@ -267,8 +267,10 @@ bool App::Initialize() {
  
     float modelScale = 8.0;
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["sibenik.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
+    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World,  DirectX::XMMatrixScaling(1,1,1) * DirectX::XMMatrixRotationRollPitchYaw(0,0,MathUtils::Pi / 2.0) * DirectX::XMMatrixTranslation(50, 60, 50) );
 
-    mShadowMap = std::make_unique<ShadowMap>(md3dDevice.Get(), 2048, 2048);
+
+    mShadowMap = std::make_unique<ShadowMap>(md3dDevice.Get(), 4096, 4096);
     mShadowMap->initShadowMap();
 
     mDeferredRenderer = std::make_unique<DeferredRenderer>(md3dDevice.Get(), mClientWidth, mClientHeight);
@@ -364,7 +366,7 @@ void App::UpdateObjectCBs(const Timer& gt) {
 
 void App::UpdateScenePhysics(const Timer& gt) {
    
-    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["model1"]->World, DirectX::XMMatrixScaling(6.0f, 6.0f, 6.0f) * DirectX::XMMatrixTranslation(10.0f * std::sin(float(gt.TotalTime())), 15.0f, 0.0 ));
+    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["model1"]->World, DirectX::XMMatrixScaling(0.01f, 0.01f, 0.01f) * DirectX::XMMatrixTranslation(10.0f * std::sin(float(gt.TotalTime())), 15.0f, 0.0 ));
     mScene->getObjectInfos()["model1"]->NumFramesDirty = d3dUtil::gNumFrameResources;
 }
 

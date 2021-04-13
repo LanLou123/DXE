@@ -108,7 +108,19 @@ void Model::InitModel(ID3D12Device* device, CommandObject* cmdObj) {
     }
     else if (modelType == ModelType::QUAD_MODEL) {
         buildQuadGeometry();
-    }      
+    }
+    else if (modelType == ModelType::SPHERE_MODEL) {
+        buildSphereGeometry();
+    }
+    else if (modelType == ModelType::CUBE_MODEL) {
+        buildCubeGeometry();
+    }
+    else if (modelType == ModelType::GRID_MODEL) {
+        buildGridGeometry();
+    }
+    else if (modelType == ModelType::CYLINDER_MODEL) {
+        buildCylinderGeometry();
+    }
     createBuffers(device);
     uploadBuffers(device, cmdObj);
 }
@@ -219,6 +231,162 @@ void Model::buildQuadGeometry() {
     IndexBufferByteSize = ibByteSize;
 }
 
+void Model::buildSphereGeometry() {
+    Geometry mGeo;
+    Geometry::MeshData sphere = mGeo.CreateSphere(8.f, 20, 20);
+
+    UINT sphereVertexOffset = 0;
+    UINT sphereIndexOffset = 0;
+
+    Mesh sphereSubMesh;
+    sphereSubMesh.IndexCount = (UINT)sphere.Indices32.size();
+    sphereSubMesh.StartIndexLocation = sphereIndexOffset;
+    sphereSubMesh.BaseVertexLocation = sphereVertexOffset;
+    sphereSubMesh.materialName = "mat2";
+    DrawArgs["sphere"] = sphereSubMesh;
+
+    auto totalVertCount = sphere.Vertices.size();
+    vertices.resize(totalVertCount);
+
+    UINT k = 0;
+    for (size_t i = 0; i < sphere.Vertices.size(); ++i, ++k) {
+        vertices[k].Pos = sphere.Vertices[i].Position;
+        vertices[k].Normal = sphere.Vertices[i].Normal;
+        vertices[k].TexC = sphere.Vertices[i].TexC;
+    }
+
+    indices.insert(indices.end(), std::begin(sphere.GetIndices16()), std::end(sphere.GetIndices16()));
+
+    const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
+    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+
+    ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
+    CopyMemory(VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
+    ThrowIfFailed(D3DCreateBlob(ibByteSize, IndexBufferCPU.GetAddressOf()));
+    CopyMemory(IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
+
+    VertexBufferByteSize = vbByteSize;
+    VertexByteStride = sizeof(Vertex);
+    IndexFormat = DXGI_FORMAT_R16_UINT;
+    IndexBufferByteSize = ibByteSize;
+}
+void Model::buildCubeGeometry() {
+    Geometry mGeo;
+    Geometry::MeshData sphere = mGeo.CreateBox(2.f, 2.f, 2.f, 3.0);
+
+    UINT sphereVertexOffset = 0;
+    UINT sphereIndexOffset = 0;
+
+    Mesh sphereSubMesh;
+    sphereSubMesh.IndexCount = (UINT)sphere.Indices32.size();
+    sphereSubMesh.StartIndexLocation = sphereIndexOffset;
+    sphereSubMesh.BaseVertexLocation = sphereVertexOffset;
+    sphereSubMesh.materialName = "mat2";
+    DrawArgs["cube"] = sphereSubMesh;
+
+    auto totalVertCount = sphere.Vertices.size();
+    vertices.resize(totalVertCount);
+
+    UINT k = 0;
+    for (size_t i = 0; i < sphere.Vertices.size(); ++i, ++k) {
+        vertices[k].Pos = sphere.Vertices[i].Position;
+        vertices[k].Normal = sphere.Vertices[i].Normal;
+        vertices[k].TexC = sphere.Vertices[i].TexC;
+    }
+
+    indices.insert(indices.end(), std::begin(sphere.GetIndices16()), std::end(sphere.GetIndices16()));
+
+    const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
+    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+
+    ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
+    CopyMemory(VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
+    ThrowIfFailed(D3DCreateBlob(ibByteSize, IndexBufferCPU.GetAddressOf()));
+    CopyMemory(IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
+
+    VertexBufferByteSize = vbByteSize;
+    VertexByteStride = sizeof(Vertex);
+    IndexFormat = DXGI_FORMAT_R16_UINT;
+    IndexBufferByteSize = ibByteSize;
+}
+void Model::buildGridGeometry() {
+    Geometry mGeo;
+    Geometry::MeshData sphere = mGeo.CreateGrid(20.f, 20.f, 5.f, 5.0);
+
+    UINT sphereVertexOffset = 0;
+    UINT sphereIndexOffset = 0;
+
+    Mesh sphereSubMesh;
+    sphereSubMesh.IndexCount = (UINT)sphere.Indices32.size();
+    sphereSubMesh.StartIndexLocation = sphereIndexOffset;
+    sphereSubMesh.BaseVertexLocation = sphereVertexOffset;
+    sphereSubMesh.materialName = "mat2";
+    DrawArgs["grid"] = sphereSubMesh;
+
+    auto totalVertCount = sphere.Vertices.size();
+    vertices.resize(totalVertCount);
+
+    UINT k = 0;
+    for (size_t i = 0; i < sphere.Vertices.size(); ++i, ++k) {
+        vertices[k].Pos = sphere.Vertices[i].Position;
+        vertices[k].Normal = sphere.Vertices[i].Normal;
+        vertices[k].TexC = sphere.Vertices[i].TexC;
+    }
+
+    indices.insert(indices.end(), std::begin(sphere.GetIndices16()), std::end(sphere.GetIndices16()));
+
+    const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
+    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+
+    ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
+    CopyMemory(VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
+    ThrowIfFailed(D3DCreateBlob(ibByteSize, IndexBufferCPU.GetAddressOf()));
+    CopyMemory(IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
+
+    VertexBufferByteSize = vbByteSize;
+    VertexByteStride = sizeof(Vertex);
+    IndexFormat = DXGI_FORMAT_R16_UINT;
+    IndexBufferByteSize = ibByteSize;
+}
+void Model::buildCylinderGeometry() {
+    Geometry mGeo;
+    Geometry::MeshData sphere = mGeo.CreateCylinder(5.f, 5.f, 5.f, 5.0, 5.0);
+
+    UINT sphereVertexOffset = 0;
+    UINT sphereIndexOffset = 0;
+
+    Mesh sphereSubMesh;
+    sphereSubMesh.IndexCount = (UINT)sphere.Indices32.size();
+    sphereSubMesh.StartIndexLocation = sphereIndexOffset;
+    sphereSubMesh.BaseVertexLocation = sphereVertexOffset;
+    sphereSubMesh.materialName = "mat2";
+    DrawArgs["grid"] = sphereSubMesh;
+
+    auto totalVertCount = sphere.Vertices.size();
+    vertices.resize(totalVertCount);
+
+    UINT k = 0;
+    for (size_t i = 0; i < sphere.Vertices.size(); ++i, ++k) {
+        vertices[k].Pos = sphere.Vertices[i].Position;
+        vertices[k].Normal = sphere.Vertices[i].Normal;
+        vertices[k].TexC = sphere.Vertices[i].TexC;
+    }
+
+    indices.insert(indices.end(), std::begin(sphere.GetIndices16()), std::end(sphere.GetIndices16()));
+
+    const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
+    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+
+    ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
+    CopyMemory(VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
+    ThrowIfFailed(D3DCreateBlob(ibByteSize, IndexBufferCPU.GetAddressOf()));
+    CopyMemory(IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
+
+    VertexBufferByteSize = vbByteSize;
+    VertexByteStride = sizeof(Vertex);
+    IndexFormat = DXGI_FORMAT_R16_UINT;
+    IndexBufferByteSize = ibByteSize;
+}
 
 void Model::buildGeometry() {
     Geometry mGeo;
@@ -242,7 +410,7 @@ void Model::buildGeometry() {
     sphereSubMesh.IndexCount = (UINT)sphere.Indices32.size();
     sphereSubMesh.StartIndexLocation = sphereIndexOffset;
     sphereSubMesh.BaseVertexLocation = sphereVertexOffset;
-    sphereSubMesh.materialName = "mat2";
+    sphereSubMesh.materialName = "mat1";
     DrawArgs["sphere"] = sphereSubMesh;
 
     auto totalVertCount = box.Vertices.size() + sphere.Vertices.size();

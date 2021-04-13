@@ -43,7 +43,7 @@ float4 getAvgCol(uint3 texIndex) {
     return (c + t + b + l + r + o + i) / 7;
 }
 
-float3 getAvgNor(uint3 idx) {
+float3 getAvgNorcol(uint3 idx) {
 
 }
 
@@ -61,15 +61,15 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
         return;
 
     float2 uv = DTid.xy / float2(shadowTexDimensions);
-    float4 screenSpacePos = float4(uv * 2.0 - 1.0, gShadowMap.Load(int3(DTid.xy, 0)).x - 0.0001 , 1.0);
+    float4 screenSpacePos = float4(uv * 2.0 - 1.0, gShadowMap.Load(int3(DTid.xy, 0)).x - 0.0063 , 1.0);
     screenSpacePos.y = -screenSpacePos.y;
  
 
     float4 volumeSpacePos = mul(screenSpacePos, gLight2World);
     volumeSpacePos.xyz /= (voxelScale);
 
-    uint3 texIndex = uint3(((volumeSpacePos.x * 0.5) + 0.5f) * volTexDimensions.x,
-        ((volumeSpacePos.y * 0.5) + 0.5f) * volTexDimensions.y + 1.1, // not sre why, but need to offset y value to match accurate result, weird
+    uint3 texIndex = uint3(((volumeSpacePos.x * 0.5) + 0.5f) * volTexDimensions.x  ,
+        ((volumeSpacePos.y * 0.5) + 0.5f) * volTexDimensions.y  , // not sre why, but need to offset y value to match accurate result, weird
         ((volumeSpacePos.z * 0.5) + 0.5f) * volTexDimensions.z );
 
     float4 col = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex]).xyz / 255.0, 1.0f);
@@ -78,7 +78,7 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
     float3 nor = float3(convRGBA8ToVec4(gVoxelizerNormal[texIndex]).xyz / 255.0);
     nor = 2.0 * (nor  - float3(0.5, 0.5, 0.5));
 
-    col.xyz *= (abs(dot(nor, -gLightDir)) + 0.3) * gLightCol * 1.0;
+    col.xyz *= (abs(dot(nor, -normalize(gLightDir))) + 0.1) * gLightCol * 1.0;
 
     //col.xyz = float3(1.0, 1.0, 1.0);
 
