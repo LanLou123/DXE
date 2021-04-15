@@ -129,7 +129,7 @@ float4 sampleVoxelVolumeAnisotropic(Texture3D<float4> voxelTexture, Texture3D<fl
    // }
 
 
-    filteredColor.rgb *= 2.0f;
+    filteredColor.rgb *= 1.0f;
     //filteredColor.a *= 0.8;
 
     return filteredColor;

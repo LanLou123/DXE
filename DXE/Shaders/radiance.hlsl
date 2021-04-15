@@ -78,7 +78,7 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
     float3 nor = float3(convRGBA8ToVec4(gVoxelizerNormal[texIndex]).xyz / 255.0);
     nor = 2.0 * (nor  - float3(0.5, 0.5, 0.5));
 
-    col.xyz *= (abs(dot(nor, -normalize(gLightDir))) + 0.1) * gLightCol * 1.0;
+    col.xyz *= (abs(dot(nor, -normalize(gLightDir))) + 0.0) * gLightCol * 1.0;
 
     //col.xyz = float3(1.0, 1.0, 1.0);
 

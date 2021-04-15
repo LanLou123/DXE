@@ -168,11 +168,13 @@ float4 PS(VertexOut pin) : SV_Target
         float3 VC = float3(0, 0, 0);
         float4 VC4 = float4(0, 0, 0,0);
 
+        float curRadius = aperture * dst * 2;
+
         for (int i = 0; i < 64; ++i) {
             bool outSideVol = false; 
             
             float3 coneSamplePos = startSamplePos + sampleDir * dst;
-            float curRadius = aperture * dst * 2;
+            curRadius = aperture * dst * 2;
 
             float4 sampleCol = sampleVoxelVolumeAnisotropic(
                 gVoxelizerRadiance,
@@ -250,7 +252,7 @@ float4 PS(VertexOut pin) : SV_Target
     col = col * lamb * percentLit ;
 
     col.xyz *= 1.0;
-    col += float4(diffuseCol * Alb.xyz * 1.0, 0.0);
+    col += float4(diffuseCol * Alb.xyz * 2.0, 0.0);
 
     if (showDirect) {
         col = float4(Alb.rgb * lamb * percentLit, 1);
