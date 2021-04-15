@@ -28,12 +28,13 @@
 ### Planned
  - mutiple render layers seperating dynamic geometry and static geometry to further optimize voxelization
  - cone traced reflection/SSR, translucent object
+ - Clip map/cascaded mip map implementation for VCT
  - area/volume lighting
  - other mutiple light types using shadow map: point spot
  - cascaded/variance shadow mapping
  - render graph / more orgnized framework & RHI
  - tiled based lighting
- - RTX accelerated VCT possibly ? (research)  
+ - DXR accelerated VCT possibly ? (research)  
  - linear transformed cosine
  - DOF
 ## Gbuffer & deferred shawdow 
