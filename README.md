@@ -5,8 +5,8 @@
 
 # current results
 
-![](sc/small1.PNG)
-![](sc/sphere.PNG)
+![](sc/small2.PNG)
+![](sc/sphere1.PNG)
 
 ### Indirect + direct lighting
 ![](sc/indirect.PNG)
@@ -16,7 +16,7 @@
 ### finally got the whole pipeline working, need a lot of fixing, and the performance isn't good since no optimization have been done at all yet, but I can feel I'm getting there
 
 ## diffuse light only for now
-![](sc/diff1.PNG)
+![](sc/diff2.PNG)
 
 ![](sc/snibk.PNG)
 
@@ -27,9 +27,9 @@
 ### Implemented : 
  - Deferred rendering pipeline
  - Scene voxelization using hardware conservative rasterization & geometry shader
- - Radiance volume injection trough shadow map with compute dispatch thread invocation mapping to the dimention of shadowmap instead of volume
- - Anistropic radiance volume mip map chain generation with compute shader for preventing light leaking - a widely known issue for VCT.
- - Voxel cone tracing in a single pass conmbining previously generated geometry buffer as well as anistropic radiance 3d texture buffer to generate final image
+ - Radiance volume injection trough shadow map with compute dispatch thread invocation mapping to the dimension of shadowmap instead of volume
+ - Anisotropic radiance volume mip map chain generation with compute shader for preventing light leaking - a widely known issue for VCT.
+ - Voxel cone tracing in a single pass conmbining previously generated geometry buffer as well as anisotropic radiance 3d texture buffer to generate final image
 
 
 ### Planned

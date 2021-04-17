@@ -273,9 +273,9 @@ void Scene::initScene() {
     loadModels();
     buildMaterials();
     loadTextures(); 
-    //loadAssetFromAssimp("../Resources/Models/sponza/sponza.obj");
+    loadAssetFromAssimp("../Resources/Models/sponza/sponza.obj");
     //loadAssetFromAssimp("../Resources/Models/sibenik/sibenik.obj"); 
-    loadAssetFromAssimp("../Resources/Models/island/castle.obj");
+    //loadAssetFromAssimp("../Resources/Models/island/castle.obj");
     //loadAssetFromAssimp("../Resources/Models/city/city.fbx");
     //loadAssetFromAssimp("../Resources/Models/fantasy-town/source/town.obj");
 

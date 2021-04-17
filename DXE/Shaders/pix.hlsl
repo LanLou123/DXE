@@ -270,6 +270,8 @@ float4 PS(VertexOut pin) : SV_Target
         col = float4(voxelNormal.xyz, 1.0f);
     }
 
+    //col.xyz = diffuseCol * lit;
+
     float gamma = 0.9;
     float exposure = 2.8;
 
@@ -279,7 +281,7 @@ float4 PS(VertexOut pin) : SV_Target
 
     col = float4(mapped, 1.0);
 
-    //col = float4(diffuseCol * 1, 1.0);
+ 
     return col;
 }
 

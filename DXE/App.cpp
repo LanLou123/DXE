@@ -266,7 +266,7 @@ bool App::Initialize() {
     mScene->initScene();
  
     float modelScale = 4.5;
-    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["castle.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["castle.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
     DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World,  DirectX::XMMatrixScaling(1,1,1) * DirectX::XMMatrixRotationRollPitchYaw(0,0,MathUtils::Pi / 2.0) * DirectX::XMMatrixTranslation(50, 60, 40) );
 
 
