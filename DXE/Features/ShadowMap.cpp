@@ -139,7 +139,7 @@ void ShadowMap::BuildResource()
 
 void ShadowMap::Update(const Timer& gt) {
 	// update light directions
-	mShadowMapData.mLightRotationAngle += 0.03f * gt.DeltaTime();
+	mShadowMapData.mLightRotationAngle += 0.3f * gt.DeltaTime();
 	XMMATRIX R = DirectX::XMMatrixRotationY(mShadowMapData.mLightRotationAngle);
 	for (int i = 0; i < 3; ++i)
 	{

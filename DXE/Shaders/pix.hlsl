@@ -148,7 +148,7 @@ float4 PS(VertexOut pin) : SV_Target
      float3 vright = cross(Nor.xyz, up);
     float3 vforward = cross(Nor.xyz, vright);
 
-    float aperture = 0.57;
+    float aperture = 0.37;
 
     float3 diffuseCol = float3(0.0, 0.0, 0.0);
     float diffusOcclusion = 0.0;
@@ -175,7 +175,7 @@ float4 PS(VertexOut pin) : SV_Target
 
         float curRadius = aperture * dst * 2;
 
-        for (int i = 0; i < 44; ++i) {
+        for (int i = 0; i < 84; ++i) {
             bool outSideVol = false; 
             
             float3 coneSamplePos = startSamplePos + sampleDir * dst;
@@ -214,7 +214,7 @@ float4 PS(VertexOut pin) : SV_Target
             if (VA >= 1.0f || outSideVol) break;
 
             //float lastDis = curDis;
-            dst += curRadius * 0.9;/*dst / (1.0 - aperture);*/
+            dst += curRadius * 1.9;/*dst / (1.0 - aperture);*/
         }
         diffuseCol += VC4.rgb * ConeSampleWeights[conei];
 
@@ -248,20 +248,20 @@ float4 PS(VertexOut pin) : SV_Target
         }
     }
     //percentLit += 0.1f;
-
+    float lit = 3.0;
     float3 lightDir = gLightPosW;
     lightDir = normalize(lightDir);
-    float lamb = dot(lightDir, Nor) + 0.3;
+    float lamb = dot(lightDir, Nor) + 0.1;
 
     float4 col = float4(Alb.rgb, 1.0f);
     col = col * lamb * percentLit ;
 
-    col.xyz *= 2.0;
-    col = col + float4(diffuseCol * Alb.xyz * 3.0, 0.0);
+    col.xyz *= lit;
+    col = col + float4(diffuseCol * Alb.xyz * lit, 0.0);
     col.a = 1.0;
 
     if (showDirect) {
-        col = float4(Alb.rgb * lamb * percentLit, 1);
+        col = float4(Alb.rgb * lamb * percentLit* lit, 1);
     }
     if (visulizevoxel == 1) {
         col = float4(voxelPickColor, 1.0f);
@@ -269,6 +269,15 @@ float4 PS(VertexOut pin) : SV_Target
     else if (visulizevoxel == 2) {
         col = float4(voxelNormal.xyz, 1.0f);
     }
+
+    float gamma = 0.9;
+    float exposure = 2.8;
+
+    float3 mapped = float3(1.0,1.0,1.0) - exp(-col.xyz * exposure);
+
+    mapped = pow(mapped, float3(1.0 / gamma, 1.0 / gamma, 1.0 / gamma));
+
+    col = float4(mapped, 1.0);
 
     //col = float4(diffuseCol * 1, 1.0);
     return col;

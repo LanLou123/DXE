@@ -1,5 +1,5 @@
 # DXE
-# A voxel GI rendering engine in dx12, currently in progress
+# A voxel cone traced GI rendering engine in dx12, currently in progress
 
 
 
@@ -34,9 +34,10 @@
 
 ### Planned
  - mutiple render layers seperating dynamic geometry and static geometry to further optimize voxelization
+ - temporal filtering/spatial reprojection for flicker & noise reduction
  - cone traced reflection/SSR, translucent object
- - Clip map/cascaded mip map implementation for VCT
  - area/volume lighting
+ - Clip map/cascaded mip map implementation for VCT
  - other mutiple light types using shadow map: point spot
  - cascaded/variance shadow mapping
  - render graph / more orgnized framework & RHI
@@ -44,6 +45,7 @@
  - DXR accelerated VCT possibly ? (research)  
  - linear transformed cosine
  - DOF
+ - may be experiment with SDF (signed distance field) to replace cone trace, heard they look better
 ## Gbuffer & deferred shawdow 
 ![](sc/gb.PNG)
 ![](sc/sm.PNG)

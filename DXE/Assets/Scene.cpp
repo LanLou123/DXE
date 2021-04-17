@@ -277,7 +277,7 @@ void Scene::initScene() {
     //loadAssetFromAssimp("../Resources/Models/sibenik/sibenik.obj"); 
     loadAssetFromAssimp("../Resources/Models/island/castle.obj");
     //loadAssetFromAssimp("../Resources/Models/city/city.fbx");
-    
+    //loadAssetFromAssimp("../Resources/Models/fantasy-town/source/town.obj");
 
     cpyCommandObject->endCommandRecording();
     cpyCommandObject->FlushCommandQueue();
