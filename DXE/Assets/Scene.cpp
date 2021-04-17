@@ -158,7 +158,12 @@ void Scene::loadAssetFromAssimp(const std::string filepath) {
     //===========================================
 
     Assimp::Importer importer;
-    const aiScene* aiscene = importer.ReadFile(filepath, aiProcessPreset_TargetRealtime_Quality  | aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_CalcTangentSpace | aiProcess_GenNormals );
+   // importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
+    const aiScene* aiscene = importer.ReadFile(filepath, 
+        aiProcess_Triangulate 
+        | aiProcess_FlipUVs 
+        | aiProcess_CalcTangentSpace
+    );
 
     if (!aiscene || aiscene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !aiscene->mRootNode) {
  
@@ -268,11 +273,10 @@ void Scene::initScene() {
     loadModels();
     buildMaterials();
     loadTextures(); 
-    loadAssetFromAssimp("../Resources/Models/sponza/sponza.obj");
+    //loadAssetFromAssimp("../Resources/Models/sponza/sponza.obj");
     //loadAssetFromAssimp("../Resources/Models/sibenik/sibenik.obj"); 
-    //loadAssetFromAssimp("../Resources/Models/city/wildtown.obj");
-
-    //loadAssetFromAssimp("../Resources/Models/room/room.obj");
+    loadAssetFromAssimp("../Resources/Models/island/castle.obj");
+    //loadAssetFromAssimp("../Resources/Models/city/city.fbx");
     
 
     cpyCommandObject->endCommandRecording();

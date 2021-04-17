@@ -136,7 +136,8 @@ void Model::setObj2VoxelScale(float _scale) {
 void Model::buildGeometryAssimp(){
 
     const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
-    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint32_t);
+
 
 
     ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
@@ -146,7 +147,7 @@ void Model::buildGeometryAssimp(){
 
     VertexBufferByteSize = vbByteSize;
     VertexByteStride = sizeof(Vertex);
-    IndexFormat = DXGI_FORMAT_R16_UINT;
+    IndexFormat = DXGI_FORMAT_R32_UINT;
     IndexBufferByteSize = ibByteSize;
 
 }
@@ -169,9 +170,9 @@ void Model::appendAssimpMesh(const aiScene* aiscene, aiMesh* aimesh) {
         vertices.push_back(curVertex);
     }
 
-
     for (unsigned int i = 0; i < aimesh->mNumFaces; ++i) {
-        aiFace aiface = aimesh->mFaces[i];
+        aiFace& aiface = aimesh->mFaces[i];
+ 
         for (unsigned int j = 0; j < aiface.mNumIndices; ++j) {
             indices.push_back(aiface.mIndices[j]);
             curIndexCount++;
@@ -218,7 +219,7 @@ void Model::buildQuadGeometry() {
 
     indices.insert(indices.end(), std::begin(quad.GetIndices16()), std::end(quad.GetIndices16()));
     const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
-    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint32_t);
 
     ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
     CopyMemory(VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
@@ -227,7 +228,7 @@ void Model::buildQuadGeometry() {
 
     VertexBufferByteSize = vbByteSize;
     VertexByteStride = sizeof(Vertex);
-    IndexFormat = DXGI_FORMAT_R16_UINT;
+    IndexFormat = DXGI_FORMAT_R32_UINT;
     IndexBufferByteSize = ibByteSize;
 }
 
@@ -258,7 +259,7 @@ void Model::buildSphereGeometry() {
     indices.insert(indices.end(), std::begin(sphere.GetIndices16()), std::end(sphere.GetIndices16()));
 
     const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
-    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint32_t);
 
     ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
     CopyMemory(VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
@@ -267,7 +268,7 @@ void Model::buildSphereGeometry() {
 
     VertexBufferByteSize = vbByteSize;
     VertexByteStride = sizeof(Vertex);
-    IndexFormat = DXGI_FORMAT_R16_UINT;
+    IndexFormat = DXGI_FORMAT_R32_UINT;
     IndexBufferByteSize = ibByteSize;
 }
 void Model::buildCubeGeometry() {
@@ -297,7 +298,7 @@ void Model::buildCubeGeometry() {
     indices.insert(indices.end(), std::begin(sphere.GetIndices16()), std::end(sphere.GetIndices16()));
 
     const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
-    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint32_t);
 
     ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
     CopyMemory(VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
@@ -306,7 +307,7 @@ void Model::buildCubeGeometry() {
 
     VertexBufferByteSize = vbByteSize;
     VertexByteStride = sizeof(Vertex);
-    IndexFormat = DXGI_FORMAT_R16_UINT;
+    IndexFormat = DXGI_FORMAT_R32_UINT;
     IndexBufferByteSize = ibByteSize;
 }
 void Model::buildGridGeometry() {
@@ -336,7 +337,7 @@ void Model::buildGridGeometry() {
     indices.insert(indices.end(), std::begin(sphere.GetIndices16()), std::end(sphere.GetIndices16()));
 
     const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
-    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint32_t);
 
     ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
     CopyMemory(VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
@@ -345,7 +346,7 @@ void Model::buildGridGeometry() {
 
     VertexBufferByteSize = vbByteSize;
     VertexByteStride = sizeof(Vertex);
-    IndexFormat = DXGI_FORMAT_R16_UINT;
+    IndexFormat = DXGI_FORMAT_R32_UINT;
     IndexBufferByteSize = ibByteSize;
 }
 void Model::buildCylinderGeometry() {
@@ -375,7 +376,7 @@ void Model::buildCylinderGeometry() {
     indices.insert(indices.end(), std::begin(sphere.GetIndices16()), std::end(sphere.GetIndices16()));
 
     const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
-    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint32_t);
 
     ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
     CopyMemory(VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
@@ -384,7 +385,7 @@ void Model::buildCylinderGeometry() {
 
     VertexBufferByteSize = vbByteSize;
     VertexByteStride = sizeof(Vertex);
-    IndexFormat = DXGI_FORMAT_R16_UINT;
+    IndexFormat = DXGI_FORMAT_R32_UINT;
     IndexBufferByteSize = ibByteSize;
 }
 
@@ -433,7 +434,7 @@ void Model::buildGeometry() {
     indices.insert(indices.end(), std::begin(sphere.GetIndices16()), std::end(sphere.GetIndices16()));
 
     const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
-    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+    const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint32_t);
 
 
     ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
@@ -443,7 +444,7 @@ void Model::buildGeometry() {
 
     VertexBufferByteSize = vbByteSize;
     VertexByteStride = sizeof(Vertex);
-    IndexFormat = DXGI_FORMAT_R16_UINT;
+    IndexFormat = DXGI_FORMAT_R32_UINT;
     IndexBufferByteSize = ibByteSize;
 
 

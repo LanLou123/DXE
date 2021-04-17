@@ -96,18 +96,19 @@ float4 PS(VertexOut pin) : SV_Target
 
             float3 texMiped = texIndex;
             texMiped.x /= 6.0;
+            texMiped.x += 1.0 / 6.0;
 
             int3 itexIndex = int3(((mappedloc.x * 0.5) + 0.5f) * texDimensions.x,
                 ((mappedloc.y * 0.5) + 0.5f) * texDimensions.y,
                 ((mappedloc.z * 0.5) + 0.5f)) * texDimensions.z;
 
             if (visulizevoxel == 2) {
-                if (all(gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 3) == 0)) {
+                if (all(gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 2) == 0)) {
                     curloc = curloc + raydr * step;
                 }
                 else {
 
-                    voxelNormal = gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 3) * 12.0;
+                    voxelNormal = gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 2) * 1.0;
                     step = -0.1 * step;
                     curloc = curloc + raydr * step;
 
@@ -141,13 +142,17 @@ float4 PS(VertexOut pin) : SV_Target
     //    up = float3(0.0, 0.0, 1.0);
     //}
     //float3 vright = cross(Nor.xyz, up);
+    //if (abs(dot(Nor.xyz, up)) == 1.0) {
+    //    up = float3(0, 0, -1);
+    //}
      float3 vright = cross(Nor.xyz, up);
     float3 vforward = cross(Nor.xyz, vright);
+
     float aperture = 0.57;
 
     float3 diffuseCol = float3(0.0, 0.0, 0.0);
     float diffusOcclusion = 0.0;
-    float startSampledDis = 1.6;
+    float startSampledDis = 1.28;
 
  
     for (int conei = 0; conei < 6; ++conei) {
@@ -160,7 +165,7 @@ float4 PS(VertexOut pin) : SV_Target
 
 
         float dst = startSampledDis;
-        float3 startSamplePos = PosW.xyz + Nor.xyz * dst;
+        float3 startSamplePos = PosW.xyz + Nor.xyz * (dst + 0.0);
 
 
  
@@ -170,7 +175,7 @@ float4 PS(VertexOut pin) : SV_Target
 
         float curRadius = aperture * dst * 2;
 
-        for (int i = 0; i < 64; ++i) {
+        for (int i = 0; i < 44; ++i) {
             bool outSideVol = false; 
             
             float3 coneSamplePos = startSamplePos + sampleDir * dst;
@@ -238,7 +243,7 @@ float4 PS(VertexOut pin) : SV_Target
     for (int i = 0; i < 9; ++i)
     {
         float2 curPos = shadowPosNDC.xy + offsets[i];
-        if (gShadowMap.Sample(gsamLinearWrap, curPos).r > shadowPosNDC.z) {
+        if (gShadowMap.Sample(gsamLinearWrap, curPos).r + 0.002 > shadowPosNDC.z) {
             percentLit += 0.1f;
         }
     }
@@ -251,8 +256,9 @@ float4 PS(VertexOut pin) : SV_Target
     float4 col = float4(Alb.rgb, 1.0f);
     col = col * lamb * percentLit ;
 
-    col.xyz *= 1.0;
-    col += float4(diffuseCol * Alb.xyz * 2.0, 0.0);
+    col.xyz *= 2.0;
+    col = col + float4(diffuseCol * Alb.xyz * 3.0, 0.0);
+    col.a = 1.0;
 
     if (showDirect) {
         col = float4(Alb.rgb * lamb * percentLit, 1);

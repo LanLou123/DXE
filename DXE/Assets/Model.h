@@ -88,7 +88,7 @@ protected:
 	UINT globalMeshID;
 
 	std::vector<Vertex> vertices;
-	std::vector<std::uint16_t> indices;
+	std::vector<std::uint32_t> indices; // specifically for large meshes whoes index size > 65535
 
 	DirectX::XMFLOAT4X4 World = MathUtils::Identity4x4();
 	DirectX::XMFLOAT4X4 texTransform = MathUtils::Identity4x4();

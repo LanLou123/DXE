@@ -15,8 +15,8 @@ cbuffer cbPerObject : register(b0)
     float gObj2VoxelScale;
 };
 
-#define VOXELSCALE 1.2
-#define VOXELMIPCOUNT 8
+#define VOXELSCALE 1.6
+#define VOXELMIPCOUNT 9
 #define PI 3.1415926
 
 cbuffer cbPass : register(b1)
@@ -45,6 +45,7 @@ cbuffer cbPass : register(b1)
     float cbPerObjectPad2;
     float3 camUpDir;
     int showVoxel;
+    int showDirect;
 };
 
 float4 convRGBA8ToVec4(uint val)
@@ -58,7 +59,7 @@ uint convVec4ToRGBA8(float4 val)
     return (uint (val.w) & 0x000000FF) << 24U | (uint(val.z) & 0x000000FF) << 16U | (uint(val.y) & 0x000000FF) << 8U | (uint(val.x) & 0x000000FF);
 }
 
-static const float3 cVXGIConeSampleDirections[] =
+static const float3 ConeSampleDirections[] =
 {
     float3(0.0f, 1.0f, 0.0f),
     float3(0.0f, 0.5f, 0.866025f),
@@ -70,7 +71,7 @@ static const float3 cVXGIConeSampleDirections[] =
 
 float getMipLevelFromRadius(float radius)
 {
-    return log2((radius + 0.5f) / VOXELSCALE);
+    return max(log2((radius + 0.00f) / VOXELSCALE) - 0.0, 0.0);
 }
 
 static const float cMipDirectionalOffsets[] = {
@@ -82,7 +83,7 @@ static const float cMipDirectionalOffsets[] = {
     5.0f / 6.0f
 };
 
-static const float cVXGIConeSampleWeights[] =
+static const float ConeSampleWeights[] =
 {
     PI / 4.0f,
     3 * PI / 20.0f,
@@ -113,26 +114,23 @@ float4 sampleVoxelVolumeAnisotropic(Texture3D<float4> voxelTexture, Texture3D<fl
 
    
     float4 filteredColor = float4(0.0, 0.0, 0.0, 0.0);
-    if (anisotropicMipLevel > 0.0) {
+    //if (anisotropicMipLevel > -1.0) {
         if (any(voxelPos.xyz < 0.0f) || any(voxelPos.xyz > 1.0f))
             outsideVolume = true;
 
         voxelPos.x /= 6.0f;
 
         float4 xSample = voxelMips.SampleLevel(voxelSampler, voxelPos + float3(cMipDirectionalOffsets[isNegative.x], 0.0f, 0.0f), anisotropicMipLevel);
-        float4 xSample1 = voxelMips.SampleLevel(voxelSampler, voxelPos, anisotropicMipLevel);
         float4 ySample = voxelMips.SampleLevel(voxelSampler, voxelPos + float3(cMipDirectionalOffsets[isNegative.y + 2], 0.0f, 0.0f), anisotropicMipLevel);
         float4 zSample = voxelMips.SampleLevel(voxelSampler, voxelPos + float3(cMipDirectionalOffsets[isNegative.z + 4], 0.0f, 0.0f), anisotropicMipLevel);
 
         filteredColor = dirSq.x * xSample + dirSq.y * ySample + dirSq.z * zSample;
 
-        //filteredColor = lerp(mip0Sample, filteredColor, clamp(mipLevel, 0.0f, 1.0f)); //This kills the performance
-        //filteredColor = xSample1;
-        //filteredColor.a = mip0Sample.a;
-    }
+   // }
 
 
-    filteredColor.rgb *= 8.0f;
+    filteredColor.rgb *= 1.0f;
+    //filteredColor.a *= 0.8;
 
     return filteredColor;
 }

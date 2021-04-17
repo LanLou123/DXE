@@ -7,9 +7,14 @@ E:\DX12\DXE\DXE\DXE\App.cpp(999,77): warning C4244: 'argument': conversion from 
 E:\DX12\DXE\DXE\DXE\App.cpp(999,48): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
 E:\DX12\DXE\DXE\DXE\App.cpp(1024,23): warning C4018: '<': signed/unsigned mismatch
 E:\DX12\DXE\DXE\DXE\App.cpp(1032,29): warning C4018: '>=': signed/unsigned mismatch
+  Scene.cpp
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(204,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(211,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(225,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(232,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
   Generating code
-  2 of 3495 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  3 of 3507 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    7 functions had inline decision re-evaluated but remain unchanged
+    61 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Release\DXE.exe

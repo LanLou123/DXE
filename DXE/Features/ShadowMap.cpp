@@ -139,7 +139,7 @@ void ShadowMap::BuildResource()
 
 void ShadowMap::Update(const Timer& gt) {
 	// update light directions
-	mShadowMapData.mLightRotationAngle += 0.1f * gt.DeltaTime();
+	mShadowMapData.mLightRotationAngle += 0.03f * gt.DeltaTime();
 	XMMATRIX R = DirectX::XMMatrixRotationY(mShadowMapData.mLightRotationAngle);
 	for (int i = 0; i < 3; ++i)
 	{
@@ -164,13 +164,14 @@ void ShadowMap::Update(const Timer& gt) {
 	XMFLOAT3 sphereCenterLS;
 	DirectX::XMStoreFloat3(&sphereCenterLS, DirectX::XMVector3TransformCoord(targetPos, lightView));
 
+	float depth_scale = 1.0;
 	// Ortho frustum in light space encloses scene.
 	float l = sphereCenterLS.x - sceneRadius;
 	float b = sphereCenterLS.y - sceneRadius;
-	float n = sphereCenterLS.z - sceneRadius;
+	float n = sphereCenterLS.z - sceneRadius * depth_scale;
 	float r = sphereCenterLS.x + sceneRadius;
 	float t = sphereCenterLS.y + sceneRadius;
-	float f = sphereCenterLS.z + sceneRadius;
+	float f = sphereCenterLS.z + sceneRadius * depth_scale;
 
 	mShadowMapData.mLightNearZ = n;
 	mShadowMapData.mLightFarZ = f;

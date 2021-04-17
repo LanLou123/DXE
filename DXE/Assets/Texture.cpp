@@ -76,11 +76,13 @@ D3D12_SHADER_RESOURCE_VIEW_DESC Texture::getSRVDESC() {
 
 bool Texture::initializeTextureBuffer(ID3D12Device* device, CommandObject* cmdObj) {
 	if (!(createTextureBuffer(device))) { 
-		std::cout << "default heap creation for texture failed"<<std::endl;
+		std::cout << "default heap creation for texture failed for : ";
+		std::wcout << Filename << std::endl;
 		return false; 
 	}
 	if (!(uploadTexture(device, cmdObj))) {
-		std::cout << "texture upload failed"<<std::endl;
+		std::cout << "texture upload failed for : ";
+		std::wcout << Filename << std::endl;
 		return false;
 	}
 	return true;

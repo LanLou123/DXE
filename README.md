@@ -4,8 +4,15 @@
 
 
 # current results
+
 ![](sc/small1.PNG)
 ![](sc/sphere.PNG)
+
+### Indirect + direct lighting
+![](sc/indirect.PNG)
+### Direct lighting only
+![](sc/direct.PNG)
+
 ### finally got the whole pipeline working, need a lot of fixing, and the performance isn't good since no optimization have been done at all yet, but I can feel I'm getting there
 
 ## diffuse light only for now
@@ -50,4 +57,5 @@
 ## Radiance Map
 ![](sc/radiance.PNG)
 
-
+# Credits
+ - [Sketchfab : Sea Keep "Lonely Watcher"](https://sketchfab.com/3d-models/sea-keep-lonely-watcher-09a15a0c14cb4accaf060a92bc70413d)

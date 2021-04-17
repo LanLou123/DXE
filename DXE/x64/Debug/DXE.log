@@ -1,9 +1,9 @@
-﻿  App.cpp
-E:\DX12\DXE\DXE\DXE\App.cpp(24,129): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(36,119): warning C4244: 'argument': conversion from 'INT64' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(989,85): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(989,77): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(989,48): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(1014,23): warning C4018: '<': signed/unsigned mismatch
-E:\DX12\DXE\DXE\DXE\App.cpp(1022,29): warning C4018: '>=': signed/unsigned mismatch
+﻿  Model.cpp
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(157,43): warning C4267: 'initializing': conversion from 'size_t' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(158,41): warning C4267: 'initializing': conversion from 'size_t' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(276,63): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(315,66): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(315,61): warning C4244: 'argument': conversion from 'float' to 'uint32_t', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(354,73): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(354,68): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
   DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Debug\DXE.exe
