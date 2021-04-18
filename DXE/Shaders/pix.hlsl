@@ -273,7 +273,7 @@ float4 PS(VertexOut pin) : SV_Target
     //col.xyz = diffuseCol * lit;
 
     float gamma = 0.9;
-    float exposure = 2.8;
+    float exposure = 1.8;
 
     float3 mapped = float3(1.0,1.0,1.0) - exp(-col.xyz * exposure);
 

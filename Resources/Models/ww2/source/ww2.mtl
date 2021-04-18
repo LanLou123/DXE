@@ -1,0 +1,876 @@
+# Blender MTL File: 'untitled.blend'
+# Material Count: 78
+
+newmtl 01_-_Default
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Bike_D.png
+
+newmtl Material_#1104
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588235 0.588235 0.588235
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_OilLantern_D.png
+
+newmtl Material_#14
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Bike_D_Wheels.png
+map_d ../textures/T_Bike_Opacity.png
+
+newmtl Material_#2
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_MilitaryCrate_color.png
+map_d C:\\Users\\ZRoya\\Downloads\\prop_militarycrate\\tex\\uvw_military_crate.jpg
+
+newmtl T_Bench_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.070588 0.203922
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Bench_D.png
+
+newmtl T_Box_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.070588 0.203922
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Box_D.png
+
+newmtl T_Bricks_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Bricks_D.png
+
+newmtl T_Chair_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588235 0.588235 0.588235
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Chair_D.png
+
+newmtl T_CityTree_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.070588 0.203922
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Citytree_D.png
+
+newmtl T_Clothes_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Clothes_D.png
+map_d ../textures/T_Clothes_O.png
+
+newmtl T_Cobblestone_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Cobblestone_D.png
+
+newmtl T_Details_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Details_D.png
+
+newmtl T_Fence_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Fence_D.png
+map_d ../textures/T_Fence_D.png
+
+newmtl T_Flowershop_Roof_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.819608 0.588235
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Flowershop_roof_D.png
+
+newmtl T_Flowershop_Trims_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.980392 0.768627
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Flowershop_trims_D.png
+
+newmtl T_Flowershop_Unique_Door_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.890196 0.588235 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Flowershop_Unique_Door_D.png
+
+newmtl T_Flowershop_Unique_Door_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.890196 0.588235 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Flowershop_Unique_Door_D.png
+
+newmtl T_Flowershop_Unique_Windows_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588235 0.850980 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Flowershop_UniqueWindows_D.png
+
+newmtl T_Flowershop_Unique_Windows_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588235 0.850980 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Flowershop_UniqueWindows_D.png
+
+newmtl T_Flowershop_walls_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588235 1.000000 0.772549
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Flowershop_wall_D.png
+
+newmtl T_Grass_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Grass_D.png
+
+newmtl T_Gun_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588235 0.588235 0.588235
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Gun_D.png
+
+newmtl T_Handcart_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Handcart_D.png
+
+newmtl T_House_Cafe_BrickWalls_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_BrickWalls_D.png
+
+newmtl T_House_Cafe_BrickWalls_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_BrickWalls_D.png
+
+newmtl T_House_Cafe_Floor_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_Floor_D.png
+
+newmtl T_House_Cafe_PlasterWallsShort_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_PlasterWallsShort_D.png
+
+newmtl T_House_Cafe_PlasterWalls_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_PLasterWalls_D.png
+
+newmtl T_House_Cafe_Roof_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_Roof_D.png
+
+newmtl T_House_Cafe_Roofshort_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_Roofshort_D.png
+
+newmtl T_House_Cafe_Trims_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_Trims_D.png
+map_d ../textures/T_House_Cafe_Trims_D.png
+
+newmtl T_House_Cafe_UniquePosters_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_UniquePosters_D.png
+
+newmtl T_House_Cafe_UniquePosters_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_UniquePosters_D.png
+
+newmtl T_House_Cafe_UniqueStone_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_UniqueStone_D.png
+
+newmtl T_House_Cafe_UniqueWindows_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_UniqueWindows_D.png
+map_d ../textures/T_House_Cafe_UniqueWindows_O.png
+
+newmtl T_House_Cafe_UniqueWindows_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_UniqueWindows_D.png
+map_d ../textures/T_House_Cafe_UniqueWindows_O.png
+
+newmtl T_House_Cafe_WallsInside_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_WallsInside_D.png
+
+newmtl T_House_Cafe_WoodWalls_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_House_Cafe_WoodWalls_D.png
+
+newmtl T_House_Market_Arches_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_Arches_D.png
+
+newmtl T_House_Market_Arches_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_Arches_D.png
+
+newmtl T_House_Market_Attic_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_Attic_D.png
+
+newmtl T_House_Market_Decals_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_decals_D.png
+map_d ../textures/T_house_market_Decals_O.png
+
+newmtl T_House_Market_Decals_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_decals_D.png
+map_d ../textures/T_house_market_Decals_O.png
+
+newmtl T_House_Market_Decals_D.002
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_decals_D.png
+map_d ../textures/T_house_market_Decals_O.png
+
+newmtl T_House_Market_Floor_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_Floor_D.png
+
+newmtl T_House_Market_Plaster_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_plaster_D.png
+
+newmtl T_House_Market_Roof
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_roof_D.png
+
+newmtl T_House_Market_Trims_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_Trims_D.png
+
+newmtl T_House_Market_Trims_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_Trims_D.png
+
+newmtl T_House_Market_Uniqueshutters_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_uniqueshutters_D.png
+
+newmtl T_House_Market_Uniqueshutters_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_uniqueshutters_D.png
+
+newmtl T_House_Market_Uniquesign_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_uniquesign_D.png
+
+newmtl T_House_Market_Uniquesign_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_uniquesign_D.png
+
+newmtl T_House_Market_Uniquewindows_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_uniquewindows_D.png
+
+newmtl T_House_Market_Uniquewindows_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_uniquewindows_D.png
+
+newmtl T_House_Market_Uniquewindows_D.002
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_uniquewindows_D.png
+
+newmtl T_House_Market_Uniquewindows_D.003
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_uniquewindows_D.png
+
+newmtl T_House_Market_Walls_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_wall_D.png
+
+newmtl T_House_Market_Walls_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_house_market_wall_D.png
+
+newmtl T_Ivy_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Ivy_D.png
+map_d ../textures/T_Ivy_O.png
+
+newmtl T_Jeep_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Jeep_D.png
+
+newmtl T_Jeepwindows_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Jeepwindow_D.png
+map_d ../textures/T_Jeepwindow_O.png
+
+newmtl T_Lantern_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Lantern_D.png
+map_d ../textures/T_Lantern_O.png
+
+newmtl T_Leaves_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588235 0.588235 0.588235
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Leaves_D.png
+map_d ../textures/T_Opacity_D.png
+
+newmtl T_Leaves_D.001
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588235 0.588235 0.588235
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Leaves_D.png
+map_d ../textures/T_Leaves_O.png
+
+newmtl T_Lights_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588235 0.588235 0.588235
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Jeep_Lights_D.png
+
+newmtl T_Piano_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Piano_D.png
+
+newmtl T_Plant1_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.070588 0.203922
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Plant1_D.png
+map_d ../textures/T_Plant1_O.jpg
+
+newmtl T_Plant2_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.070588 0.203922
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Plant2_D.png
+map_d ../textures/T_Plant2_O.jpg
+
+newmtl T_Plating_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Plating_D.png
+
+newmtl T_Road_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Road_D.png
+
+newmtl T_Sidewalk_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_SideWalk_D.png
+
+newmtl T_Stairs_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Stairs_D.png
+
+newmtl T_Table_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588235 0.588235 0.588235
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Table_D.png
+
+newmtl T_Tree_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.070588 0.203922
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Tree_D.png
+
+newmtl T_Utilitypole_D
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.070588 0.203922
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd ../textures/T_Utilitypole_D.png
+
+newmtl border
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.145098 0.145098 0.145098
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+
+newmtl unique_stone
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.513726 0.325490
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd 1DAE05_VanDerSmissen_Silke_CityScene\\1DAE05_VanDerSmissen_Silke_CityScene\\CityScene\\max

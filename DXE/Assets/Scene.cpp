@@ -203,7 +203,9 @@ void Scene::loadAssetFromAssimp(const std::string filepath) {
             curtex->Name = completeTexturePath.substr(completeTexturePath.find_last_of('\\') + 1);
             srvDiffID = curtex->textureID;
             if (mTextures.find(curtex->Name) == mTextures.end()) {
-                curtex->initializeTextureBuffer(md3dDevice, cpyCommandObject.get());
+                if (!curtex->initializeTextureBuffer(md3dDevice, cpyCommandObject.get())) {
+                    continue;
+                }
                 globalTextureSRVDescriptorHeapIndex++;
                 mTextures[curtex->Name] = std::move(curtex);
             }
@@ -224,7 +226,9 @@ void Scene::loadAssetFromAssimp(const std::string filepath) {
             curtex->Name = completeTexturePath.substr(completeTexturePath.find_last_of('\\') + 1);
             srvNormID = curtex->textureID;
             if (mTextures.find(curtex->Name) == mTextures.end()) {
-                curtex->initializeTextureBuffer(md3dDevice, cpyCommandObject.get());
+                if (!curtex->initializeTextureBuffer(md3dDevice, cpyCommandObject.get())) {
+                    continue;
+                }
                 globalTextureSRVDescriptorHeapIndex++;
                 mTextures[curtex->Name] = std::move(curtex);
             }
@@ -273,11 +277,12 @@ void Scene::initScene() {
     loadModels();
     buildMaterials();
     loadTextures(); 
-    loadAssetFromAssimp("../Resources/Models/sponza/sponza.obj");
+    //loadAssetFromAssimp("../Resources/Models/sponza/sponza.obj");
     //loadAssetFromAssimp("../Resources/Models/sibenik/sibenik.obj"); 
-    //loadAssetFromAssimp("../Resources/Models/island/castle.obj");
+    loadAssetFromAssimp("../Resources/Models/island/castle.obj");
     //loadAssetFromAssimp("../Resources/Models/city/city.fbx");
     //loadAssetFromAssimp("../Resources/Models/fantasy-town/source/town.obj");
+    //loadAssetFromAssimp("../Resources/Models/ww2/source/ww2.obj");
 
     cpyCommandObject->endCommandRecording();
     cpyCommandObject->FlushCommandQueue();

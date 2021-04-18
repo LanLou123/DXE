@@ -100,26 +100,32 @@ DirectX::XMFLOAT4X4& Model::getWorldMatrix() {
 
 void Model::InitModel(ID3D12Device* device, CommandObject* cmdObj) {
 
-    if (modelType == ModelType::TEMPLATE_MODEL) {
+    switch (modelType)
+    {
+    case TEMPLATE_MODEL:
         buildGeometry();
-    }
-    else if (modelType == ModelType::ASSIMP_MODEL) {
+        break;
+    case ASSIMP_MODEL:
         buildGeometryAssimp();
-    }
-    else if (modelType == ModelType::QUAD_MODEL) {
+        break;
+    case QUAD_MODEL:
         buildQuadGeometry();
-    }
-    else if (modelType == ModelType::SPHERE_MODEL) {
-        buildSphereGeometry();
-    }
-    else if (modelType == ModelType::CUBE_MODEL) {
-        buildCubeGeometry();
-    }
-    else if (modelType == ModelType::GRID_MODEL) {
+        break;
+    case GRID_MODEL:
         buildGridGeometry();
-    }
-    else if (modelType == ModelType::CYLINDER_MODEL) {
+        break;
+    case CUBE_MODEL:
+        buildCubeGeometry();
+        break;
+    case SPHERE_MODEL:
+        buildSphereGeometry();
+        break;
+    case CYLINDER_MODEL:
         buildCylinderGeometry();
+        break;
+    default:
+        buildGeometry();
+        break;
     }
     createBuffers(device);
     uploadBuffers(device, cmdObj);
