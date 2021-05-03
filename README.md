@@ -7,13 +7,14 @@
 
 ![](sc/small2.PNG)
 ![](sc/sphere1.PNG)
+![](sc/imgg.PNG)
 
 ### Indirect + direct lighting
 ![](sc/indirect.PNG)
 ### Direct lighting only
 ![](sc/direct.PNG)
 
-## some other examples, thanks to amazingly talanted artists on sketchfab
+## some other examples, models thanks to talented artists on sketchfab
 
 ![](sc/ww2.PNG)
 ![](sc/ww22.PNG)
@@ -33,7 +34,7 @@
  - Deferred rendering pipeline
  - Scene voxelization using hardware conservative rasterization & geometry shader
  - Radiance volume injection trough shadow map with compute dispatch thread invocation mapping to the dimension of shadowmap instead of volume
- - Anisotropic radiance volume mip map chain generation with compute shader for preventing light leaking - a widely known issue for VCT.
+ - Anisotropic radiance volume mip map chain generation with compute shader for alleviating light leaking - a widely known issue for VCT.
  - Voxel cone tracing in a single pass conmbining previously generated geometry buffer as well as anisotropic radiance 3d texture buffer to generate final image
 
 

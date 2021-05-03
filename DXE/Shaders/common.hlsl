@@ -15,7 +15,7 @@ cbuffer cbPerObject : register(b0)
     float gObj2VoxelScale;
 };
 
-#define VOXELSCALE 1.28
+#define VOXELSCALE 1.5
 #define VOXELMIPCOUNT 9
 #define PI 3.1415926
 
@@ -71,7 +71,7 @@ static const float3 ConeSampleDirections[] =
 
 float getMipLevelFromRadius(float radius)
 {
-    return max(log2((radius + 0.00f) / VOXELSCALE) - 0.0, 0.0);
+    return max(log2(float(radius + 0.0f) / VOXELSCALE) - 0.0, 0.0);
 }
 
 static const float cMipDirectionalOffsets[] = {
@@ -92,6 +92,16 @@ static const float ConeSampleWeights[] =
     3 * PI / 20.0f,
     3 * PI / 20.0f,
 };
+
+//static const float ConeSampleWeights[] =
+//{
+//    0.25,
+//    0.15,
+//    0.15,
+//    0.15,
+//    0.15,
+//    0.15,
+//};
 
 void accumulateColorOcclusion(float4 sampleColor, inout float3 colorAccum, inout float occlusionAccum)
 {
@@ -131,12 +141,13 @@ float4 sampleVoxelVolumeAnisotropic(Texture3D<float4> voxelTexture, Texture3D<fl
 
         filteredColor = dirSq.x * xSample + dirSq.y * ySample + dirSq.z * zSample;
 
-
-
+        //float4 xSample0 = voxelMips.SampleLevel(voxelSampler, voxelPos, anisotropicMipLevel);
+        //filteredColor = xSample0;
    // }
 
+        float mm = anisotropicMipLevel;
 
-    filteredColor.rgb *= 1.0f;
+    filteredColor.rgb *= 1.0f * pow(mm, 0.4);
     //filteredColor.a *= 0.8;
 
     return filteredColor;

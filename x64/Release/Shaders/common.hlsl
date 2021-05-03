@@ -15,7 +15,7 @@ cbuffer cbPerObject : register(b0)
     float gObj2VoxelScale;
 };
 
-#define VOXELSCALE 1.6
+#define VOXELSCALE 1.5
 #define VOXELMIPCOUNT 9
 #define PI 3.1415926
 
@@ -71,7 +71,7 @@ static const float3 ConeSampleDirections[] =
 
 float getMipLevelFromRadius(float radius)
 {
-    return max(log2((radius + 0.00f) / VOXELSCALE) - 0.0, 0.0);
+    return max(log2(float(radius + 0.0f) / VOXELSCALE) - 0.0, 0.0);
 }
 
 static const float cMipDirectionalOffsets[] = {
@@ -93,6 +93,16 @@ static const float ConeSampleWeights[] =
     3 * PI / 20.0f,
 };
 
+//static const float ConeSampleWeights[] =
+//{
+//    0.25,
+//    0.15,
+//    0.15,
+//    0.15,
+//    0.15,
+//    0.15,
+//};
+
 void accumulateColorOcclusion(float4 sampleColor, inout float3 colorAccum, inout float occlusionAccum)
 {
     colorAccum = occlusionAccum * colorAccum + (1.0f - occlusionAccum) * sampleColor.a * sampleColor.rgb;
@@ -103,7 +113,12 @@ void accumulateColorOcclusion(float4 sampleColor, inout float3 colorAccum, inout
 float4 sampleVoxelVolumeAnisotropic(Texture3D<float4> voxelTexture, Texture3D<float4> voxelMips, SamplerState voxelSampler, float3 worldPosition, float radius, float3 direction, inout bool outsideVolume)
 {
     //direction = -direction;
-    uint3 isNegative = (direction < 0.0f);
+    //uint3 isNegative = (direction < 0.0f);
+    uint3 isNegative;
+    isNegative.x = (direction.x < 0.0f) ? 1 : 0;
+    isNegative.y = (direction.y < 0.0f) ? 1 : 0;
+    isNegative.z = (direction.z < 0.0f) ? 1 : 0;
+
     float3 dirSq = direction * direction;
 
     float3 voxelPos = worldPosition / 200.0; // 200 as placeholder
@@ -126,10 +141,13 @@ float4 sampleVoxelVolumeAnisotropic(Texture3D<float4> voxelTexture, Texture3D<fl
 
         filteredColor = dirSq.x * xSample + dirSq.y * ySample + dirSq.z * zSample;
 
+        //float4 xSample0 = voxelMips.SampleLevel(voxelSampler, voxelPos, anisotropicMipLevel);
+        //filteredColor = xSample0;
    // }
 
+        float mm = anisotropicMipLevel;
 
-    filteredColor.rgb *= 1.0f;
+    filteredColor.rgb *= 1.0f * pow(mm, 0.3);
     //filteredColor.a *= 0.8;
 
     return filteredColor;

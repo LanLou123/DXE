@@ -266,9 +266,9 @@ bool App::Initialize() {
     mScene->initScene();
  
     float modelScale = 4.5;
-    float ww2Scale = 6.1;
-    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ww2.obj"]->World, DirectX::XMMatrixScaling(ww2Scale, ww2Scale, ww2Scale));
-    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["castle.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
+    float ww2Scale = 10.1;
+    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ww2.obj"]->World, DirectX::XMMatrixScaling(ww2Scale, ww2Scale, ww2Scale));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["castle.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
     DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World,  DirectX::XMMatrixScaling(1,1,1) * DirectX::XMMatrixRotationRollPitchYaw(0,0,MathUtils::Pi / 2.0) * DirectX::XMMatrixTranslation(50, 60, 40) );
 
 
@@ -528,7 +528,10 @@ void App::Draw(const Timer& gt) {
     DrawScene2GBuffers();
     DrawScene2ShadowMap();
     mMeshVoxelizer->Clear3DTexture(mCommandList.Get(), mRootSignatures["CompResetPass"].Get(), mPSOs["CompReset"].Get());
-    VoxelizeMesh();
+    if (!voxelized) {
+        VoxelizeMesh();
+        voxelized = true;
+    }
     InjectRadiance();
     FillMip();
     DrawScene();
@@ -1213,7 +1216,11 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> App::GetStaticSamplers()
         D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressV
         D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressW
         0.0f,                              // mipLODBias
-        8);                                // maxAnisotropy
+        0,                                 // maxAnisotropy
+        D3D12_COMPARISON_FUNC_NEVER,
+        D3D12_STATIC_BORDER_COLOR_OPAQUE_BLACK,
+        0.f,
+        D3D12_FLOAT32_MAX);
 
     return {
         pointWrap, pointClamp,

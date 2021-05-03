@@ -13,6 +13,8 @@ Texture3D<float4> gVoxelizerEmissive : register(t8);
 Texture3D<float4> gVoxelizerRadiance : register(t9);
 Texture3D<float4> gVoxelizerRadianceMip : register(t10);
 
+#define AO_STRENGTH 0.4
+
 struct VertexIn
 {
     float3 PosL  : POSITION;
@@ -68,20 +70,20 @@ float4 PS(VertexOut pin) : SV_Target
     // ray marched for voxel visulization
     // =======================================
 
-    //float4 screen_space_pos = pin.PosH;
-    //float sx = -(2.0 * screen_space_pos.x / gRenderTargetSize.x) + 1.0;
-    //float sy =  - 1.0 + (2.0 * screen_space_pos.y / gRenderTargetSize.y);
-    //float3 forward = normalize(camLookDir);
-    //float3 ref = 2.0 * forward + gEyePosW;
-    //float len = length(ref - gEyePosW);
-    //float3 right = cross(forward, camUpDir);
-    //float3 V = camUpDir * len * tan(45.0 / 2.0);
-    //float3 H = right * len * (gRenderTargetSize.x / gRenderTargetSize.y) * tan(45.0 / 2.0);
-    //float3 pp = ref + sx * H - sy * V;
+    float4 screen_space_pos = pin.PosH;
+    float sx = -(2.0 * screen_space_pos.x / gRenderTargetSize.x) + 1.0;
+    float sy =  - 1.0 + (2.0 * screen_space_pos.y / gRenderTargetSize.y);
+    float3 forward = normalize(camLookDir);
+    float3 ref = 2.0 * forward + gEyePosW;
+    float len = length(ref - gEyePosW);
+    float3 right = cross(forward, camUpDir);
+    float3 V = camUpDir * len * tan(45.0 / 2.0);
+    float3 H = right * len * (gRenderTargetSize.x / gRenderTargetSize.y) * tan(45.0 / 2.0);
+    float3 pp = ref + sx * H - sy * V;
 
 
     if (visulizevoxel) {
-        float3 raydr = normalize(PosW.xyz - gEyePosW);
+        float3 raydr = normalize(pp - gEyePosW);
         float3 rayori = gEyePosW;
         float step = 0.13f;
         float3 curloc = rayori;
@@ -148,11 +150,11 @@ float4 PS(VertexOut pin) : SV_Target
      float3 vright = cross(Nor.xyz, up);
     float3 vforward = cross(Nor.xyz, vright);
 
-    float aperture = 0.37;
+    float aperture = 0.577;
 
     float3 diffuseCol = float3(0.0, 0.0, 0.0);
     float diffusOcclusion = 0.0;
-    float startSampledDis = 1.28;
+    float startSampledDis = VOXELSCALE + 0.5;
 
  
     for (int conei = 0; conei < 6; ++conei) {
@@ -160,12 +162,14 @@ float4 PS(VertexOut pin) : SV_Target
 
 
         float3 sampleDir = Nor.xyz;
-        sampleDir += ConeSampleDirections[conei].x * vright + ConeSampleDirections[conei].z * vforward;
+        float3 curSampleDir = ConeSampleDirections[conei];
+        //curSampleDir = normalize(curSampleDir);
+        sampleDir += curSampleDir.x * vright + curSampleDir.z * vforward;
         sampleDir = normalize(sampleDir);
 
 
         float dst = startSampledDis;
-        float3 startSamplePos = PosW.xyz + Nor.xyz * (dst + 0.0);
+        float3 startSamplePos = PosW.xyz + Nor.xyz * startSampledDis;
 
 
  
@@ -173,18 +177,18 @@ float4 PS(VertexOut pin) : SV_Target
         float3 VC = float3(0, 0, 0);
         float4 VC4 = float4(0, 0, 0,0);
 
-        float curRadius = aperture * dst * 2;
+        float curRadius = aperture * dst * 2.0;
 
-        for (int i = 0; i < 84; ++i) {
+        for (int i = 0; i < 30; ++i) {
             bool outSideVol = false; 
             
             float3 coneSamplePos = startSamplePos + sampleDir * dst;
-            curRadius = aperture * dst * 2;
+            curRadius = aperture * dst * 2.0;
 
             float4 sampleCol = sampleVoxelVolumeAnisotropic(
                 gVoxelizerRadiance,
                 gVoxelizerRadianceMip,
-                gsamAnisotropicClamp,
+                gsamLinearClamp,
                 coneSamplePos,
                 curRadius,
                 sampleDir,
@@ -203,7 +207,7 @@ float4 PS(VertexOut pin) : SV_Target
 
 
             VC4 += (1 - VC4.a) * sampleCol;
-            VA += (1 - VA) * sampleCol.a / (1.0 + curRadius * 0.0);
+            VA += (1 - VA) * sampleCol.a / 10.0;// / (1.0 + curRadius * 0.0);
 
 
             //sampleCol.a = 1.0 - pow(abs(1.0 - sampleCol.a), ((curDis - lastDis) / curDis));
@@ -214,10 +218,13 @@ float4 PS(VertexOut pin) : SV_Target
             if (VA >= 1.0f || outSideVol) break;
 
             //float lastDis = curDis;
-            dst += curRadius * 1.9;/*dst / (1.0 - aperture);*/
+            dst += curRadius * 1.5;/*dst / (1.0 - aperture);*/
         }
-        diffuseCol += VC4.rgb * ConeSampleWeights[conei];
 
+        float rr = abs(dot(Nor.xyz, sampleDir));
+
+        diffuseCol += VC4.rgb * ConeSampleWeights[conei] * rr;
+        diffusOcclusion += VA * ConeSampleWeights[conei];
     }
 
 
@@ -254,7 +261,7 @@ float4 PS(VertexOut pin) : SV_Target
     float lamb = dot(lightDir, Nor) + 0.1;
 
     float4 col = float4(Alb.rgb, 1.0f);
-    col = col * lamb * percentLit ;
+    col = clamp(col * lamb * percentLit, float4(0.0,0.0,0.0,0.0),float4(1.0,1.0,1.0,1.0) ) ;
 
     col.xyz *= lit;
     col = col + float4(diffuseCol * Alb.xyz * lit, 0.0);
@@ -271,6 +278,9 @@ float4 PS(VertexOut pin) : SV_Target
     }
 
     //col.xyz = diffuseCol * lit;
+    diffusOcclusion = 1.0 - diffusOcclusion * AO_STRENGTH;
+   // col.xyz *= diffusOcclusion;
+    //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion);
 
     float gamma = 0.9;
     float exposure = 1.8;

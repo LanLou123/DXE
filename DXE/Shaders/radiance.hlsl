@@ -61,7 +61,7 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
         return;
 
     float2 uv = DTid.xy / float2(shadowTexDimensions);
-    float4 screenSpacePos = float4(uv * 2.0 - 1.0, gShadowMap.Load(int3(DTid.xy, 0)).x - 0.0000 , 1.0);
+    float4 screenSpacePos = float4(uv * 2.0 - 1.0, gShadowMap.Load(int3(DTid.xy, 0)).x  , 1.0);
     screenSpacePos.y = -screenSpacePos.y;
  
 

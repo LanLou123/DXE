@@ -10,6 +10,10 @@
 #include "Utilities/Timer.h"
 #include "Utilities/DescriptorHeap.h"
 
+#include "imgui.h"
+#include "Utilities/imgui_impl_win32.h"
+#include "Utilities/imgui_impl_dx12.h"
+
 #pragma comment(lib,"d3dcompiler.lib")
 #pragma comment(lib, "D3D12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -112,6 +116,7 @@ protected:
 
 	std::unique_ptr<mDescriptorHeap> mRtvHeap;
 	std::unique_ptr<mDescriptorHeap> mDsvHeap;
+
 
 	D3D12_VIEWPORT mScreenViewport;
 	D3D12_RECT mScissorRect;

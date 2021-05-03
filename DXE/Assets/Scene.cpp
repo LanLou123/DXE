@@ -279,10 +279,10 @@ void Scene::initScene() {
     loadTextures(); 
     //loadAssetFromAssimp("../Resources/Models/sponza/sponza.obj");
     //loadAssetFromAssimp("../Resources/Models/sibenik/sibenik.obj"); 
-    loadAssetFromAssimp("../Resources/Models/island/castle.obj");
+    //loadAssetFromAssimp("../Resources/Models/island/castle.obj");
     //loadAssetFromAssimp("../Resources/Models/city/city.fbx");
     //loadAssetFromAssimp("../Resources/Models/fantasy-town/source/town.obj");
-    //loadAssetFromAssimp("../Resources/Models/ww2/source/ww2.obj");
+    loadAssetFromAssimp("../Resources/Models/ww2/source/ww2.obj");
 
     cpyCommandObject->endCommandRecording();
     cpyCommandObject->FlushCommandQueue();

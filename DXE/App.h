@@ -124,7 +124,7 @@ private:
     bool mIsWireframe = false;
     int mShowVoxel = 1;
     int mShowDirect = 0;
-  
+    bool voxelized = false;
 
  
 };

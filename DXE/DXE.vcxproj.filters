@@ -20,6 +20,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{9062080f-0a89-4d3a-b1dc-f159554a90d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{9a161122-1183-4490-b63d-ddf43b82fca2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Frames\FrameResource.h">
@@ -79,6 +82,21 @@
     <ClInclude Include="Utilities\ShaderProgram.h">
       <Filter>Source Files\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\imgui\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imgui\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\imgui_impl_dx12.h">
+      <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\imgui_impl_win32.h">
+      <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -133,6 +151,27 @@
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Utilities\ShaderProgram.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\imgui_impl_dx12.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\imgui_impl_win32.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
   </ItemGroup>

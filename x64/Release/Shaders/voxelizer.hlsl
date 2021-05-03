@@ -114,7 +114,7 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 		switch (index)
 		{
 		case 0:
-			inputPosL = float4(input[i].PosL.zyx, 1.0f);
+			inputPosL = float4(input[i].PosL.yzx, 1.0f);
 			break;
 		case 1:
 			inputPosL = float4(input[i].PosL.xzy, 1.0f);
@@ -181,8 +181,8 @@ void CompReset(int3 dispatchThreadID : SV_DispatchThreadID) {
 	int oldEmissive = gVoxelizerEmissive[int3(x, y, z)];
 	int oldRadiance = gVoxelizerRadiance[int3(x, y, z)];
 
-	gVoxelizerAlbedo[int3(x, y, z)] = 0;
-	gVoxelizerNormal[int3(x, y, z)] = 0;
+	//gVoxelizerAlbedo[int3(x, y, z)] = 0;
+	//gVoxelizerNormal[int3(x, y, z)] = 0;
 	gVoxelizerEmissive[int3(x, y, z)] = 0;
 	gVoxelizerRadiance[int3(x, y, z)] = newRadiance;
 }

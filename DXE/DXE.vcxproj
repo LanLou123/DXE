@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../include/imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -135,7 +135,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;../include/imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -145,6 +145,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\imgui\imconfig.h" />
+    <ClInclude Include="..\include\imgui\imgui.h" />
+    <ClInclude Include="..\include\imgui\imgui_internal.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Assets\Camera.h" />
     <ClInclude Include="Assets\Geometry.h" />
@@ -159,6 +162,8 @@
     <ClInclude Include="Frames\FrameResource.h" />
     <ClInclude Include="Utilities\CommandObject.h" />
     <ClInclude Include="Utilities\DescriptorHeap.h" />
+    <ClInclude Include="Utilities\imgui_impl_dx12.h" />
+    <ClInclude Include="Utilities\imgui_impl_win32.h" />
     <ClInclude Include="Utilities\MathUtils.h" />
     <ClInclude Include="Utilities\RootSignature.h" />
     <ClInclude Include="Utilities\ShaderProgram.h" />
@@ -166,6 +171,11 @@
     <ClInclude Include="Utilities\Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\imgui\imgui.cpp" />
+    <ClCompile Include="..\include\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\include\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\include\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Assets\Camera.cpp" />
     <ClCompile Include="Assets\Geometry.cpp" />
@@ -180,6 +190,8 @@
     <ClCompile Include="Frames\FrameResource.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Utilities\CommandObject.cpp" />
+    <ClCompile Include="Utilities\imgui_impl_dx12.cpp" />
+    <ClCompile Include="Utilities\imgui_impl_win32.cpp" />
     <ClCompile Include="Utilities\MathUtils.cpp" />
     <ClCompile Include="Utilities\RootSignature.cpp" />
     <ClCompile Include="Utilities\ShaderProgram.cpp" />

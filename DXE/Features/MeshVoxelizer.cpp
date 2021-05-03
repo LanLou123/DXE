@@ -302,7 +302,7 @@ D3D12_RECT MeshVoxelizer::ScissorRect()const {
 
 void MeshVoxelizer::PopulateUniformData() {
 	float sceneRadius = 300.0f;
-	DirectX::XMFLOAT3 eyePos = DirectX::XMFLOAT3(0.0f, sceneRadius / 2.0f, -sceneRadius);
+	DirectX::XMFLOAT3 eyePos = DirectX::XMFLOAT3(0.0f, 0.0, -sceneRadius);
 	DirectX::XMFLOAT3 tartPos = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 	DirectX::XMFLOAT3 up = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
 
