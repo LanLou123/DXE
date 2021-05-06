@@ -105,27 +105,27 @@ float4 PS(VertexOut pin) : SV_Target
                 ((mappedloc.z * 0.5) + 0.5f)) * texDimensions.z;
 
             if (visulizevoxel == 2) {
-                if (all(gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 2) == 0)) {
+                if (all(gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 3) == 0)) {
                     curloc = curloc + raydr * step;
                 }
                 else {
 
-                    voxelNormal = gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 2) * 1.0;
-                    step = -0.1 * step;
+                    voxelNormal = gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 3) * 1.0;
+                    step = -0.2 * step;
                     curloc = curloc + raydr * step;
 
                 }
             }
             else {
-                if (all(gVoxelizerRadiance.Sample(gsamPointClamp, texIndex) == 0)) {
+                if (all(gVoxelizerAlbedo.Sample(gsamPointClamp, texIndex) == 0)) {
                     curloc = curloc + raydr * step;
                 }
 
                 else {
 
-                    voxelPickColor = gVoxelizerRadiance.Sample(gsamPointClamp, texIndex).xyz * 1.0 ;
+                    voxelPickColor = gVoxelizerAlbedo.Sample(gsamPointClamp, texIndex).xyz * 1.0 ;
                     voxelNormal = gVoxelizerRadiance.Sample(gsamPointClamp, texIndex).xyzw ;
-                    step = -0.1 * step;
+                    step = -0.2 * step;
                     curloc = curloc + raydr * step;
 
                 }
@@ -179,7 +179,7 @@ float4 PS(VertexOut pin) : SV_Target
 
         float curRadius = aperture * dst * 2.0;
 
-        for (int i = 0; i < 30; ++i) {
+        for (int i = 0; i < 20; ++i) {
             bool outSideVol = false; 
             
             float3 coneSamplePos = startSamplePos + sampleDir * dst;

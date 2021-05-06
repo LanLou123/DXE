@@ -78,9 +78,7 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 	float4 outputPosH[3] = { float4(0.0f, 0.0f, 0.0f, 0.0f),
 							 float4(0.0f, 0.0f, 0.0f, 0.0f),
 							 float4(0.0f, 0.0f, 0.0f, 0.0f) };
-
-	const float2 halfPixel = float2(1.0f, 1.0f) / 512.0f;
-
+	 
 	float3 posW0 = input[0].PosL.xyz;
 	float3 posW1 = input[1].PosL.xyz;
 	float3 posW2 = input[2].PosL.xyz;
@@ -117,14 +115,14 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 			inputPosL = float4(input[i].PosL.yzx, 1.0f);
 			break;
 		case 1:
-			inputPosL = float4(input[i].PosL.xzy, 1.0f);
+			inputPosL = float4(input[i].PosL.zxy, 1.0f);
 			break;
 		case 2:
 			inputPosL = float4(input[i].PosL.xyz, 1.0f);
 			break;
 		}
 
-		inputPosL.z = 1.0;
+		//inputPosL.z = 1.0;
 	 
 		outputPosH[i] = mul(inputPosL, gVoxelViewProj);
 
@@ -158,7 +156,9 @@ void PS(PS_INPUT pin)
 	{
 		//imageAtomicRGBA8Avg(gVoxelizerAlbedo, texIndex, diffuseAlbedo);
 		//diffuseAlbedo = float4(1, 1, 1, 1);
-		gVoxelizerAlbedo[texIndex] = convVec4ToRGBA8(float4(diffuseAlbedo.xyzw) * 255.0f);
+		float4 writeCol = diffuseAlbedo.xyzw;
+		writeCol = (diffuseAlbedo.w == 0) ? float4(0, 0, 0, 0) : float4(diffuseAlbedo.xyz, 1.0);
+		gVoxelizerAlbedo[texIndex] = convVec4ToRGBA8(writeCol * 255.0f);
 		//imageAtomicRGBA8Avg(gVoxelizerNormal, texIndex, float4((pin.Normal.xyz / 2.0 + float3(0.5, 0.5, 0.5)), 1.0));
 		gVoxelizerNormal[texIndex] = convVec4ToRGBA8(float4((pin.Normal.xyz/ 2.0 + float3(0.5, 0.5, 0.5))  , 1.0) * 255.0f);
 	}

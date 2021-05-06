@@ -78,9 +78,7 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 	float4 outputPosH[3] = { float4(0.0f, 0.0f, 0.0f, 0.0f),
 							 float4(0.0f, 0.0f, 0.0f, 0.0f),
 							 float4(0.0f, 0.0f, 0.0f, 0.0f) };
-
-	const float2 halfPixel = float2(1.0f, 1.0f) / 512.0f;
-
+	 
 	float3 posW0 = input[0].PosL.xyz;
 	float3 posW1 = input[1].PosL.xyz;
 	float3 posW2 = input[2].PosL.xyz;
@@ -93,7 +91,6 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 	};
 
 
-	//Find dominant axis
 	int index = 0;
 	int i = 0;
 
@@ -101,7 +98,7 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 	for (i = 1; i < 3; i++)
 	{
 		[flatten]
-		if (axis[i] > axis[i - 1])
+		if (axis[i] > axis[index])
 			index = i;
 	}
 
@@ -117,7 +114,7 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 			inputPosL = float4(input[i].PosL.yzx, 1.0f);
 			break;
 		case 1:
-			inputPosL = float4(input[i].PosL.xzy, 1.0f);
+			inputPosL = float4(input[i].PosL.zxy, 1.0f);
 			break;
 		case 2:
 			inputPosL = float4(input[i].PosL.xyz, 1.0f);

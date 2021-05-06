@@ -254,11 +254,88 @@ void App::BuildRootSignature()
         IID_PPV_ARGS(mRootSignatures["CompFillBaseMip"].GetAddressOf())));
 }
 
+bool App::InitImgui() {
+    D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+    desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+    desc.NumDescriptors = 1;
+    desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+    ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&m_cbvSrvHeap4Imgui)));
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+
+        // Setup Platform/Renderer bindings
+    ImGui_ImplWin32_Init(MainWnd());
+    auto res = MainWnd();
+    ImGui_ImplDX12_Init(md3dDevice.Get(), d3dUtil::gNumFrameResources,
+        DXGI_FORMAT_R8G8B8A8_UNORM,
+        m_cbvSrvHeap4Imgui.Get(),
+        m_cbvSrvHeap4Imgui.Get()->GetCPUDescriptorHandleForHeapStart(),
+        m_cbvSrvHeap4Imgui.Get()->GetGPUDescriptorHandleForHeapStart());
+
+    // Setup Style
+    // ImGui::StyleColorsDark();
+    ImGui::StyleColorsClassic();
+    return true;
+}
+
+void App::UpdateGui(const Timer& gt) {
+
+    mImguiPara.LightPos = { mShadowMap->mShadowMapData.mRotatedLightDirections.x,
+        mShadowMap->mShadowMapData.mRotatedLightDirections.y, 
+        mShadowMap->mShadowMapData.mRotatedLightDirections.z };
+
+    ImGui_ImplDX12_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+
+    // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+ 
+
+    // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+    {
+        static float f = 0.0f;
+        static int counter = 0;
+
+        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+        ImGui::Checkbox("Another Window", &show_another_window);
+
+        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::SliderFloat3("LightPos", mImguiPara.LightPos.data(), -1.0,1.0);
+        mShadowMap->setShadowLightPos(mImguiPara.LightPos[0], mImguiPara.LightPos[1], mImguiPara.LightPos[2]);
+        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text("counter = %d", counter);
+
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::End();
+    }
+
+    // 3. Show another simple window.
+
+}
+
+void App::OnDestroy() {
+    ImGui_ImplDX12_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
+}
 
 bool App::Initialize() {
 
     if (!Core::Initialize()) {
+        return false;
+    }
+
+    if (!InitImgui()) {
         return false;
     }
 
@@ -268,7 +345,7 @@ bool App::Initialize() {
     float modelScale = 4.5;
     float ww2Scale = 10.1;
     DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ww2.obj"]->World, DirectX::XMMatrixScaling(ww2Scale, ww2Scale, ww2Scale));
-    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["castle.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["mr.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
     DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World,  DirectX::XMMatrixScaling(1,1,1) * DirectX::XMMatrixRotationRollPitchYaw(0,0,MathUtils::Pi / 2.0) * DirectX::XMMatrixTranslation(50, 60, 40) );
 
 
@@ -323,7 +400,7 @@ void App::Update(const Timer& gt) {
 
     UpdateCBs(gt);
     UpdateScenePhysics(gt);
-
+    UpdateGui(gt);
 }
 
 void App::UpdateCamera(const Timer& gt)
@@ -451,7 +528,7 @@ void App::UpdateRadiancePassCB(const Timer& gt) {
     XMMATRIX invProj = DirectX::XMMatrixInverse(&DirectX::XMMatrixDeterminant(proj), proj);
     XMMATRIX invViewProj = DirectX::XMMatrixInverse(&DirectX::XMMatrixDeterminant(viewProj), viewProj);
 
-    mRadianceCB.gLightDir = mShadowMap->mShadowMapData.mRotatedLightDirections[0];
+    mRadianceCB.gLightDir = mShadowMap->mShadowMapData.mRotatedLightDirections;
     mRadianceCB.gLightCol = XMFLOAT3(1.0, 1.0, 1.0);
     mRadianceCB.voxelScale = 200.0f;
     DirectX::XMStoreFloat4x4(&mRadianceCB.gLight2World, DirectX::XMMatrixTranspose(invViewProj));
@@ -506,6 +583,7 @@ void App::OnResize() {
 
 
 
+
 void App::Draw(const Timer& gt) {
 
 
@@ -536,6 +614,18 @@ void App::Draw(const Timer& gt) {
     FillMip();
     DrawScene();
 
+    // record cmdlist for imgui before we close cmdlist
+    {
+        mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+            D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+        ID3D12DescriptorHeap* ppHeaps[] = { m_cbvSrvHeap4Imgui.Get() };
+        mCommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+        ImGui::Render();
+        ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), mCommandList.Get());
+        mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
+            D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+    }
+
     // Done recording commands.
     ThrowIfFailed(mCommandList->Close());
 
@@ -558,6 +648,17 @@ void App::Draw(const Timer& gt) {
 
 }
 
+void App::OnKeyDown(WPARAM btnState) {
+    if (btnState == VK_TAB) {
+        isFreeCamEnabled = !isFreeCamEnabled;
+        std::cout << "called" << std::endl;
+    }
+}
+void App::OnKeyUp(WPARAM btnState) {
+
+}
+
+
 void App::OnMouseDown(WPARAM btnState, int x, int y) {
     mLastMousePos.x = x;
     mLastMousePos.y = y;
@@ -572,43 +673,47 @@ void App::OnMouseUp(WPARAM btnState, int x, int y)
 
 void App::OnMouseMove(WPARAM btnState, int x, int y)
 {
-    if ((btnState & MK_LBUTTON) != 0)
-    {
-        // Make each pixel correspond to a quarter of a degree.
-        float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
-        float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
+    if (isFreeCamEnabled) {
+        if ((btnState & MK_LBUTTON) != 0)
+        {
+            // Make each pixel correspond to a quarter of a degree.
+            float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
+            float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
 
-        mScene->getCamerasMap()["MainCam"]->Pitch(dy);
-        mScene->getCamerasMap()["MainCam"]->RotateY(dx);
+            mScene->getCamerasMap()["MainCam"]->Pitch(dy);
+            mScene->getCamerasMap()["MainCam"]->RotateY(dx);
 
-        // Update angles based on input to orbit camera around box.
-        mTheta += dx;
-        mPhi += dy;
+            // Update angles based on input to orbit camera around box.
+            mTheta += dx;
+            mPhi += dy;
 
-        // Restrict the angle mPhi.
-        mPhi = MathUtils::Clamp(mPhi, 0.1f, MathUtils::Pi - 0.1f);
+            // Restrict the angle mPhi.
+            mPhi = MathUtils::Clamp(mPhi, 0.1f, MathUtils::Pi - 0.1f);
+        }
+        else if ((btnState & MK_RBUTTON) != 0)
+        {
+            // Make each pixel correspond to 0.2 unit in the scene.
+            float dx = 0.05f * static_cast<float>(x - mLastMousePos.x);
+            float dy = 0.05f * static_cast<float>(y - mLastMousePos.y);
+
+            // Update the camera radius based on input.
+            mRadius += dx - dy;
+
+            // Restrict the radius.
+            mRadius = MathUtils::Clamp(mRadius, 5.0f, 550.0f);
+        }
+
+        mLastMousePos.x = x;
+        mLastMousePos.y = y;
     }
-    else if ((btnState & MK_RBUTTON) != 0)
-    {
-        // Make each pixel correspond to 0.2 unit in the scene.
-        float dx = 0.05f * static_cast<float>(x - mLastMousePos.x);
-        float dy = 0.05f * static_cast<float>(y - mLastMousePos.y);
-
-        // Update the camera radius based on input.
-        mRadius += dx - dy;
-
-        // Restrict the radius.
-        mRadius = MathUtils::Clamp(mRadius, 5.0f, 550.0f);
-    }
-
-    mLastMousePos.x = x;
-    mLastMousePos.y = y;
 }
 
 void App::OnKeyboardInput(const Timer& gt)
 {
     const float dt = gt.DeltaTime();
     float speed = 30.0f;
+
+ 
 
     if (GetAsyncKeyState('1') & 0x8000)
         mIsWireframe = true;
@@ -629,18 +734,20 @@ void App::OnKeyboardInput(const Timer& gt)
     else {
         mShowDirect = 0;
     }
-    if (GetAsyncKeyState('W') & 0x8000)
-        mScene->getCamerasMap()["MainCam"]->Walk(speed * dt);
+    if (isFreeCamEnabled) {
+        if (GetAsyncKeyState('W') & 0x8000)
+            mScene->getCamerasMap()["MainCam"]->Walk(speed * dt);
 
-    if (GetAsyncKeyState('S') & 0x8000)
-        mScene->getCamerasMap()["MainCam"]->Walk(-speed * dt);
+        if (GetAsyncKeyState('S') & 0x8000)
+            mScene->getCamerasMap()["MainCam"]->Walk(-speed * dt);
 
-    if (GetAsyncKeyState('A') & 0x8000)
-        mScene->getCamerasMap()["MainCam"]->Strafe(-speed * dt);
+        if (GetAsyncKeyState('A') & 0x8000)
+            mScene->getCamerasMap()["MainCam"]->Strafe(-speed * dt);
 
-    if (GetAsyncKeyState('D') & 0x8000)
-        mScene->getCamerasMap()["MainCam"]->Strafe(speed * dt);
-    mScene->getCamerasMap()["MainCam"]->UpdateViewMatrix();
+        if (GetAsyncKeyState('D') & 0x8000)
+            mScene->getCamerasMap()["MainCam"]->Strafe(speed * dt);
+        mScene->getCamerasMap()["MainCam"]->UpdateViewMatrix();
+    }
     //std::cout << mScene->getCamerasMap()["MainCam"]->GetPosition().m128_f32[0] << " " << mScene->getCamerasMap()["MainCam"]->GetPosition().m128_f32[1] << " " << mScene->getCamerasMap()["MainCam"]->GetPosition().m128_f32[2] << std::endl;
 }
 
@@ -870,6 +977,7 @@ void App::BuildPSOs() {
     // =====================================
     auto voxelRasterDesc = rasterDesc;
     voxelRasterDesc.CullMode = D3D12_CULL_MODE_NONE;
+ 
     auto voxelDepthStencilDesc = dsvDesc;
     voxelDepthStencilDesc.DepthEnable = false;
     //voxelRasterDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_ON;

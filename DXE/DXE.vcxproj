@@ -164,6 +164,7 @@
     <ClInclude Include="Utilities\DescriptorHeap.h" />
     <ClInclude Include="Utilities\imgui_impl_dx12.h" />
     <ClInclude Include="Utilities\imgui_impl_win32.h" />
+    <ClInclude Include="Utilities\Keyboard.h" />
     <ClInclude Include="Utilities\MathUtils.h" />
     <ClInclude Include="Utilities\RootSignature.h" />
     <ClInclude Include="Utilities\ShaderProgram.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="Utilities\CommandObject.cpp" />
     <ClCompile Include="Utilities\imgui_impl_dx12.cpp" />
     <ClCompile Include="Utilities\imgui_impl_win32.cpp" />
+    <ClCompile Include="Utilities\Keyboard.cpp" />
     <ClCompile Include="Utilities\MathUtils.cpp" />
     <ClCompile Include="Utilities\RootSignature.cpp" />
     <ClCompile Include="Utilities\ShaderProgram.cpp" />

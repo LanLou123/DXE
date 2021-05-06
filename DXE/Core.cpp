@@ -2,19 +2,21 @@
 
 
 #include "Core.h"
-
 #include <WindowsX.h>
-
-
+ 
 
 using Microsoft::WRL::ComPtr;
 using namespace std;
 using namespace DirectX;
 
+// Forward declare message handler from imgui_impl_win32.cpp
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK
 MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wParam, lParam))
+		return true;
 	// Forward hwnd on because we can get messages (e.g., WM_CREATE)
 	// before CreateWindow returns, and thus before mhMainWnd is valid.
 	return Core::GetCore()->MsgProc(hwnd, msg, wParam, lParam);
@@ -101,6 +103,9 @@ int Core::Run()
 		}
 	}
 
+	// flush command queue before relseasing resources
+	FlushCommandQueue();
+	OnDestroy();
 
 	return (int)msg.wParam;
 }
@@ -349,7 +354,9 @@ LRESULT Core::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		((MINMAXINFO*)lParam)->ptMinTrackSize.x = 200;
 		((MINMAXINFO*)lParam)->ptMinTrackSize.y = 200;
 		return 0;
-
+	case WM_KEYDOWN:
+		OnKeyDown(wParam);
+		return 0;
 	case WM_LBUTTONDOWN:
 	case WM_MBUTTONDOWN:
 	case WM_RBUTTONDOWN:
@@ -370,7 +377,7 @@ LRESULT Core::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		else if ((int)wParam == VK_F2)
 			Set4xMsaaState(!m4xMsaaState);
-
+		OnKeyUp(wParam);
 		return 0;
 	}
 
@@ -520,7 +527,7 @@ void Core::CreateSwapChain()
 	sd.BufferDesc.Format = mBackBufferFormat;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	sd.SampleDesc.Count = m4xMsaaState ? 4 : 1;
+	sd.SampleDesc.Count = 1; //Direct3D 12 don't support creating MSAA swap chains--attempts to create a swap chain with SampleDesc.Count > 1 will fail
 	sd.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.BufferCount = SwapChainBufferCount;

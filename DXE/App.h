@@ -7,6 +7,7 @@
 #include "Utilities/DescriptorHeap.h"
 #include "Utilities/MathUtils.h"
 #include "Utilities/Utils.h"
+#include "Utilities/Keyboard.h"
 #include "Frames/FrameResource.h"
 #include "Assets/Geometry.h"
 #include "Assets/Texture.h"
@@ -35,13 +36,18 @@ private:
     virtual void OnResize()override;
     virtual void Update(const Timer& gt)override;
     virtual void Draw(const Timer& gt)override;
+    virtual void OnDestroy()override;
 
+    // input callbacks 
     virtual void OnMouseDown(WPARAM btnState, int x, int y)override;
     virtual void OnMouseUp(WPARAM btnState, int x, int y)override;
     virtual void OnMouseMove(WPARAM btnState, int x, int y)override;
+    // key board input
+    virtual void OnKeyDown(WPARAM btnState)override;
+    virtual void OnKeyUp(WPARAM btnState)override;
 
-
-
+    // per frame updates
+    void UpdateGui(const Timer& gt);
     void OnKeyboardInput(const Timer& gt);
     void UpdateCamera(const Timer& gt);
     void UpdateObjectCBs(const Timer& gt);
@@ -52,6 +58,8 @@ private:
     void UpdateCBs(const Timer& gt);
     void UpdateScenePhysics(const Timer& gt);
 
+    // misc initializations
+    bool InitImgui();
     void BuildDescriptorHeaps();
     void BuildRootSignature();
     void BuildShadersAndInputLayout();
@@ -74,6 +82,8 @@ private:
     void BuildFrameResources();
     void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<ObjectInfo*>& objInfos);
 
+
+    //render passes draw command
     void DrawScene2ShadowMap();
     void DrawScene2GBuffers();
     void VoxelizeMesh();
@@ -81,6 +91,7 @@ private:
     void FillMip();
     void FillMipLevel(int level);
     void DrawScene();
+
 
     std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
 
@@ -121,12 +132,26 @@ private:
 
     POINT mLastMousePos;
 
+    //imgui parameters
+    ComPtr<ID3D12DescriptorHeap> m_cbvSrvHeap4Imgui;
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+
+    // states/ flags
+    bool isFreeCamEnabled = true;
+    bool mouse = true;
     bool mIsWireframe = false;
     int mShowVoxel = 1;
     int mShowDirect = 0;
     bool voxelized = false;
 
- 
+    struct ImguiParameters {
+        std::vector<float> LightPos;
+    }mImguiPara;
+
+
 };
 
 

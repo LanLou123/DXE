@@ -51,11 +51,15 @@ protected:
 	virtual void OnResize();
 	virtual void Update(const Timer& t) = 0;
 	virtual void Draw(const Timer& t) = 0;
+	virtual void OnDestroy() = 0;
 
 	// Convenience overrides for handling mouse input.
 	virtual void OnMouseDown(WPARAM btnState, int x, int y) { }
 	virtual void OnMouseUp(WPARAM btnState, int x, int y) { }
 	virtual void OnMouseMove(WPARAM btnState, int x, int y) { }
+	// key board input
+	virtual void OnKeyDown(WPARAM btnState ){}
+	virtual void OnKeyUp(WPARAM btnState) {}
 
 protected:
 
@@ -126,7 +130,7 @@ protected:
 	UINT mCbvSrvUavDescriptorSize = 0;
 
 	// Derived class parameters
-	std::wstring mMainWndCaption = L"d3d App";
+	std::wstring mMainWndCaption = L"Press TAB to toggle free camera and gui control";
 	D3D_DRIVER_TYPE md3dDriverType = D3D_DRIVER_TYPE_HARDWARE;
 	DXGI_FORMAT mBackBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 	DXGI_FORMAT mDepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;

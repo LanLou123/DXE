@@ -137,22 +137,25 @@ void ShadowMap::BuildResource()
 		IID_PPV_ARGS(&mShadowMap)));
 }
 
+void ShadowMap::setShadowLightPos(float x, float y, float z) {
+	mShadowMapData.mRotatedLightDirections = XMFLOAT3(x, y, z);
+}
+
 void ShadowMap::Update(const Timer& gt) {
 	// update light directions
-	mShadowMapData.mLightRotationAngle += 0.06f * gt.DeltaTime();
-	XMMATRIX R = DirectX::XMMatrixRotationY(mShadowMapData.mLightRotationAngle);
-	for (int i = 0; i < 3; ++i)
-	{
-		XMVECTOR lightDir = XMLoadFloat3(&mShadowMapData.mBaseLightDirections[i]);
-		lightDir = DirectX::XMVector3TransformNormal(lightDir, R);
-		DirectX::XMStoreFloat3(&mShadowMapData.mRotatedLightDirections[i], lightDir);
-	}
+	//mShadowMapData.mLightRotationAngle += 0.06f * gt.DeltaTime();
+	//XMMATRIX R = DirectX::XMMatrixRotationY(mShadowMapData.mLightRotationAngle);
+
+	//XMVECTOR lightDir = XMLoadFloat3(&mShadowMapData.mLightPos);
+	//lightDir = DirectX::XMVector3TransformNormal(lightDir, R);
+	//DirectX::XMStoreFloat3(&mShadowMapData.mRotatedLightDirections, lightDir);
+	
 	//mShadowMapData.mRotatedLightDirections[0] = DirectX::XMFLOAT3(cos(mShadowMapData.mLightRotationAngle) * 2.0, -0.5, 0.0 );
 	// Only the first "main" light casts a shadow.
 	XMFLOAT3 sceneCenter(0.0f, 0.0f, 0.0f);
 	float sceneRadius = 250.f;
 
-	XMVECTOR lightDir = DirectX::XMLoadFloat3(&mShadowMapData.mRotatedLightDirections[0]);
+	XMVECTOR lightDir = DirectX::XMLoadFloat3(&mShadowMapData.mRotatedLightDirections);
 	lightDir = DirectX::XMVector3Normalize(lightDir);
 	XMVECTOR lightPos = -2.0f * sceneRadius * lightDir;
 	XMVECTOR targetPos = DirectX::XMLoadFloat3(&sceneCenter);

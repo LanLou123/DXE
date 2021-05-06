@@ -58,8 +58,9 @@ void AllMipRadiance(uint3 DTid : SV_DispatchThreadID)
 
 
 	float4 filteredCol[8];
+	int i, j, k;
 	[unroll]
-	for (int i = 0; i < 8; ++i) {
+	for (i = 0; i < 8; ++i) {
 		filteredCol[i] = float4(0.0, 0.0, 0.0, 0.0);
 	}
 
@@ -67,13 +68,13 @@ void AllMipRadiance(uint3 DTid : SV_DispatchThreadID)
 
 	//+x
 	[unroll]
-	for (int i = 0; i < 2; i++)
+	for (i = 0; i < 2; i++)
 	{
 		[unroll]
-		for (int j = 0; j < 2; j++)
+		for (j = 0; j < 2; j++)
 		{
 			[unroll]
-			for (int k = 0; k < 2; k++)
+			for (k = 0; k < 2; k++)
 			{
 				int3 curIdx = biggerMipIdx + int3(i, j, k);
 				filteredCol[4 * i + 2 * j + 1 * k] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;
@@ -87,13 +88,13 @@ void AllMipRadiance(uint3 DTid : SV_DispatchThreadID)
 
 	// -x
 	[unroll]
-	for (int i = 0; i < 2; i++)
+	for (i = 0; i < 2; i++)
 	{
 		[unroll]
-		for (int j = 0; j < 2; j++)
+		for (j = 0; j < 2; j++)
 		{
 			[unroll]
-			for (int k = 0; k < 2; k++)
+			for (k = 0; k < 2; k++)
 			{
 				int3 curIdx = biggerMipIdx + int3(i, j, k);
 				filteredCol[- 4 * i + 2 * j + 1 * k + 4] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;
@@ -107,13 +108,13 @@ void AllMipRadiance(uint3 DTid : SV_DispatchThreadID)
 
 	// +y
 	[unroll]
-	for (int i = 0; i < 2; i++)
+	for (i = 0; i < 2; i++)
 	{
 		[unroll]
-		for (int j = 0; j < 2; j++)
+		for (j = 0; j < 2; j++)
 		{
 			[unroll]
-			for (int k = 0; k < 2; k++)
+			for (k = 0; k < 2; k++)
 			{
 				int3 curIdx = biggerMipIdx + int3(i, j, k);
 				filteredCol[1 * i + 4 * j + 2 * k] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;
@@ -127,13 +128,13 @@ void AllMipRadiance(uint3 DTid : SV_DispatchThreadID)
 
 	// -y
 	[unroll]
-	for (int i = 0; i < 2; i++)
+	for (i = 0; i < 2; i++)
 	{
 		[unroll]
-		for (int j = 0; j < 2; j++)
+		for (j = 0; j < 2; j++)
 		{
 			[unroll]
-			for (int k = 0; k < 2; k++)
+			for (k = 0; k < 2; k++)
 			{
 				int3 curIdx = biggerMipIdx + int3(i, j, k);
 				filteredCol[1 * i - 4 * j + 2 * k + 4] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;
@@ -147,13 +148,13 @@ void AllMipRadiance(uint3 DTid : SV_DispatchThreadID)
 
 	// +z
 	[unroll]
-	for (int i = 0; i < 2; i++)
+	for (i = 0; i < 2; i++)
 	{
 		[unroll]
-		for (int j = 0; j < 2; j++)
+		for (j = 0; j < 2; j++)
 		{
 			[unroll]
-			for (int k = 0; k < 2; k++)
+			for (k = 0; k < 2; k++)
 			{
 				int3 curIdx = biggerMipIdx + int3(i, j, k);
 				filteredCol[1 * i + 2 * j + 4 * k] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;
@@ -167,13 +168,13 @@ void AllMipRadiance(uint3 DTid : SV_DispatchThreadID)
 
 	// -z
 	[unroll]
-	for (int i = 0; i < 2; i++)
+	for (i = 0; i < 2; i++)
 	{
 		[unroll]
-		for (int j = 0; j < 2; j++)
+		for (j = 0; j < 2; j++)
 		{
 			[unroll]
-			for (int k = 0; k < 2; k++)
+			for (k = 0; k < 2; k++)
 			{
 				int3 curIdx = biggerMipIdx + int3(i, j, k);
 				filteredCol[1 * i + 2 * j - 4 * k + 4] = convRGBA8ToVec4(gVoxelizerRadiance[curIdx]) / 255.0;

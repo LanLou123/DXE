@@ -147,7 +147,7 @@ float4 sampleVoxelVolumeAnisotropic(Texture3D<float4> voxelTexture, Texture3D<fl
 
         float mm = anisotropicMipLevel;
 
-    filteredColor.rgb *= 1.0f * pow(mm, 0.4);
+    filteredColor.rgb *= 1.0f * pow(mm, 0.3);
     //filteredColor.a *= 0.8;
 
     return filteredColor;
