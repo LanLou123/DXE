@@ -86,7 +86,7 @@ private:
     //render passes draw command
     void DrawScene2ShadowMap();
     void DrawScene2GBuffers();
-    void VoxelizeMesh();
+    void VoxelizeMesh(RenderLayer _layer);
     void InjectRadiance();
     void FillMip();
     void FillMipLevel(int level);
@@ -149,6 +149,7 @@ private:
 
     struct ImguiParameters {
         std::vector<float> LightPos;
+        std::vector<float> l2pos = { 20,10,10 };
     }mImguiPara;
 
 

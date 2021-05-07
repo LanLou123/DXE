@@ -12,6 +12,7 @@ struct ObjectConstants
     DirectX::XMFLOAT4X4 World = MathUtils::Identity4x4();
     DirectX::XMFLOAT4X4 TexTransform = MathUtils::Identity4x4();
     float Obj2VoxelScale = 1; // used to scale model down to screen space
+    int IsDynamic = false;
 };
 
 struct PassConstants
@@ -50,7 +51,7 @@ struct MaterialConstants {
     DirectX::XMFLOAT3 FresnelR0 = { 0.01f, 0.01f, 0.01f };
     float Roughness = 0.25f;
     DirectX::XMFLOAT4X4 MatTransform = MathUtils::Identity4x4();
-
+    int IsEmissive = false;
 
 };
 

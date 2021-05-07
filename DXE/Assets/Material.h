@@ -13,6 +13,7 @@ public:
     int DiffuseSrvHeapIndex = -1; // index  into SRV heap for diffuse texture
     int NormalSrvHeapIndex = -1; // index into SRV heap for normal texture
     int NumFramesDirty = d3dUtil::gNumFrameResources; // make sure it returns to this value after update
+    bool IsEmissive = false;
 
     // material constants
     DirectX::XMFLOAT4 DiffuseAlbedo = { 1.0f ,1.0f ,1.0f, 1.0f };

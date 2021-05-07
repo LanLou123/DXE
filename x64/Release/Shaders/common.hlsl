@@ -13,6 +13,7 @@ cbuffer cbPerObject : register(b0)
     float4x4 gWorld;
     float4x4 gTexTransform;
     float gObj2VoxelScale;
+    int IsDynamic;
 };
 
 #define VOXELSCALE 1.5
@@ -46,6 +47,16 @@ cbuffer cbPass : register(b1)
     float3 camUpDir;
     int showVoxel;
     int showDirect;
+};
+
+
+cbuffer cbMaterial : register(b2)
+{
+    float4   gDiffuseAlbedo;
+    float3   gFresnelR0;
+    float    gRoughness;
+    float4x4 gMatTransform;
+    int      IsEmissive;
 };
 
 float4 convRGBA8ToVec4(uint val)

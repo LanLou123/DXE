@@ -54,7 +54,7 @@ public:
 	bool initShadowMap();
 
 	ShadowMapData mShadowMapData;
-	void setShadowLightPos(float x, float y, float z);
+	void setShadowLightPos(float x, float y, float z, const Timer& gt);
 
 private:
 

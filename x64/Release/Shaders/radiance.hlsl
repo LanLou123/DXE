@@ -72,7 +72,7 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
         ((volumeSpacePos.y * 0.5) + 0.5f) * volTexDimensions.y  , // not sre why, but need to offset y value to match accurate result, weird
         ((volumeSpacePos.z * 0.5) + 0.5f) * volTexDimensions.z );
 
-    float4 col = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex]).xyz / 255.0, 1.0f);
+    float4 col = float4(convRGBA8ToVec4(gVoxelizerAlbedo[texIndex]).xyz / 255.0, 0.0f);
     //float4 col = getAvgCol(texIndex);
 
     float3 nor = float3(convRGBA8ToVec4(gVoxelizerNormal[texIndex]).xyz / 255.0);
@@ -87,9 +87,15 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
 
     //imageAtomicRGBA8Avg(gVoxelizerRadiance, texIndex, col);
 
-    int oldRadiance = gVoxelizerRadiance[int3(texIndex)];
+    int oldRadiance = gVoxelizerRadiance[int3(texIndex)]; 
     float4 oldRadianceCol = convRGBA8ToVec4(oldRadiance) / 255.0;
-    col.a = oldRadianceCol.a; // preserve the alpha
+    //col += oldRadianceCol; // preserve the alpha
+    //if radiance is already filled - meaning we already have emissive color written to it in voxlizer.hlsl, we leave it alone
+    if (all(oldRadianceCol.xyz > 0)) {
+        col.xyz = oldRadianceCol.xyz;
+    }
+    col.a = oldRadianceCol.a;
+    col = clamp(col, float4(0.0, 0.0, 0.0, 0.0), float4(1, 1, 1, 3));
     col *= 255.0f;
 
     gVoxelizerRadiance[int3(texIndex)] = convVec4ToRGBA8(col);

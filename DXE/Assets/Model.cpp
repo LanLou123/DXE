@@ -1,8 +1,8 @@
 #include "Model.h"
 
-Model::Model() : globalMeshID(0), modelType(ModelType::TEMPLATE_MODEL){}
+Model::Model() : globalMeshID(0), modelType(ModelType::TEMPLATE_MODEL), IsDynamic(false){}
 
-Model::Model(ModelType _type) : modelType(_type), globalMeshID(0){
+Model::Model(ModelType _type) : modelType(_type), globalMeshID(0), IsDynamic(false) {
      
 }
 

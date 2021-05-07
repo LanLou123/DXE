@@ -15,8 +15,12 @@ enum class RenderLayer : int {
 	Debug,
 	Gbuffer,
 	Sky,
+	Dynamic,
+	Static,
 	Count
 };
+
+
 
 struct MeshInfo {
 
@@ -55,6 +59,10 @@ struct ObjectInfo {
 	d3dUtil::Bound mBound;
 
 	float Obj2VoxelScale;
+
+	// tags for object types
+	bool IsDynamic = false;
+
 };
 
 

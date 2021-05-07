@@ -137,8 +137,9 @@ void ShadowMap::BuildResource()
 		IID_PPV_ARGS(&mShadowMap)));
 }
 
-void ShadowMap::setShadowLightPos(float x, float y, float z) {
+void ShadowMap::setShadowLightPos(float x, float y, float z, const Timer& gt) {
 	mShadowMapData.mRotatedLightDirections = XMFLOAT3(x, y, z);
+	Update(gt);
 }
 
 void ShadowMap::Update(const Timer& gt) {

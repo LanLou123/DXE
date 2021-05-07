@@ -307,7 +307,17 @@ void App::UpdateGui(const Timer& gt) {
 
         ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
         ImGui::SliderFloat3("LightPos", mImguiPara.LightPos.data(), -1.0,1.0);
-        mShadowMap->setShadowLightPos(mImguiPara.LightPos[0], mImguiPara.LightPos[1], mImguiPara.LightPos[2]);
+        mShadowMap->setShadowLightPos(mImguiPara.LightPos[0], mImguiPara.LightPos[1], mImguiPara.LightPos[2], gt);
+
+        
+        ImGui::SliderFloat3("Light2Pos", mImguiPara.l2pos.data(), -160.0, 160.0);
+        DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World, DirectX::XMMatrixScaling(2.f, 2.f, 2.f) * DirectX::XMMatrixRotationRollPitchYaw(MathUtils::Pi / 2.0, 0, MathUtils::Pi / 2.0) * DirectX::XMMatrixTranslation(
+            mImguiPara.l2pos[0], 
+            mImguiPara.l2pos[1], 
+            mImguiPara.l2pos[2]));
+
+        mScene->getObjectInfos()["area"]->NumFramesDirty = d3dUtil::gNumFrameResources;
+
         ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
         if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
@@ -342,11 +352,11 @@ bool App::Initialize() {
     mScene = std::make_unique<Scene>(md3dDevice.Get(), mClientWidth, mClientHeight);
     mScene->initScene();
  
-    float modelScale = 4.5;
+    float modelScale = 6.5;
     float ww2Scale = 10.1;
     DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ww2.obj"]->World, DirectX::XMMatrixScaling(ww2Scale, ww2Scale, ww2Scale));
-    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["mr.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
-    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World,  DirectX::XMMatrixScaling(1,1,1) * DirectX::XMMatrixRotationRollPitchYaw(0,0,MathUtils::Pi / 2.0) * DirectX::XMMatrixTranslation(50, 60, 40) );
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["sibenik.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
+    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World,  DirectX::XMMatrixScaling(1,1,1) * DirectX::XMMatrixRotationRollPitchYaw(0, MathUtils::Pi / 2.0,0) * DirectX::XMMatrixTranslation(50, 60, 40) );
 
 
     mShadowMap = std::make_unique<ShadowMap>(md3dDevice.Get(), 4096, 4096);
@@ -433,6 +443,7 @@ void App::UpdateObjectCBs(const Timer& gt) {
             ObjectConstants objConstants;
             DirectX::XMStoreFloat4x4(&objConstants.World, DirectX::XMMatrixTranspose(world));
             DirectX::XMStoreFloat4x4(&objConstants.TexTransform, DirectX::XMMatrixTranspose(texTransform));
+            objConstants.IsDynamic = e.second->IsDynamic;
             objConstants.Obj2VoxelScale = e.second->Obj2VoxelScale;
             currObjectCB->CopyData(e.second->ObjCBIndex, objConstants);
 
@@ -447,6 +458,7 @@ void App::UpdateScenePhysics(const Timer& gt) {
    
     DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["model1"]->World, DirectX::XMMatrixScaling(0.01f, 0.01f, 0.01f) * DirectX::XMMatrixTranslation(10.0f * std::sin(float(gt.TotalTime())), 15.0f, 0.0 ));
     mScene->getObjectInfos()["model1"]->NumFramesDirty = d3dUtil::gNumFrameResources;
+
 }
 
 void App::UpdateMaterialCBs(const Timer& gt) {
@@ -460,6 +472,7 @@ void App::UpdateMaterialCBs(const Timer& gt) {
             matConstants.DiffuseAlbedo = mat->DiffuseAlbedo;
             matConstants.FresnelR0 = mat->FresnelR0;
             matConstants.Roughness = mat->Roughness;
+            matConstants.IsEmissive = mat->IsEmissive;
             DirectX::XMStoreFloat4x4(&matConstants.MatTransform, DirectX::XMMatrixTranspose(matTransform));
 
             currMaterialCB->CopyData(mat->MatCBIndex, matConstants);
@@ -606,10 +619,12 @@ void App::Draw(const Timer& gt) {
     DrawScene2GBuffers();
     DrawScene2ShadowMap();
     mMeshVoxelizer->Clear3DTexture(mCommandList.Get(), mRootSignatures["CompResetPass"].Get(), mPSOs["CompReset"].Get());
-    if (!voxelized) {
-        VoxelizeMesh();
+    if (!voxelized) { // full scene voxlization
+        VoxelizeMesh(RenderLayer::Default);
         voxelized = true;
     }
+    //dynamic geometry revoxlization
+    VoxelizeMesh(RenderLayer::Dynamic);
     InjectRadiance();
     FillMip();
     DrawScene();
@@ -711,7 +726,7 @@ void App::OnMouseMove(WPARAM btnState, int x, int y)
 void App::OnKeyboardInput(const Timer& gt)
 {
     const float dt = gt.DeltaTime();
-    float speed = 30.0f;
+    float speed = 60.0f;
 
  
 
@@ -1158,7 +1173,7 @@ void App::FillMipLevel(int level) {
     mCommandList->ResourceBarrier((int)1, &CD3DX12_RESOURCE_BARRIER::UAV(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr()));
 }
 
-void App::VoxelizeMesh() {
+void App::VoxelizeMesh(RenderLayer _layer) {
 
     //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getResourcePtr(),
     //    D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
@@ -1174,7 +1189,7 @@ void App::VoxelizeMesh() {
     auto passCB = mCurrFrameResource->PassCB->Resource();
     mCommandList->SetGraphicsRootConstantBufferView(d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV, passCB->GetGPUVirtualAddress());
     mCommandList->SetPipelineState(mPSOs["voxelizer"].Get());
-    DrawRenderItems(mCommandList.Get(), mScene->getObjectInfoLayer()[(int)RenderLayer::Default]);
+    DrawRenderItems(mCommandList.Get(), mScene->getObjectInfoLayer()[(int)_layer]);
 
     //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getResourcePtr(),
     //    D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS ));

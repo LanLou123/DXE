@@ -75,6 +75,8 @@ public:
 	std::string Name;	
 	
 	ModelType modelType;
+
+	bool IsDynamic;
 	
 	// A MeshGeometry may store multiple geometries in one vertex/index buffer.
 	// Use this container to define the Submesh geometries so we can draw

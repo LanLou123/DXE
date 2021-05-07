@@ -9,6 +9,9 @@
 ![](sc/sphere1.PNG)
 ![](sc/imgg.PNG)
 
+### area lighting
+![](sc/area.PNG)
+
 ### Indirect + direct lighting
 ![](sc/indirect.PNG)
 ### Direct lighting only
@@ -16,10 +19,9 @@
 
 ## some other examples, models thanks to talented artists on sketchfab
 
-![](sc/ww2.PNG)
 ![](sc/ww22.PNG)
 ![](sc/ww23.PNG)
-![](sc/ww221.PNG)
+
 
 ## diffuse light only for now
 ![](sc/diff2.PNG)
@@ -36,19 +38,19 @@
  - Radiance volume injection trough shadow map with compute dispatch thread invocation mapping to the dimension of shadowmap instead of volume
  - Anisotropic radiance volume mip map chain generation with compute shader for alleviating light leaking - a widely known issue for VCT.
  - Voxel cone tracing in a single pass conmbining previously generated geometry buffer as well as anisotropic radiance 3d texture buffer to generate final image
-
+ - area/volume lighting
+ - mutiple render layers seperating dynamic geometry and static geometry to further optimize voxelization
 
 ### Planned
- - mutiple render layers seperating dynamic geometry and static geometry to further optimize voxelization
+ - better soft shadow from area lights
  - temporal filtering/spatial reprojection for flicker & noise reduction
  - cone traced reflection or SSR, translucent/transmissive object(subsurface scattering)
- - area/volume lighting
  - Clip map/cascaded mip map implementation for VCT
  - other mutiple light types using shadow map: point spot
  - cascaded/variance shadow mapping
  - render graph / more orgnized framework & RHI
  - tiled based lighting
- - DXR accelerated or DXR hybrid with VCT possibly (far/medium range GI utilize Voxel, close range GI/shadow/reflection utilize DXR based on their advantage) ? (research)  
+ - DXR accelerated or hybrid GI possibly (far/medium range GI utilize Voxel/SDF, close range GI/shadow/reflection utilize DXR or SSGI, which I believe is the GI lighting tech used in UE5's PS5 demo (lumen)) ? (research)  
  - linear transformed cosine
  - DOF
  - may be experiment with SDF (signed distance field) to replace cone trace, heard they look better

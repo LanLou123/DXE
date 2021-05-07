@@ -60,6 +60,9 @@ void Scene::populateMeshInfos() {
         curObjectInfo->World = curModel.second->getWorldMatrix();
         curObjectInfo->mBound = curModel.second->getBounds();
         curObjectInfo->Obj2VoxelScale = curModel.second->getObj2VoxelScale();
+        curObjectInfo->IsDynamic = curModel.second->IsDynamic;
+
+        //normal groups for generic rendering passes
         if (curModel.second->modelType == ModelType::QUAD_MODEL) {
             mObjectInfoLayer[(int)RenderLayer::Debug].push_back(curObjectInfo.get());
             mObjectInfoLayer[(int)RenderLayer::Gbuffer].push_back(curObjectInfo.get());
@@ -67,6 +70,15 @@ void Scene::populateMeshInfos() {
         else {
             mObjectInfoLayer[(int)RenderLayer::Default].push_back(curObjectInfo.get());
         }
+
+        //dynamic and static geometry groups for revoxlizations
+        if (curObjectInfo->IsDynamic) {
+            mObjectInfoLayer[(int)RenderLayer::Dynamic].push_back(curObjectInfo.get());
+        }
+        else {
+            mObjectInfoLayer[(int)RenderLayer::Static].push_back(curObjectInfo.get());
+        }
+
         mObjectInfos[curModel.first] = (std::move(curObjectInfo));
         
         curObjectIndex++;
@@ -81,6 +93,7 @@ void Scene::buildMaterials() {
     mat1->DiffuseAlbedo = DirectX::XMFLOAT4(0.2f, 0.6f, 0.6f, 1.0f);
     mat1->FresnelR0 = DirectX::XMFLOAT3(0.01f, 0.01f, 0.01f);
     mat1->Roughness = 0.125f;
+    mat1->IsEmissive = false;
     mat1->DiffuseSrvHeapIndex = 0;
     mat1->NormalSrvHeapIndex = 0;
     
@@ -91,6 +104,7 @@ void Scene::buildMaterials() {
     mat2->DiffuseAlbedo = DirectX::XMFLOAT4(0.0f, 0.2f, 0.6f, 1.0f);
     mat2->FresnelR0 = DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f);
     mat2->Roughness = 0.0;
+    mat2->IsEmissive = true;
     mat2->DiffuseSrvHeapIndex = 1;
     mat2->NormalSrvHeapIndex = 0;
 
@@ -130,10 +144,11 @@ void Scene::loadModels() {
     mymodel1->setObj2VoxelScale(200.0f);
     mModels["model1"] = std::move(mymodel1);
 
-    auto mymodel2 = std::make_unique<Model>(ModelType::SPHERE_MODEL);
+    auto mymodel2 = std::make_unique<Model>(ModelType::GRID_MODEL);
     mymodel2->Name = "area";
     mymodel2->InitModel(md3dDevice, cpyCommandObject.get());
     mymodel2->setObj2VoxelScale(200.0f);
+    mymodel2->IsDynamic = true;
     mModels["area"] = std::move(mymodel2);
 
 

@@ -70,20 +70,20 @@ float4 PS(VertexOut pin) : SV_Target
     // ray marched for voxel visulization
     // =======================================
 
-    float4 screen_space_pos = pin.PosH;
-    float sx = -(2.0 * screen_space_pos.x / gRenderTargetSize.x) + 1.0;
-    float sy =  - 1.0 + (2.0 * screen_space_pos.y / gRenderTargetSize.y);
-    float3 forward = normalize(camLookDir);
-    float3 ref = 2.0 * forward + gEyePosW;
-    float len = length(ref - gEyePosW);
-    float3 right = cross(forward, camUpDir);
-    float3 V = camUpDir * len * tan(45.0 / 2.0);
-    float3 H = right * len * (gRenderTargetSize.x / gRenderTargetSize.y) * tan(45.0 / 2.0);
-    float3 pp = ref + sx * H - sy * V;
+    //float4 screen_space_pos = pin.PosH;
+    //float sx = -(2.0 * screen_space_pos.x / gRenderTargetSize.x) + 1.0;
+    //float sy =  - 1.0 + (2.0 * screen_space_pos.y / gRenderTargetSize.y);
+    //float3 forward = normalize(camLookDir);
+    //float3 ref = 2.0 * forward + gEyePosW;
+    //float len = length(ref - gEyePosW);
+    //float3 right = cross(forward, camUpDir);
+    //float3 V = camUpDir * len * tan(45.0 / 2.0);
+    //float3 H = right * len * (gRenderTargetSize.x / gRenderTargetSize.y) * tan(45.0 / 2.0);
+    //float3 pp = ref + sx * H - sy * V;
 
 
     if (visulizevoxel) {
-        float3 raydr = normalize(pp - gEyePosW);
+        float3 raydr = normalize(PosW.xyz - gEyePosW);
         float3 rayori = gEyePosW;
         float step = 0.13f;
         float3 curloc = rayori;
@@ -117,13 +117,13 @@ float4 PS(VertexOut pin) : SV_Target
                 }
             }
             else {
-                if (all(gVoxelizerAlbedo.Sample(gsamPointClamp, texIndex) == 0)) {
+                if (all(gVoxelizerRadiance.Sample(gsamPointClamp, texIndex) == 0)) {
                     curloc = curloc + raydr * step;
                 }
 
                 else {
 
-                    voxelPickColor = gVoxelizerAlbedo.Sample(gsamPointClamp, texIndex).xyz * 1.0 ;
+                    voxelPickColor = gVoxelizerRadiance.Sample(gsamPointClamp, texIndex).xyz * 1.0 ;
                     voxelNormal = gVoxelizerRadiance.Sample(gsamPointClamp, texIndex).xyzw ;
                     step = -0.2 * step;
                     curloc = curloc + raydr * step;
@@ -154,7 +154,7 @@ float4 PS(VertexOut pin) : SV_Target
 
     float3 diffuseCol = float3(0.0, 0.0, 0.0);
     float diffusOcclusion = 0.0;
-    float startSampledDis = VOXELSCALE + 0.5;
+    float startSampledDis = VOXELSCALE + 0.9;
 
  
     for (int conei = 0; conei < 6; ++conei) {
@@ -218,7 +218,7 @@ float4 PS(VertexOut pin) : SV_Target
             if (VA >= 1.0f || outSideVol) break;
 
             //float lastDis = curDis;
-            dst += curRadius * 1.5;/*dst / (1.0 - aperture);*/
+            dst += curRadius * 1.2;/*dst / (1.0 - aperture);*/
         }
 
         float rr = abs(dot(Nor.xyz, sampleDir));
@@ -264,6 +264,9 @@ float4 PS(VertexOut pin) : SV_Target
     col = clamp(col * lamb * percentLit, float4(0.0,0.0,0.0,0.0),float4(1.0,1.0,1.0,1.0) ) ;
 
     col.xyz *= lit;
+    //onlyvoxel lights
+    //col.xyz = float3(0.0, 0.0, 0.0);
+    //onlyvoxel lights
     col = col + float4(diffuseCol * Alb.xyz * lit, 0.0);
     col.a = 1.0;
 
@@ -279,7 +282,7 @@ float4 PS(VertexOut pin) : SV_Target
 
     //col.xyz = diffuseCol * lit;
     diffusOcclusion = 1.0 - diffusOcclusion * AO_STRENGTH;
-   // col.xyz *= diffusOcclusion;
+    //col.xyz *= diffusOcclusion;
     //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion);
 
     float gamma = 0.9;
