@@ -10,8 +10,8 @@
 ![](sc/sphere1.PNG)
 ![](sc/imgg.PNG)
 
-### video demo
-![](https://www.youtube.com/watch?v=HrUgsg-X_58)
+
+## [**Video demo**](https://www.youtube.com/watch?v=HrUgsg-X_58)
 
 ### area lighting
 ![](sc/area.PNG)
