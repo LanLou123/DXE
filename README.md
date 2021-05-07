@@ -47,7 +47,7 @@
 
 ### Planned
  - better soft shadow from area lights
- - interleaved sampling for blocky reduction/ tiled based pixel rearrangement for GPU cache efficiency [reference](https://www.digipen.edu/sites/default/files/public/docs/theses/sanghyeok-hong-digipen-master-of-science-in-computer-science-thesis-temporal-voxel-cone-tracing-with-interleaved-sample-patterns.pdf)
+ - interleaved sampling for blocky reduction/ tiled based pixel rearrangement to improve data locality for GPU cache coherency[reference](https://www.digipen.edu/sites/default/files/public/docs/theses/sanghyeok-hong-digipen-master-of-science-in-computer-science-thesis-temporal-voxel-cone-tracing-with-interleaved-sample-patterns.pdf)
  - temporal filtering/spatial reprojection for flicker & noise reduction
  - cone traced reflection or SSR, translucent/transmissive object(subsurface scattering)
  - Clip map/cascaded mip map implementation for VCT
