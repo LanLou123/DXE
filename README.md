@@ -47,6 +47,7 @@
 
 ### Planned
  - better soft shadow from area lights
+ - interleaved sampling for blocky reduction/ tiled based pixel rearrangement for GPU cache efficiency [reference](https://www.digipen.edu/sites/default/files/public/docs/theses/sanghyeok-hong-digipen-master-of-science-in-computer-science-thesis-temporal-voxel-cone-tracing-with-interleaved-sample-patterns.pdf)
  - temporal filtering/spatial reprojection for flicker & noise reduction
  - cone traced reflection or SSR, translucent/transmissive object(subsurface scattering)
  - Clip map/cascaded mip map implementation for VCT
@@ -74,6 +75,7 @@
 ![](sc/radiance.PNG)
 
 # Credits
+ - [Original Paper](https://research.nvidia.com/sites/default/files/pubs/2011-09_Interactive-Indirect-Illumination/GIVoxels-pg2011-authors.pdf)
  - [UE5 PS5 demo tech analysis](https://www.eurogamer.net/articles/digitalfoundry-2020-unreal-engine-5-playstation-5-tech-demo-analysis)
  - [Sketchfab : Sea Keep "Lonely Watcher"](https://sketchfab.com/3d-models/sea-keep-lonely-watcher-09a15a0c14cb4accaf060a92bc70413d)
  - [Sketchfab : WW2 Cityscene](https://sketchfab.com/3d-models/ww2-cityscene-carentan-inspired-639dc3d330a940a2b9d7f40542eabdf3)
