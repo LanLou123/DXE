@@ -16,7 +16,7 @@ struct MipVoxelData {
 	int mipDim;
 };
 
-enum class VOLUME_TEXTURE_TYPE : int { ALBEDO = 0, NORMAL, EMISSIVE, RADIANCE, COUNT };
+enum class VOLUME_TEXTURE_TYPE : int { ALBEDO = 0, NORMAL, EMISSIVE, RADIANCE, FLAG, COUNT };
 
 class VolumeTexture {
 public:

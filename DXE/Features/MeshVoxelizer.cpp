@@ -258,11 +258,13 @@ void MeshVoxelizer::initVoxelizer() {
 	auto V_Albedo = std::make_unique<VolumeTexture>(device, mX, mY, mZ);
 	auto V_Normal = std::make_unique<VolumeTexture>(device, mX, mY, mZ);
 	auto V_Emissive = std::make_unique<VolumeTexture>(device, mX, mY, mZ);
-	auto V_Radiance = std::make_unique<VolumeTexture>(device, mX, mY, mZ);
+	auto V_Radiance = std::make_unique<VolumeTexture>(device, mX, mY, mZ); 
+	auto V_Flag = std::make_unique<VolumeTexture>(device, mX, mY, mZ);
 	mVolumeTextures[VOLUME_TEXTURE_TYPE::ALBEDO] = std::move(V_Albedo);
 	mVolumeTextures[VOLUME_TEXTURE_TYPE::NORMAL] = std::move(V_Normal);
 	mVolumeTextures[VOLUME_TEXTURE_TYPE::EMISSIVE] = std::move(V_Emissive);
 	mVolumeTextures[VOLUME_TEXTURE_TYPE::RADIANCE] = std::move(V_Radiance);
+	mVolumeTextures[VOLUME_TEXTURE_TYPE::FLAG] = std::move(V_Flag);
 
 	for (auto& m : mVolumeTextures) {
 		m.second->Init();

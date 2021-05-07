@@ -81,9 +81,9 @@ void App::BuildRootSignature()
     CD3DX12_DESCRIPTOR_RANGE gbufferTable;
     gbufferTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4, t5
     CD3DX12_DESCRIPTOR_RANGE voxelTexTable;
-    voxelTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)VOLUME_TEXTURE_TYPE::COUNT, 6); // t6 t7 t8 t9
+    voxelTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)VOLUME_TEXTURE_TYPE::COUNT, 6); // t6 t7 t8 t9 t10
     CD3DX12_DESCRIPTOR_RANGE radianceTexTable;
-    radianceTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getNumMipLevels(), 10); // t10
+    radianceTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getNumMipLevels(), 11); // t11
     // Root parameter can be a table, root descriptor or root constants.
     CD3DX12_ROOT_PARAMETER slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::COUNT];
     // Perfomance TIP: Order from most frequent to least frequent.   
@@ -130,9 +130,9 @@ void App::BuildRootSignature()
     CD3DX12_DESCRIPTOR_RANGE gbufferTableVoxelizer;
     gbufferTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4, t5
     CD3DX12_DESCRIPTOR_RANGE voxelTexTableVoxelizer;
-    voxelTexTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, (int)VOLUME_TEXTURE_TYPE::COUNT, 0); // u0 u1 u2 u3
+    voxelTexTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, (int)VOLUME_TEXTURE_TYPE::COUNT, 0); // u0 u1 u2 u3 u4
     CD3DX12_DESCRIPTOR_RANGE radianceTexTableVoxelizer;
-    radianceTexTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 4); // u4
+    radianceTexTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 5); // u5
     // Root parameter can be a table, root descriptor or root constants.
 
     CD3DX12_ROOT_PARAMETER slotRootParameterVoxelizer[8];
