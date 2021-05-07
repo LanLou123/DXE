@@ -144,7 +144,7 @@ void Scene::loadModels() {
     mymodel1->setObj2VoxelScale(200.0f);
     mModels["model1"] = std::move(mymodel1);
 
-    auto mymodel2 = std::make_unique<Model>(ModelType::GRID_MODEL);
+    auto mymodel2 = std::make_unique<Model>(ModelType::SPHERE_MODEL);
     mymodel2->Name = "area";
     mymodel2->InitModel(md3dDevice, cpyCommandObject.get());
     mymodel2->setObj2VoxelScale(200.0f);

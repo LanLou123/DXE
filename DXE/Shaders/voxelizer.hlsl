@@ -210,9 +210,10 @@ void CompReset(int3 dispatchThreadID : SV_DispatchThreadID) {
 	int newRadiance = convVec4ToRGBA8(newRadianceCol * 255.0f);
 
 
-	//gVoxelizerAlbedo[int3(x, y, z)] = 0;
+	//if(gVoxelizerAlbedo[int3(x, y, z)] == 0 && gVoxelizerNormal[int3(x, y, z)] == 0 && gVoxelizerEmissive[int3(x, y, z)] == 0) return;
 	//gVoxelizerNormal[int3(x, y, z)] = 0;
 	//gVoxelizerEmissive[int3(x, y, z)] = 0; //emissive value is applied and older emissive is cleaned
+	 
 	gVoxelizerRadiance[int3(x, y, z)] = newRadiance;
 	if (AlbCol.a == 0.0) {
 		return;
@@ -221,13 +222,9 @@ void CompReset(int3 dispatchThreadID : SV_DispatchThreadID) {
 		gVoxelizerRadiance[int3(x, y, z)] = convVec4ToRGBA8(float4(0,0,0, AlbCol.a) * 255.0f);
 	}
 	else {
-
-			gVoxelizerAlbedo[int3(x, y, z)] = 0;
-			gVoxelizerEmissive[int3(x, y, z)] = 0; //emissive value is applied and older emissive is cleaned
-
-		//if (FlagCol.x != 0.5) {
-			//gVoxelizerRadiance[int3(x, y, z)] = newRadiance;
-		//}
+		gVoxelizerNormal[int3(x, y, z)] = 0;
+		gVoxelizerAlbedo[int3(x, y, z)] = 0;
+		gVoxelizerEmissive[int3(x, y, z)] = 0; //emissive value is applied and older emissive is cleaned
 	}
 
 }

@@ -63,7 +63,10 @@ PS_OUT PS(VertexOut pin)
 
     // Dynamically look up the texture in the array.
     diffuseAlbedo *= gDiffuseMap.Sample(gsamAnisotropicWrap, pin.TexC);
-    output.ALB = diffuseAlbedo;
+    if(IsEmissive == 0)
+        output.ALB = diffuseAlbedo;
+    else
+        output.ALB = 6.0 * diffuseAlbedo;//for emissive material
     output.POS = pin.PosW;
     output.NOR = float4(pin.Normal,1.0f);
     float dpcol = pin.PosH.z;

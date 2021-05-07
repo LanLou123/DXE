@@ -311,7 +311,7 @@ void App::UpdateGui(const Timer& gt) {
 
         
         ImGui::SliderFloat3("Light2Pos", mImguiPara.l2pos.data(), -160.0, 160.0);
-        DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World, DirectX::XMMatrixScaling(2.f, 2.f, 2.f) * DirectX::XMMatrixRotationRollPitchYaw(MathUtils::Pi / 2.0, 0, MathUtils::Pi / 2.0) * DirectX::XMMatrixTranslation(
+        DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World, DirectX::XMMatrixScaling(1.5f, 1.5f, 1.5f) * DirectX::XMMatrixRotationRollPitchYaw(MathUtils::Pi / 2.0, 0, MathUtils::Pi / 2.0) * DirectX::XMMatrixTranslation(
             mImguiPara.l2pos[0], 
             mImguiPara.l2pos[1], 
             mImguiPara.l2pos[2]));

@@ -7,7 +7,7 @@
 
 
 ![](sc/small2.PNG)
-![](sc/sphere1.PNG)
+![](sc/addy1.gif)
 ![](sc/imgg.PNG)
 
 
