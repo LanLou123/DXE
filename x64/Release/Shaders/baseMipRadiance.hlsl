@@ -37,6 +37,7 @@ void BaseMipRadiance( uint3 DTid : SV_DispatchThreadID )
 
 	uint3 curMipIdx = DTid;
 
+	if (gVoxelizerRadiance[curMipIdx] == 0 && gVoxelizerMipedRadiance[curMipIdx] == 0) return;
 	uint3 moveDim = uint3(mipDim, 0, 0);
 	gVoxelizerMipedRadiance[curMipIdx] = gVoxelizerRadiance[curMipIdx];
 	gVoxelizerMipedRadiance[curMipIdx + moveDim] = gVoxelizerRadiance[curMipIdx];

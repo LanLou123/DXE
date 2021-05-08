@@ -91,9 +91,12 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
     float4 oldRadianceCol = convRGBA8ToVec4(oldRadiance) / 255.0;
     //col += oldRadianceCol; // preserve the alpha
     //if radiance is already filled - meaning we already have emissive color written to it in voxlizer.hlsl, we leave it alone
-    if (all(oldRadianceCol.xyz > 0)) {
-        col.xyz = oldRadianceCol.xyz;
-    }
+
+    //onlyvoxel lights
+    //if (all(oldRadianceCol.xyz > 0)) {
+    //    col.xyz = oldRadianceCol.xyz;
+    //}
+
     col.a = oldRadianceCol.a;
     col = clamp(col, float4(0.0, 0.0, 0.0, 0.0), float4(1, 1, 1, 3));
     col *= 255.0f;

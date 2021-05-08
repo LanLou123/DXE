@@ -16,8 +16,8 @@ E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(229,52): warning C4244: '=': conversion fro
 E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(243,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
 E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(252,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
   Generating code
-  2 of 4877 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  3 of 4877 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    29 functions had inline decision re-evaluated but remain unchanged
+    32 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Release\DXE.exe

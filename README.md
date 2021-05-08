@@ -6,7 +6,7 @@
 # current results
 
 
-![](sc/small2.PNG)
+![](sc/small.PNG)
 ![](sc/addy1.gif)
 ![](sc/imgg.PNG)
 
@@ -16,21 +16,17 @@
 ### area lighting
 ![](sc/area.PNG)
 
+### comparision
 ### Indirect + direct lighting
 ![](sc/indirect.PNG)
 ### Direct lighting only
 ![](sc/direct.PNG)
 
-## some other examples, models thanks to talented artists on sketchfab
-
-![](sc/ww22.PNG)
-![](sc/ww23.PNG)
 
 
 ## diffuse light only for now
-![](sc/diff2.PNG)
+![](sc/diff1.PNG)
 
-![](sc/snibk.PNG)
 
 ![](sc/out.PNG)
 
