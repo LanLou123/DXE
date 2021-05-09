@@ -352,10 +352,11 @@ bool App::Initialize() {
     mScene = std::make_unique<Scene>(md3dDevice.Get(), mClientWidth, mClientHeight);
     mScene->initScene();
  
-    float modelScale = 6.5;
+    float modelScale = 4.5;
     float ww2Scale = 10.1;
     DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ww2.obj"]->World, DirectX::XMMatrixScaling(ww2Scale, ww2Scale, ww2Scale));
-    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["sibenik.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["castle.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
+   
     DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World,  DirectX::XMMatrixScaling(1,1,1) * DirectX::XMMatrixRotationRollPitchYaw(0, MathUtils::Pi / 2.0,0) * DirectX::XMMatrixTranslation(50, 60, 40) );
 
 

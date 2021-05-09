@@ -181,6 +181,7 @@ void PS(PS_INPUT pin)
 			gVoxelizerEmissive[texIndex] = convVec4ToRGBA8(writeColEmissive * 255.0f);
 
 			if (IsDynamic == 0) {
+				
 				gVoxelizerFlag[texIndex] = convVec4ToRGBA8(float4(0.5, 0, 0, 0) * 255.0f);
 			}
 
@@ -203,9 +204,10 @@ void CompReset(int3 dispatchThreadID : SV_DispatchThreadID) {
 	int oldAlbedo = gVoxelizerAlbedo[int3(x, y, z)];
 	int flag = gVoxelizerFlag[int3(x, y, z)];
 
+	float4 FlagCol = convRGBA8ToVec4(flag) / 255.0f;
 	float4 EmiCol = convRGBA8ToVec4(oldEmissive) / 255.0f;
 	float4 AlbCol = convRGBA8ToVec4(oldAlbedo) / 255.0f;
-	float4 FlagCol = convRGBA8ToVec4(flag) / 255.0f;
+	
 	float4 newRadianceCol = float4(EmiCol.xyz, AlbCol.a); // copy albedo's alhpa value for occlusion, copy emmisive's color value for radiance
 	int newRadiance = convVec4ToRGBA8(newRadianceCol * 255.0f);
 
