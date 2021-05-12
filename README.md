@@ -17,6 +17,9 @@
 ### area lighting
 ![](sc/area.PNG)
 
+### voxel ambient occlusion :
+![](sc/VXAO.PNG)
+
 ### comparision
 ### Indirect + direct lighting
 ![](sc/indirect.PNG)

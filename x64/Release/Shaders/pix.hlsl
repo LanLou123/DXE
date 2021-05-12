@@ -88,16 +88,16 @@ float4 TraceDiffuseCone(float3 position, float3 normal, float3 direction, float 
         );
 
         VC4 += (1 - VC4.a) * sampleCol;
-        VA += (1 - VA) * sampleCol.a / 10.0;// / (1.0 + curRadius * 0.0);
+        VA += (1 - VA) * sampleCol.a / 1.0;// / (1.0 + curRadius * 0.0);
 
         if (VA >= 1.0f || outSideVol) break;
 
-        dst += curRadius * 1.2;/*dst / (1.0 - aperture);*/
+        dst += curRadius * 1.0;/*dst / (1.0 - aperture);*/
     }
 
     float rr = abs(dot(normal, sampleDir));
 
-    return float4(VC4.rgb * rr, VA);
+    return float4(VC4.rgb , VA);
 
 }
 
@@ -130,7 +130,7 @@ float TraceShadowCone(float3 position, float3 normal, float3 direction, float ap
             outSideVol
         );
 
-        VA += (1 - VA) * sampleCol.a / 10.0;// / (1.0 + curRadius * 0.0);
+        VA += (1 - VA) * sampleCol.a / (1.0 + curRadius * 0.0);// / (1.0 + curRadius * 0.0);
 
         if (VA >= 1.0f || outSideVol) break;
 
@@ -199,7 +199,7 @@ float4 PS(VertexOut pin) : SV_Target
                 }
                 else {
 
-                    voxelNormal = gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 3) * 1.0;
+                    voxelNormal = gVoxelizerRadianceMip.SampleLevel(gsamPointClamp, texMiped, 3) * 3.0;
                     step = -0.2 * step;
                     curloc = curloc + raydr * step;
 
@@ -258,7 +258,7 @@ float4 PS(VertexOut pin) : SV_Target
         diffusOcclusion += diffcol.a * ConeSampleWeights[conei];
     }
 
-    float visibility = TraceShadowCone(PosW.xyz, Nor.xyz, Nor.xyz, diffaperture);
+    //float visibility = TraceShadowCone(PosW.xyz, Nor.xyz, Nor.xyz, diffaperture);
 
 
     // =======================================
@@ -291,7 +291,7 @@ float4 PS(VertexOut pin) : SV_Target
     float lit = 3.0;
     float3 lightDir = gLightPosW;
     lightDir = normalize(lightDir);
-    float lamb = dot(lightDir, Nor) + 0.1;
+    float lamb = dot(lightDir, Nor) + 0.0;
 
     float4 col = float4(Alb.rgb, 1.0f);
     col = clamp(col * lamb * percentLit, float4(0.0,0.0,0.0,0.0),float4(1.0,1.0,1.0,1.0) ) ;
@@ -319,7 +319,7 @@ float4 PS(VertexOut pin) : SV_Target
     //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion);
 
     float gamma = 0.9;
-    float exposure = 1.6;
+    float exposure = 1.7;
 
     float3 mapped = float3(1.0,1.0,1.0) - exp(-col.xyz * exposure);
 

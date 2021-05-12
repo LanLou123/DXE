@@ -14,7 +14,7 @@ Texture3D<float4> gVoxelizerRadiance : register(t9);
 Texture3D<float4> gVoxelizerFlag : register(t10);
 Texture3D<float4> gVoxelizerRadianceMip : register(t11);
 
-#define AO_STRENGTH 0.4
+#define AO_STRENGTH 0.3
 
 struct VertexIn
 {
@@ -316,7 +316,7 @@ float4 PS(VertexOut pin) : SV_Target
     //col.xyz = diffuseCol * lit;
     diffusOcclusion = 1.0 - diffusOcclusion * AO_STRENGTH;
     //col.xyz *= diffusOcclusion;
-    //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion);
+    //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion) * 2.0;
 
     float gamma = 0.9;
     float exposure = 1.7;
