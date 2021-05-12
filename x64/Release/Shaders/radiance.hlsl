@@ -28,6 +28,7 @@ RWTexture3D<uint> gVoxelizerAlbedo : register(u0);
 RWTexture3D<uint> gVoxelizerNormal : register(u1);
 RWTexture3D<uint> gVoxelizerEmissive : register(u2);
 RWTexture3D<uint> gVoxelizerRadiance : register(u3);
+RWTexture3D<uint> gVoxelizerFlag : register(u4);
 
 Texture2D    gShadowMap : register(t0);
 
@@ -98,7 +99,9 @@ void Radiance( uint3 DTid : SV_DispatchThreadID )
     //}
 
     col.a = oldRadianceCol.a;
-    col = clamp(col, float4(0.0, 0.0, 0.0, 0.0), float4(1, 1, 1, 3));
+    if (all(oldRadianceCol.xyz > 0.0)) return; // if we already have value in from voxlizer pass, meaning emissive radiance already injected
+    //col.xyz += oldRadianceCol.xyz;
+    col = clamp(col , float4(0.0, 0.0, 0.0, 0.0), float4(1, 1, 1, 1));
     col *= 255.0f;
 
     gVoxelizerRadiance[int3(texIndex)] = convVec4ToRGBA8(col);

@@ -177,8 +177,10 @@ void Scene::loadAssetFromAssimp(const std::string filepath) {
     const aiScene* aiscene = importer.ReadFile(filepath, 
  
          aiProcess_Triangulate 
+        | aiProcess_GenNormals
         | aiProcess_FlipUVs 
         | aiProcess_CalcTangentSpace
+        | aiProcess_SortByPType
     );
 
     if (!aiscene || aiscene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !aiscene->mRootNode) {
@@ -297,7 +299,7 @@ void Scene::initScene() {
     //loadAssetFromAssimp("../Resources/Models/sibenik/sibenik.obj"); 
     //loadAssetFromAssimp("../Resources/Models/island/castle.obj");
     //loadAssetFromAssimp("../Resources/Models/city/city.fbx");
-    //loadAssetFromAssimp("../Resources/Models/mr/mr.obj");
+    //loadAssetFromAssimp("../Resources/Models/kitchen/kitchen.obj");
     loadAssetFromAssimp("../Resources/Models/ww2/source/ww2.obj");
 
     cpyCommandObject->endCommandRecording();

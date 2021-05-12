@@ -157,7 +157,7 @@ void PS(PS_INPUT pin)
 		//imageAtomicRGBA8Avg(gVoxelizerAlbedo, texIndex, diffuseAlbedo);
 		//diffuseAlbedo = float4(1, 1, 1, 1);
 		float4 writeCol = diffuseAlbedo.xyzw;
-		writeCol = (diffuseAlbedo.w == 0) ? float4(0, 0, 0, 0) : float4(diffuseAlbedo.xyz, 1.0);
+		writeCol = (diffuseAlbedo.a == 0) ? float4(0, 0, 0, 0) : float4(diffuseAlbedo.xyz, 1.0);
 		float4 writeColEmissive = writeCol;
 		writeColEmissive.a = 0.0;
 

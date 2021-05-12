@@ -160,6 +160,8 @@ void Model::buildGeometryAssimp(){
 
 void Model::appendAssimpMesh(const aiScene* aiscene, aiMesh* aimesh) {
     
+    if (aimesh->mPrimitiveTypes == 2) return;
+
     UINT curVertexOffset = vertices.size();
     UINT curIndexOffset = indices.size();
     UINT curIndexCount = 0;

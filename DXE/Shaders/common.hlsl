@@ -135,8 +135,7 @@ float4 sampleVoxelVolumeAnisotropic(Texture3D<float4> voxelTexture, Texture3D<fl
     float3 voxelPos = worldPosition / 200.0; // 200 as placeholder
     voxelPos = voxelPos * 0.5f + 0.5f;
 
-    float mipLevel = getMipLevelFromRadius(radius);
-    float anisotropicMipLevel = mipLevel ;
+    float anisotropicMipLevel = getMipLevelFromRadius(radius);
 
    
     float4 filteredColor = float4(0.0, 0.0, 0.0, 0.0);
@@ -156,9 +155,9 @@ float4 sampleVoxelVolumeAnisotropic(Texture3D<float4> voxelTexture, Texture3D<fl
         //filteredColor = xSample0;
    // }
 
-        float mm = anisotropicMipLevel;
 
-    filteredColor.rgb *= 1.0f * pow(mm, 0.3);
+    filteredColor.rgb *= 1.0f * pow(anisotropicMipLevel, 0.3);
+ 
     //filteredColor.a *= 0.8;
 
     return filteredColor;
