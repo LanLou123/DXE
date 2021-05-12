@@ -104,7 +104,7 @@ void Scene::buildMaterials() {
     mat2->DiffuseAlbedo = DirectX::XMFLOAT4(0.0f, 0.2f, 0.6f, 1.0f);
     mat2->FresnelR0 = DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f);
     mat2->Roughness = 0.0;
-    mat2->IsEmissive = true;
+    mat2->IsEmissive = false;
     mat2->DiffuseSrvHeapIndex = 1;
     mat2->NormalSrvHeapIndex = 0;
 
@@ -119,7 +119,7 @@ void Scene::loadTextures() {
     mytex1->initializeTextureBuffer(md3dDevice, cpyCommandObject.get());
     globalTextureSRVDescriptorHeapIndex++;
 
-    auto mytex2 = std::make_unique <Texture>(L"../Resources/Textures/fall.jpg", 1);
+    auto mytex2 = std::make_unique <Texture>(L"../Resources/Textures/r2.png", 1);
     mytex2->Name = "tex2";
     mytex2->initializeTextureBuffer(md3dDevice, cpyCommandObject.get());
     globalTextureSRVDescriptorHeapIndex++;
@@ -181,6 +181,7 @@ void Scene::loadAssetFromAssimp(const std::string filepath) {
         | aiProcess_FlipUVs 
         | aiProcess_CalcTangentSpace
         | aiProcess_SortByPType
+        | aiProcess_PreTransformVertices
     );
 
     if (!aiscene || aiscene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !aiscene->mRootNode) {
@@ -222,6 +223,7 @@ void Scene::loadAssetFromAssimp(const std::string filepath) {
             srvDiffID = curtex->textureID;
             if (mTextures.find(curtex->Name) == mTextures.end()) {
                 if (!curtex->initializeTextureBuffer(md3dDevice, cpyCommandObject.get())) {
+                    srvDiffID = 0; // use default (srvID = 0) if no texture presented
                     continue;
                 }
                 globalTextureSRVDescriptorHeapIndex++;
@@ -245,6 +247,7 @@ void Scene::loadAssetFromAssimp(const std::string filepath) {
             srvNormID = curtex->textureID;
             if (mTextures.find(curtex->Name) == mTextures.end()) {
                 if (!curtex->initializeTextureBuffer(md3dDevice, cpyCommandObject.get())) {
+                    srvDiffID = 0; // use default (srvID = 0) if no texture presented
                     continue;
                 }
                 globalTextureSRVDescriptorHeapIndex++;
@@ -299,8 +302,8 @@ void Scene::initScene() {
     //loadAssetFromAssimp("../Resources/Models/sibenik/sibenik.obj"); 
     //loadAssetFromAssimp("../Resources/Models/island/castle.obj");
     //loadAssetFromAssimp("../Resources/Models/city/city.fbx");
-    //loadAssetFromAssimp("../Resources/Models/kitchen/kitchen.obj");
-    loadAssetFromAssimp("../Resources/Models/ww2/source/ww2.obj");
+    loadAssetFromAssimp("../Resources/Models/farmhouse/city.obj");
+    //loadAssetFromAssimp("../Resources/Models/ww2/source/ww2.obj");
 
     cpyCommandObject->endCommandRecording();
     cpyCommandObject->FlushCommandQueue();

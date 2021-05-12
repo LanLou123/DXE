@@ -314,12 +314,14 @@ float4 PS(VertexOut pin) : SV_Target
     }
 
     //col.xyz = diffuseCol * lit;
-    diffusOcclusion = 1.0 - diffusOcclusion * AO_STRENGTH;
+    diffusOcclusion = 1.0 - diffusOcclusion * 0.26;
+   
     //col.xyz *= diffusOcclusion;
+    //
     //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion) * 2.0;
 
     float gamma = 0.9;
-    float exposure = 1.7;
+    float exposure = 1.5;
 
     float3 mapped = float3(1.0,1.0,1.0) - exp(-col.xyz * exposure);
 

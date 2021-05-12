@@ -10,6 +10,8 @@
 ![](sc/addy1.gif)
 ![](sc/addy2.gif)
 ![](sc/imgg.PNG)
+### red diffuse reflection
+![](sc/diffreflect.PNG)
 
 
 ## [**Video demo**](https://www.youtube.com/watch?v=HrUgsg-X_58)
