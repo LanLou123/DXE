@@ -17,11 +17,11 @@
 ### area lighting
 ![](sc/area.PNG)
 
-### voxel ambient occlusion :
+### voxel ambient occlusion (VXAO) :
 ![](sc/VXAO.PNG)
 
 ### comparision
-### Indirect + direct lighting
+### Indirect + direct lighting (VXGI one bounce)
 ![](sc/indirect.PNG)
 ### Direct lighting only
 ![](sc/direct.PNG)
