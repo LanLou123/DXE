@@ -61,7 +61,7 @@ float4 TraceDiffuseCone(float3 position, float3 normal, float3 direction, float 
 
     float3 sampleDir = normalize(direction);
 
-    float startSampledDis = VOXELSCALE + 0.9;
+    float startSampledDis = VOXELSCALE + 1.3;
     float dst = startSampledDis;
     float3 startSamplePos = position + normal * startSampledDis;
 
@@ -315,7 +315,7 @@ float4 PS(VertexOut pin) : SV_Target
 
     //col.xyz = diffuseCol * lit;
     diffusOcclusion = 1.0 - diffusOcclusion * 0.26;
-   
+    //col.xyz *= float3(1.0,0.5,0.1);
     //col.xyz *= diffusOcclusion;
     //
     //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion) * 2.0;

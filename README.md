@@ -24,9 +24,9 @@
 
 ### comparision
 ### Indirect + direct lighting (VXGI one bounce)
-![](sc/indirect.PNG)
+![](sc/sunset.PNG)
 ### Direct lighting only
-![](sc/direct.PNG)
+![](sc/sunsetdir.PNG)
 
 
 
@@ -81,3 +81,4 @@
  - [UE5 PS5 demo tech analysis](https://www.eurogamer.net/articles/digitalfoundry-2020-unreal-engine-5-playstation-5-tech-demo-analysis)
  - [Sketchfab : Sea Keep "Lonely Watcher"](https://sketchfab.com/3d-models/sea-keep-lonely-watcher-09a15a0c14cb4accaf060a92bc70413d)
  - [Sketchfab : WW2 Cityscene](https://sketchfab.com/3d-models/ww2-cityscene-carentan-inspired-639dc3d330a940a2b9d7f40542eabdf3)
+ - [Sketchfab : cityScene](https://sketchfab.com/3d-models/city-scene-tarifa-46de5c63cd7d441ebca8f706cff20a40)
