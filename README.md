@@ -32,11 +32,11 @@
 
 
 
-## diffuse light only for now
+## indirect diffuse light 
 ![](sc/diff1.PNG)
 
 
-![](sc/out.PNG)
+
 
 
 
