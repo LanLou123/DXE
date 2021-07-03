@@ -87,12 +87,13 @@ void Scene::populateMeshInfos() {
 
 void Scene::buildMaterials() {
 
+    // setup some customized materials here
 	auto mat1 = std::make_unique<Material>();
     mat1->Name = "mat1";
     mat1->MatCBIndex = globalMatCBindex++;
     mat1->DiffuseAlbedo = DirectX::XMFLOAT4(0.2f, 0.6f, 0.6f, 1.0f);
     mat1->FresnelR0 = DirectX::XMFLOAT3(0.01f, 0.01f, 0.01f);
-    mat1->Roughness = 0.125f;
+    mat1->Roughness = 1.0f;
     mat1->IsEmissive = false;
     mat1->DiffuseSrvHeapIndex = 0;
     mat1->NormalSrvHeapIndex = 0;
@@ -105,27 +106,42 @@ void Scene::buildMaterials() {
     mat2->FresnelR0 = DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f);
     mat2->Roughness = 0.0;
     mat2->IsEmissive = false;
-    mat2->DiffuseSrvHeapIndex = 1;
+    mat2->DiffuseSrvHeapIndex = 0;
     mat2->NormalSrvHeapIndex = 0;
+
+    auto mat3 = std::make_unique<Material>();
+    mat3->Name = "mat3";
+    mat3->MatCBIndex = globalMatCBindex++;
+    mat3->DiffuseAlbedo = DirectX::XMFLOAT4(0.0f, 0.2f, 0.6f, 1.0f);
+    mat3->FresnelR0 = DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f);
+    mat3->Roughness = 1.0;
+    mat3->IsEmissive = false;
+    mat3->DiffuseSrvHeapIndex = 2;
+    mat3->NormalSrvHeapIndex = 0;
 
     mMaterials["mat1"] = std::move(mat1);
     mMaterials["mat2"] = std::move(mat2);
+    mMaterials["mat3"] = std::move(mat3);
 
 }
 
 void Scene::loadTextures() {
-    auto mytex1 = std::make_unique<Texture>(L"../Resources/Textures/r1.png", 0);
+    //load in some customized textures to attach to materials
+    auto mytex1 = std::make_unique<Texture>(L"../Resources/Textures/r1.png", globalTextureSRVDescriptorHeapIndex++);
     mytex1->Name = "tex1";
     mytex1->initializeTextureBuffer(md3dDevice, cpyCommandObject.get());
-    globalTextureSRVDescriptorHeapIndex++;
 
-    auto mytex2 = std::make_unique <Texture>(L"../Resources/Textures/r2.png", 1);
+    auto mytex2 = std::make_unique <Texture>(L"../Resources/Textures/r2.png", globalTextureSRVDescriptorHeapIndex++);
     mytex2->Name = "tex2";
     mytex2->initializeTextureBuffer(md3dDevice, cpyCommandObject.get());
-    globalTextureSRVDescriptorHeapIndex++;
+
+    auto mytex3 = std::make_unique <Texture>(L"../Resources/Textures/r3.png", globalTextureSRVDescriptorHeapIndex++);
+    mytex3->Name = "tex3";
+    mytex3->initializeTextureBuffer(md3dDevice, cpyCommandObject.get());
 
     mTextures[mytex1->Name] = std::move(mytex1);
     mTextures[mytex2->Name] = std::move(mytex2);
+    mTextures[mytex3->Name] = std::move(mytex3);
 }
 
 void Scene::buildCameras() {
@@ -151,6 +167,13 @@ void Scene::loadModels() {
     mymodel2->IsDynamic = true;
     mModels["area"] = std::move(mymodel2);
 
+    auto mymodel3 = std::make_unique<Model>(ModelType::GRID_MODEL);
+    mymodel3->Name = "ground";
+    mymodel3->InitModel(md3dDevice, cpyCommandObject.get());
+    mymodel3->setObj2VoxelScale(200.0f);
+    mymodel3->IsDynamic = true;
+    mModels["ground"] = std::move(mymodel3);
+
 
     auto myquad = std::make_unique<Model>(ModelType::QUAD_MODEL);
     myquad->Name = "quad";
@@ -163,7 +186,7 @@ void Scene::loadAssetFromAssimp(const std::string filepath) {
 
     auto assimpModel = std::make_unique<Model>(ModelType::ASSIMP_MODEL);
 
-    DirectX::XMFLOAT4X4 worldMat = MathUtils::Identity4x4();// the sponza model is stupidly big, I'm not happy bout dat
+    DirectX::XMFLOAT4X4 worldMat = MathUtils::Identity4x4();// 
     DirectX::XMStoreFloat4x4(&worldMat, DirectX::XMMatrixScaling(0.1f, 0.1f, 0.1f) * DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));
     assimpModel->setWorldMatrix(worldMat);
     assimpModel->setObj2VoxelScale(200.0f);
@@ -266,7 +289,7 @@ void Scene::loadAssetFromAssimp(const std::string filepath) {
         curmat->MatCBIndex = globalMatCBindex++; // 2 because 2 default test
         curmat->DiffuseAlbedo = DirectX::XMFLOAT4(0.2f, 0.6f, 0.6f, 1.0f);
         curmat->FresnelR0 = DirectX::XMFLOAT3(0.01f, 0.01f, 0.01f);
-        curmat->Roughness = 0.125f;
+        curmat->Roughness = 1.0f;
         curmat->DiffuseSrvHeapIndex = srvDiffID; // use default (srvID = 0) if no texture presented
         curmat->NormalSrvHeapIndex = srvNormID;
         mMaterials[curmat->Name] = std::move(curmat);
@@ -301,9 +324,11 @@ void Scene::initScene() {
     //loadAssetFromAssimp("../Resources/Models/sponza/sponza.obj");
     //loadAssetFromAssimp("../Resources/Models/sibenik/sibenik.obj"); 
     //loadAssetFromAssimp("../Resources/Models/island/castle.obj");
-    //loadAssetFromAssimp("../Resources/Models/city/city.fbx");
-    loadAssetFromAssimp("../Resources/Models/farmhouse/city.obj");
-    //loadAssetFromAssimp("../Resources/Models/ww2/source/ww2.obj");
+    //loadAssetFromAssimp("../Resources/Models/plane/ss.obj");
+    //loadAssetFromAssimp("../Resources/Models/PINK_GIRL.fbx");
+    //loadAssetFromAssimp("C:/Users/ZRoya/Downloads/San_Miguel/san-miguel.obj");
+    //loadAssetFromAssimp("../Resources/Models/farmhouse/city.obj");
+    loadAssetFromAssimp("../Resources/Models/ww2/source/ww2.obj");
 
     cpyCommandObject->endCommandRecording();
     cpyCommandObject->FlushCommandQueue();

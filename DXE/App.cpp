@@ -315,8 +315,15 @@ void App::UpdateGui(const Timer& gt) {
             mImguiPara.l2pos[0], 
             mImguiPara.l2pos[1], 
             mImguiPara.l2pos[2]));
-
         mScene->getObjectInfos()["area"]->NumFramesDirty = d3dUtil::gNumFrameResources;
+
+
+        ImGui::SliderFloat3("groundpos", mImguiPara.groundpos.data(), -260.0, 260.0);
+        DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ground"]->World, DirectX::XMMatrixScaling(10.5f, 10.5f, 10.5f) * DirectX::XMMatrixRotationRollPitchYaw(0, 0, 0) * DirectX::XMMatrixTranslation(
+            mImguiPara.groundpos[0],
+            mImguiPara.groundpos[1],
+            mImguiPara.groundpos[2]));
+        mScene->getObjectInfos()["ground"]->NumFramesDirty = d3dUtil::gNumFrameResources;
 
         ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
@@ -354,10 +361,10 @@ bool App::Initialize() {
  
     float modelScale = 4.5;
     float ww2Scale = 10.11;
-    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["city.obj"]->World, DirectX::XMMatrixScaling(ww2Scale, ww2Scale, ww2Scale));
+    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ww2.obj"]->World, DirectX::XMMatrixScaling(ww2Scale, ww2Scale, ww2Scale));
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["castle.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
    
-    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World,  DirectX::XMMatrixScaling(1,1,1) * DirectX::XMMatrixRotationRollPitchYaw(0, MathUtils::Pi / 2.0,0) * DirectX::XMMatrixTranslation(50, 60, 40) );
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World,  DirectX::XMMatrixScaling(1,1,1) * DirectX::XMMatrixRotationRollPitchYaw(0, MathUtils::Pi / 2.0,0) * DirectX::XMMatrixTranslation(50, 60, 40) );
 
 
     mShadowMap = std::make_unique<ShadowMap>(md3dDevice.Get(), 4096, 4096);

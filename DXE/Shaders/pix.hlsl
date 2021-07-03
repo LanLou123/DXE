@@ -56,12 +56,12 @@ VertexOut VS(VertexIn vin)
 }
 
 
-float4 TraceDiffuseCone(float3 position, float3 normal, float3 direction, float aperture ) {
+float4 TraceDiffuseCone(float3 position, float3 normal, float3 direction, float aperture, float2 scCoord ) {
 
 
     float3 sampleDir = normalize(direction);
 
-    float startSampledDis = VOXELSCALE + 1.3;
+    float startSampledDis = VOXELSCALE + 1.5;
     float dst = startSampledDis;
     float3 startSamplePos = position + normal * startSampledDis;
 
@@ -87,7 +87,7 @@ float4 TraceDiffuseCone(float3 position, float3 normal, float3 direction, float 
             outSideVol
         );
 
-        VC4 += (1 - VC4.a) * sampleCol;
+        VC4 += pow((1 - VC4.a),1) * sampleCol;
         VA += (1 - VA) * sampleCol.a / 1.0;// / (1.0 + curRadius * 0.0);
 
         if (VA >= 1.0f || outSideVol) break;
@@ -100,6 +100,53 @@ float4 TraceDiffuseCone(float3 position, float3 normal, float3 direction, float 
     return float4(VC4.rgb , VA);
 
 }
+
+
+float4 TraceSpecCone(float3 position, float3 normal, float3 direction, float aperture, float2 scCoord) {
+
+
+    float3 sampleDir = normalize(direction);
+
+    float startSampledDis = VOXELSCALE + 1.5;
+    float dst = startSampledDis;
+    float3 startSamplePos = position + normal * startSampledDis;
+
+    float VA = 0.0;
+    float3 VC = float3(0, 0, 0);
+    float4 VC4 = float4(0, 0, 0, 0);
+
+    float curRadius = aperture * dst * 2.0;
+
+    for (int i = 0; i < 20; ++i) {
+        bool outSideVol = false;
+
+        float3 coneSamplePos = startSamplePos + sampleDir * dst;
+        curRadius = aperture * dst * 2.0;
+
+        float4 sampleCol = sampleVoxelVolumeAnisotropic(
+            gVoxelizerRadiance,
+            gVoxelizerRadianceMip,
+            gsamLinearClamp,
+            coneSamplePos,
+            curRadius,
+            sampleDir,
+            outSideVol
+        );
+
+        VC4 += pow((1 - VC4.a), 1) * sampleCol;
+        VA += (1 - VA) * sampleCol.a / 1.0;// / (1.0 + curRadius * 0.0);
+
+        if (VA >= 1.0f || outSideVol) break;
+
+        dst += curRadius * 1.0;/*dst / (1.0 - aperture);*/
+    }
+
+    float rr = abs(dot(normal, sampleDir));
+
+    return float4(VC4.rgb, VA);
+
+}
+
 
 float TraceShadowCone(float3 position, float3 normal, float3 direction, float aperture) {
 
@@ -150,7 +197,9 @@ float4 PS(VertexOut pin) : SV_Target
     float4 PosW = gPositionMap.Sample(gsamLinearWrap, pin.Texc);
     float4 Alb = gAlbedoMap.Sample(gsamLinearWrap, pin.Texc);
     float4 Nor = gNormalMap.Sample(gsamLinearWrap, pin.Texc);
+    float4 DepAndSpec = gDepthMap.Sample(gsamLinearWrap, pin.Texc);
 
+    float spec = (1.0 - DepAndSpec.y);
 
     int visulizevoxel = showVoxel;
     float3 voxelPickColor = float3(0.0, 0.0, 0.0);
@@ -243,6 +292,7 @@ float4 PS(VertexOut pin) : SV_Target
     float shadowaperture = 0.02;
 
     float3 diffuseCol = float3(0.0, 0.0, 0.0);
+    float3 specCol = float3(0.0, 0.0, 0.0);
     float diffusOcclusion = 0.0;
  
     for (int conei = 0; conei < 6; ++conei) {
@@ -252,10 +302,20 @@ float4 PS(VertexOut pin) : SV_Target
         sampleDir += curSampleDir.x * vright + curSampleDir.z * vforward;
         sampleDir = normalize(sampleDir);
 
-        float4 diffcol = TraceDiffuseCone(PosW.xyz, Nor.xyz, sampleDir, diffaperture);
+        float4 diffcol = TraceDiffuseCone(PosW.xyz, Nor.xyz, sampleDir, diffaperture, pin.Texc);
 
         diffuseCol += diffcol.rgb * ConeSampleWeights[conei];
         diffusOcclusion += diffcol.a * ConeSampleWeights[conei];
+    }
+
+    if (spec > 0.0) {
+        float3 viewDir = normalize(gEyePosW - PosW.xyz);
+        float3 coneDir = reflect(-viewDir, Nor.xyz);
+        float specaperture = clamp(tan((PI / 2.0) * (1.0 - spec)), 0.0174533, PI);
+
+        
+
+        specCol += TraceSpecCone(PosW.xyz, Nor.xyz, coneDir, 0.1, pin.Texc);
     }
 
     //float visibility = TraceShadowCone(PosW.xyz, Nor.xyz, Nor.xyz, diffaperture);
@@ -300,7 +360,9 @@ float4 PS(VertexOut pin) : SV_Target
     //onlyvoxel lights
     //col.xyz = float3(0.0, 0.0, 0.0);
     //onlyvoxel lights
-    col = col + float4(diffuseCol * Alb.xyz * lit, 0.0);
+
+    //col = col + float4(diffuseCol * Alb.xyz * lit, 0.0);
+    col = float4(((diffuseCol * Alb.xyz * lit + col) * (1.0 - spec) + spec * specCol * lit) , 0.0);
     col.a = 1.0;
 
     if (showDirect) {
@@ -321,7 +383,7 @@ float4 PS(VertexOut pin) : SV_Target
     //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion) * 2.0;
 
     float gamma = 0.9;
-    float exposure = 1.5;
+    float exposure = 1.7;
 
     float3 mapped = float3(1.0,1.0,1.0) - exp(-col.xyz * exposure);
 

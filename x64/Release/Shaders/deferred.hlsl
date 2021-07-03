@@ -70,7 +70,7 @@ PS_OUT PS(VertexOut pin)
     output.POS = pin.PosW;
     output.NOR = float4(pin.Normal,1.0f);
     float dpcol = pin.PosH.z;
-    output.DEP = float4(dpcol, dpcol, dpcol, 1.0);
+    output.DEP = float4(dpcol, gRoughness, dpcol, 1.0);
     return output;
 
 }

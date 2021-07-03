@@ -70,6 +70,24 @@ uint convVec4ToRGBA8(float4 val)
     return (uint (val.w) & 0x000000FF) << 24U | (uint(val.z) & 0x000000FF) << 16U | (uint(val.y) & 0x000000FF) << 8U | (uint(val.x) & 0x000000FF);
 }
 
+
+//analytic bayer over 2 domains, is unrolled loop of GetBayerFromCoordLevel().
+//but in terms of reusing subroutines, which is faster,while it does not extend as nicely.
+float bayer2(float2 a) { a = floor(a); return frac(dot(a, float2(.5, a.y * .75))); }
+float bayer4(float2 a) { return bayer2(.5 * a) * .25 + bayer2(a); }
+float bayer8(float2 a) { return bayer4(.5 * a) * .25 + bayer2(a); }
+float bayer16(float2 a) { return bayer4(.25 * a) * .0625 + bayer4(a); }
+float bayer32(float2 a) { return bayer8(.25 * a) * .0625 + bayer4(a); }
+float bayer64(float2 a) { return bayer8(.125 * a) * .015625 + bayer8(a); }
+float bayer128(float2 a) { return bayer16(.125 * a) * .015625 + bayer8(a); }
+#define dither2(p)   (bayer2(  p)-.375      )
+#define dither4(p)   (bayer4(  p)-.46875    )
+#define dither8(p)   (bayer8(  p)-.4921875  )
+#define dither16(p)  (bayer16( p)-.498046875)
+#define dither32(p)  (bayer32( p)-.499511719)
+#define dither64(p)  (bayer64( p)-.49987793 )
+#define dither128(p) (bayer128(p)-.499969482)
+
 static const float3 ConeSampleDirections[] =
 {
     float3(0.0f, 1.0f, 0.0f),
@@ -156,7 +174,7 @@ float4 sampleVoxelVolumeAnisotropic(Texture3D<float4> voxelTexture, Texture3D<fl
    // }
 
 
-    filteredColor.rgb *= 1.0f * pow(anisotropicMipLevel, 0.3);
+    filteredColor.rgb *= 1.0f * pow(anisotropicMipLevel, 0.0);
  
     //filteredColor.a *= 0.8;
 

@@ -13,6 +13,8 @@
 ### red diffuse reflection
 ![](sc/diffreflect.PNG)
 
+### specular
+![](sc/spec.PNG)
 
 ## [**Video demo**](https://www.youtube.com/watch?v=HrUgsg-X_58)
 

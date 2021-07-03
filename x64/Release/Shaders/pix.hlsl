@@ -14,7 +14,7 @@ Texture3D<float4> gVoxelizerRadiance : register(t9);
 Texture3D<float4> gVoxelizerFlag : register(t10);
 Texture3D<float4> gVoxelizerRadianceMip : register(t11);
 
-#define AO_STRENGTH 0.4
+#define AO_STRENGTH 0.3
 
 struct VertexIn
 {
@@ -56,12 +56,12 @@ VertexOut VS(VertexIn vin)
 }
 
 
-float4 TraceDiffuseCone(float3 position, float3 normal, float3 direction, float aperture ) {
+float4 TraceDiffuseCone(float3 position, float3 normal, float3 direction, float aperture, float2 scCoord ) {
 
 
     float3 sampleDir = normalize(direction);
 
-    float startSampledDis = VOXELSCALE + 0.9;
+    float startSampledDis = VOXELSCALE + 1.5;
     float dst = startSampledDis;
     float3 startSamplePos = position + normal * startSampledDis;
 
@@ -87,7 +87,7 @@ float4 TraceDiffuseCone(float3 position, float3 normal, float3 direction, float 
             outSideVol
         );
 
-        VC4 += (1 - VC4.a) * sampleCol;
+        VC4 += pow((1 - VC4.a),1) * sampleCol;
         VA += (1 - VA) * sampleCol.a / 1.0;// / (1.0 + curRadius * 0.0);
 
         if (VA >= 1.0f || outSideVol) break;
@@ -252,7 +252,7 @@ float4 PS(VertexOut pin) : SV_Target
         sampleDir += curSampleDir.x * vright + curSampleDir.z * vforward;
         sampleDir = normalize(sampleDir);
 
-        float4 diffcol = TraceDiffuseCone(PosW.xyz, Nor.xyz, sampleDir, diffaperture);
+        float4 diffcol = TraceDiffuseCone(PosW.xyz, Nor.xyz, sampleDir, diffaperture, pin.Texc);
 
         diffuseCol += diffcol.rgb * ConeSampleWeights[conei];
         diffusOcclusion += diffcol.a * ConeSampleWeights[conei];
@@ -314,9 +314,11 @@ float4 PS(VertexOut pin) : SV_Target
     }
 
     //col.xyz = diffuseCol * lit;
-    diffusOcclusion = 1.0 - diffusOcclusion * AO_STRENGTH;
+    diffusOcclusion = 1.0 - diffusOcclusion * 0.26;
+    //col.xyz *= float3(1.0,0.5,0.1);
     //col.xyz *= diffusOcclusion;
-    //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion);
+    //
+    //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion) * 2.0;
 
     float gamma = 0.9;
     float exposure = 1.7;

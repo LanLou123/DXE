@@ -99,7 +99,7 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 	for (i = 1; i < 3; i++)
 	{
 		[flatten]
-		if (axis[i] > axis[index])
+		if (axis[i] >= axis[index] )
 			index = i;
 	}
 
@@ -122,7 +122,7 @@ void GS(triangle GS_INPUT input[3], inout TriangleStream<PS_INPUT> triStream)
 			break;
 		}
 
-		inputPosL.z = 1.0;
+		inputPosL.z = 0.0;
 	 
 		outputPosH[i] = mul(inputPosL, gVoxelViewProj);
 

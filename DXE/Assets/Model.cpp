@@ -329,7 +329,7 @@ void Model::buildGridGeometry() {
     sphereSubMesh.IndexCount = (UINT)sphere.Indices32.size();
     sphereSubMesh.StartIndexLocation = sphereIndexOffset;
     sphereSubMesh.BaseVertexLocation = sphereVertexOffset;
-    sphereSubMesh.materialName = "mat2";
+    sphereSubMesh.materialName = "mat3";
     DrawArgs["grid"] = sphereSubMesh;
 
     auto totalVertCount = sphere.Vertices.size();
