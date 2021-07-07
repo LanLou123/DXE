@@ -117,7 +117,7 @@ float4 TraceSpecCone(float3 position, float3 normal, float3 direction, float ape
 
     float curRadius = aperture * dst * 2.0;
 
-    for (int i = 0; i < 20; ++i) {
+    for (int i = 0; i < 50; ++i) {
         bool outSideVol = false;
 
         float3 coneSamplePos = startSamplePos + sampleDir * dst;
@@ -315,7 +315,7 @@ float4 PS(VertexOut pin) : SV_Target
 
         
 
-        specCol += TraceSpecCone(PosW.xyz, Nor.xyz, coneDir, 0.1, pin.Texc);
+        specCol += TraceSpecCone(PosW.xyz, Nor.xyz, coneDir, 0.06, pin.Texc);
     }
 
     //float visibility = TraceShadowCone(PosW.xyz, Nor.xyz, Nor.xyz, diffaperture);

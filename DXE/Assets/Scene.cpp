@@ -104,7 +104,7 @@ void Scene::buildMaterials() {
     mat2->MatCBIndex = globalMatCBindex++;
     mat2->DiffuseAlbedo = DirectX::XMFLOAT4(0.0f, 0.2f, 0.6f, 1.0f);
     mat2->FresnelR0 = DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f);
-    mat2->Roughness = 0.0;
+    mat2->Roughness = 0.03;
     mat2->IsEmissive = false;
     mat2->DiffuseSrvHeapIndex = 0;
     mat2->NormalSrvHeapIndex = 0;
