@@ -9,6 +9,7 @@
 ![](sc/small.PNG)
 ![](sc/addy1.gif)
 ![](sc/addy2.gif)
+![](sc/reflect.gif)
 ![](sc/imgg.PNG)
 ### red diffuse reflection
 ![](sc/diffreflect.PNG)

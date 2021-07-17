@@ -376,10 +376,12 @@ float4 PS(VertexOut pin) : SV_Target
     }
 
     //col.xyz = diffuseCol * lit;
-    diffusOcclusion = 1.0 - diffusOcclusion * 0.26;
+    diffusOcclusion = 1.0 - diffusOcclusion * 0.32;
     //col.xyz *= float3(1.0,0.5,0.1);
+    float3 skyLight = 1.0 * diffusOcclusion * Alb.rgb;
+    //col.xyz += skyLight;
     //col.xyz *= diffusOcclusion;
-    //
+    
     //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion) * 2.0;
 
     float gamma = 0.9;

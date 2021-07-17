@@ -146,10 +146,10 @@ void Model::buildGeometryAssimp(){
 
 
 
-    ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
-    CopyMemory(VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
-    ThrowIfFailed(D3DCreateBlob(ibByteSize, IndexBufferCPU.GetAddressOf()));
-    CopyMemory(IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
+    //ThrowIfFailed(D3DCreateBlob(vbByteSize, VertexBufferCPU.GetAddressOf()));
+    //CopyMemory(VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
+    //ThrowIfFailed(D3DCreateBlob(ibByteSize, IndexBufferCPU.GetAddressOf()));
+    //CopyMemory(IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
 
     VertexBufferByteSize = vbByteSize;
     VertexByteStride = sizeof(Vertex);
