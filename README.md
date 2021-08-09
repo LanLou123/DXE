@@ -12,10 +12,10 @@
 ![](sc/reflect.gif)
 ![](sc/imgg.PNG)
 ### diffuse reflection
-![](sc/diffreflect.PNG)
+![](sc/ship2.PNG)
 
 ### specular
-![](sc/ship2.PNG)
+![](sc/spec1.PNG)
 
 ## [**Video demo**](https://www.youtube.com/watch?v=HrUgsg-X_58)
 
