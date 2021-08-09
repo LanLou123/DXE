@@ -299,18 +299,18 @@ void App::UpdateGui(const Timer& gt) {
         static float f = 0.0f;
         static int counter = 0;
 
-        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+        ImGui::Begin("Voxel Cone Tracer");                          // Create a window called "Hello, world!" and append into it.
 
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-        ImGui::Checkbox("Another Window", &show_another_window);
+        ImGui::Text("This is a preview version of engine, it's still in early development.");               // Display some text (you can use a format strings too)
+        //ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+        //mGui::Checkbox("Another Window", &show_another_window);
 
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::SliderFloat3("LightPos", mImguiPara.LightPos.data(), -1.0,1.0);
+        //ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::SliderFloat3("DirectionalLightDirection", mImguiPara.LightPos.data(), -1.0,1.0);
         mShadowMap->setShadowLightPos(mImguiPara.LightPos[0], mImguiPara.LightPos[1], mImguiPara.LightPos[2], gt);
 
         
-        ImGui::SliderFloat3("Light2Pos", mImguiPara.l2pos.data(), -160.0, 160.0);
+        ImGui::SliderFloat3("SphereLocation", mImguiPara.l2pos.data(), -160.0, 160.0);
         DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World, DirectX::XMMatrixScaling(1.5f, 1.5f, 1.5f) * DirectX::XMMatrixRotationRollPitchYaw(MathUtils::Pi / 2.0, 0, MathUtils::Pi / 2.0) * DirectX::XMMatrixTranslation(
             mImguiPara.l2pos[0], 
             mImguiPara.l2pos[1], 
@@ -318,19 +318,19 @@ void App::UpdateGui(const Timer& gt) {
         mScene->getObjectInfos()["area"]->NumFramesDirty = d3dUtil::gNumFrameResources;
 
 
-        ImGui::SliderFloat3("groundpos", mImguiPara.groundpos.data(), -260.0, 260.0);
+        ImGui::SliderFloat3("GroundPosition", mImguiPara.groundpos.data(), -260.0, 260.0);
         DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ground"]->World, DirectX::XMMatrixScaling(10.5f, 10.5f, 10.5f) * DirectX::XMMatrixRotationRollPitchYaw(0, 0, 0) * DirectX::XMMatrixTranslation(
             mImguiPara.groundpos[0],
             mImguiPara.groundpos[1],
             mImguiPara.groundpos[2]));
         mScene->getObjectInfos()["ground"]->NumFramesDirty = d3dUtil::gNumFrameResources;
 
-        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
-        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
+
+        //ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+        
+ 
 
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::End();
@@ -360,10 +360,23 @@ bool App::Initialize() {
     mScene->initScene();
  
     float modelScale = 0.1;
-    float ww2Scale = 10.11;
-    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ww2.obj"]->World, DirectX::XMMatrixScaling(ww2Scale, ww2Scale, ww2Scale));
+    float ww2Scale = 10.0;
+    float hallScale = 0.40; 
+    float mcityScale = 10.0;
+    float roomScale = 17.40;
+    float BlokcingScale = 0.6;
+    float Kursovaya_DraftScale = 1.0;
+    float shipscale = 6.0;
+
+    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ship.obj"]->World, DirectX::XMMatrixScaling(shipscale, shipscale, shipscale) * DirectX::XMMatrixTranslation(0, -60, 0));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["SM_Ship01A_01_OBJ.obj"]->World, DirectX::XMMatrixScaling(shipscale, shipscale, shipscale) * DirectX::XMMatrixTranslation(0, -60, 0));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["mcity.obj"]->World, DirectX::XMMatrixScaling(mcityScale, mcityScale, mcityScale));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["Blokcing.obj"]->World, DirectX::XMMatrixScaling(BlokcingScale, BlokcingScale, BlokcingScale));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["LP_all.fbx"]->World, DirectX::XMMatrixScaling(hallScale, hallScale, hallScale));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["Kursovaya_Draft.fbx"]->World, DirectX::XMMatrixScaling(Kursovaya_DraftScale, Kursovaya_DraftScale, Kursovaya_DraftScale) * DirectX::XMMatrixRotationRollPitchYaw(MathUtils::Pi / 2.0, 0, 0));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["maya2sketchfab.fbx"]->World, DirectX::XMMatrixScaling(roomScale, roomScale, roomScale));
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["sponza.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
-   
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ww2.obj"]->World, DirectX::XMMatrixScaling(ww2Scale, ww2Scale, ww2Scale));
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World,  DirectX::XMMatrixScaling(1,1,1) * DirectX::XMMatrixRotationRollPitchYaw(0, MathUtils::Pi / 2.0,0) * DirectX::XMMatrixTranslation(50, 60, 40) );
 
 
@@ -909,6 +922,7 @@ void App::BuildPSOs() {
     shadowRasterDesc.DepthBias = 1;
     shadowRasterDesc.DepthBiasClamp = 0.0f;
     shadowRasterDesc.SlopeScaledDepthBias = 1.0f;
+    //shadowRasterDesc.CullMode = D3D12_CULL_MODE_NONE;
     CreatePSO(
         mPSOs["shadow_opaque"].GetAddressOf(),
         mRootSignatures["MainPass"].Get(),

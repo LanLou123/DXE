@@ -61,9 +61,9 @@ float4 TraceDiffuseCone(float3 position, float3 normal, float3 direction, float 
 
     float3 sampleDir = normalize(direction);
 
-    float startSampledDis = VOXELSCALE + 1.5;
+    float startSampledDis = VOXELSCALE + 1.50;
     float dst = startSampledDis;
-    float3 startSamplePos = position + normal * startSampledDis;
+    float3 startSamplePos = position + normal * VOXELSCALE;
 
     float VA = 0.0;
     float3 VC = float3(0, 0, 0);
@@ -109,7 +109,7 @@ float4 TraceSpecCone(float3 position, float3 normal, float3 direction, float ape
 
     float startSampledDis = VOXELSCALE + 1.5;
     float dst = startSampledDis;
-    float3 startSamplePos = position + normal * startSampledDis;
+    float3 startSamplePos = position + normal * VOXELSCALE;
 
     float VA = 0.0;
     float3 VC = float3(0, 0, 0);
@@ -378,14 +378,14 @@ float4 PS(VertexOut pin) : SV_Target
     //col.xyz = diffuseCol * lit;
     diffusOcclusion = 1.0 - diffusOcclusion * 0.32;
     //col.xyz *= float3(1.0,0.5,0.1);
-    float3 skyLight = 1.0 * diffusOcclusion * Alb.rgb;
+    float3 skyLight = float3(0.3,0.4,0.7) * diffusOcclusion * Alb.rgb;
     //col.xyz += skyLight;
     //col.xyz *= diffusOcclusion;
     
     //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion) * 2.0;
 
     float gamma = 0.9;
-    float exposure = 1.7;
+    float exposure = 0.7;
 
     float3 mapped = float3(1.0,1.0,1.0) - exp(-col.xyz * exposure);
 

@@ -1,5 +1,12 @@
 #include "common.hlsl"
 
+Texture2D    gDiffuseMap : register(t0);
+Texture2D    gShadowMap : register(t1);
+Texture2D    gPositionMap : register(t2);
+Texture2D    gAlbedoMap : register(t3);
+Texture2D    gNormalMap : register(t4);
+Texture2D    gDepthMap : register(t5);
+
 struct VertexIn
 {
     float3 PosL  : POSITION;

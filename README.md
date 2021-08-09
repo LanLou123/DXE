@@ -11,11 +11,11 @@
 ![](sc/addy2.gif)
 ![](sc/reflect.gif)
 ![](sc/imgg.PNG)
-### red diffuse reflection
+### diffuse reflection
 ![](sc/diffreflect.PNG)
 
 ### specular
-![](sc/spec1.PNG)
+![](sc/ship2.PNG)
 
 ## [**Video demo**](https://www.youtube.com/watch?v=HrUgsg-X_58)
 

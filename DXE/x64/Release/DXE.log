@@ -4,15 +4,23 @@ E:\DX12\DXE\DXE\DXE\App.cpp(36,119): warning C4244: 'argument': conversion from 
 E:\DX12\DXE\DXE\DXE\App.cpp(314,197): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 E:\DX12\DXE\DXE\DXE\App.cpp(314,173): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 E:\DX12\DXE\DXE\DXE\App.cpp(362,27): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\DX12\DXE\DXE\DXE\App.cpp(363,27): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\DX12\DXE\DXE\DXE\App.cpp(1135,85): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(1135,77): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(1135,48): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(1160,23): warning C4018: '<': signed/unsigned mismatch
-E:\DX12\DXE\DXE\DXE\App.cpp(1168,29): warning C4018: '>=': signed/unsigned mismatch
+E:\DX12\DXE\DXE\DXE\App.cpp(364,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DX12\DXE\DXE\DXE\App.cpp(366,28): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DX12\DXE\DXE\DXE\App.cpp(367,30): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DX12\DXE\DXE\DXE\App.cpp(1149,85): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(1149,77): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(1149,48): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(1174,23): warning C4018: '<': signed/unsigned mismatch
+E:\DX12\DXE\DXE\DXE\App.cpp(1182,29): warning C4018: '>=': signed/unsigned mismatch
+  Scene.cpp
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(107,27): warning C4305: '=': truncation from 'double' to 'float'
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(249,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(259,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(273,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(283,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
   Generating code
-  1 of 4958 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  6 of 4871 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    29 functions had inline decision re-evaluated but remain unchanged
+    22 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Release\DXE.exe

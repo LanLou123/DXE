@@ -119,6 +119,8 @@ void Scene::buildMaterials() {
     mat3->DiffuseSrvHeapIndex = 2;
     mat3->NormalSrvHeapIndex = 0;
 
+
+
     mMaterials["mat1"] = std::move(mat1);
     mMaterials["mat2"] = std::move(mat2);
     mMaterials["mat3"] = std::move(mat3);
@@ -147,8 +149,9 @@ void Scene::loadTextures() {
 void Scene::buildCameras() {
 
     auto normalCam = std::make_unique<Camera>();
-    normalCam->SetPosition(0.0f, 92.0f, -15.0f);
+    normalCam->SetPosition(0.0f, 192.0f, -115.0f);
     normalCam->SetLens(0.25f * MathUtils::Pi, static_cast<float>(mClientWidth) / mClientHeight, 1.0f, 1000.0f);
+    normalCam->LookAt(DirectX::XMFLOAT3(220.0, 242.0, 95.0), DirectX::XMFLOAT3(0.0, 0.0, 0.0), DirectX::XMFLOAT3(0.0, 1.0, 0.0));
     mCameras["MainCam"] = std::move(normalCam);
 }
 
@@ -325,10 +328,16 @@ void Scene::initScene() {
     //loadAssetFromAssimp("../Resources/Models/sibenik/sibenik.obj"); 
     //loadAssetFromAssimp("../Resources/Models/island/castle.obj");
     //loadAssetFromAssimp("../Resources/Models/plane/ss.obj");
-    //loadAssetFromAssimp("../Resources/Models/PINK_GIRL.fbx");
+    //loadAssetFromAssimp("../Resources/Models/room/source/maya2sketchfab.fbx");
+    //loadAssetFromAssimp("../Resources/Models/rship/SM_Ship01A_01_OBJ.obj");
+    loadAssetFromAssimp("../Resources/Models/ship.obj");
+    //loadAssetFromAssimp("../Resources/Models/Blokcing.obj");
+    //loadAssetFromAssimp("../Resources/Models/montmartre-cityscene/mcity.obj");
+    //loadAssetFromAssimp("../Resources/Models/LP_all.fbx");
+    //loadAssetFromAssimp("../Resources/Models/Kursovaya_Draft.fbx");
     //loadAssetFromAssimp("C:/Users/ZRoya/Downloads/San_Miguel/san-miguel.obj");
     //loadAssetFromAssimp("../Resources/Models/farmhouse/city.obj");
-    loadAssetFromAssimp("../Resources/Models/ww2/source/ww2.obj");
+    //loadAssetFromAssimp("../Resources/Models/ww2/source/ww2.obj");
 
     cpyCommandObject->endCommandRecording();
     cpyCommandObject->FlushCommandQueue();

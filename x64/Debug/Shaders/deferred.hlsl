@@ -1,5 +1,12 @@
 #include "common.hlsl"
 
+Texture2D    gDiffuseMap : register(t0);
+Texture2D    gShadowMap : register(t1);
+Texture2D    gPositionMap : register(t2);
+Texture2D    gAlbedoMap : register(t3);
+Texture2D    gNormalMap : register(t4);
+Texture2D    gDepthMap : register(t5);
+
 struct VertexIn
 {
     float3 PosL  : POSITION;
@@ -56,11 +63,14 @@ PS_OUT PS(VertexOut pin)
 
     // Dynamically look up the texture in the array.
     diffuseAlbedo *= gDiffuseMap.Sample(gsamAnisotropicWrap, pin.TexC);
-    output.ALB = diffuseAlbedo;
+    if(IsEmissive == 0)
+        output.ALB = diffuseAlbedo;
+    else
+        output.ALB = 6.0 * diffuseAlbedo;//for emissive material
     output.POS = pin.PosW;
     output.NOR = float4(pin.Normal,1.0f);
     float dpcol = pin.PosH.z;
-    output.DEP = float4(dpcol, dpcol, dpcol, 1.0);
+    output.DEP = float4(dpcol, gRoughness, dpcol, 1.0);
     return output;
 
 }

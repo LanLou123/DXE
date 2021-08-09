@@ -100,7 +100,7 @@ static const float3 ConeSampleDirections[] =
 
 float getMipLevelFromRadius(float radius)
 {
-    return max(log2(float(radius + 0.0f) / VOXELSCALE) - 0.0, 0.0);
+    return max(log2(float(radius - 0.0f) / VOXELSCALE) + 0.0, 0.0);
 }
 
 static const float cMipDirectionalOffsets[] = {
@@ -174,7 +174,10 @@ float4 sampleVoxelVolumeAnisotropic(Texture3D<float4> voxelTexture, Texture3D<fl
    // }
 
 
-    filteredColor.rgb *= 1.0f * pow(anisotropicMipLevel, 0.0);
+
+        float par = max(1.0 - pow(0.1 * anisotropicMipLevel, 6),0.0);
+        float par2 = pow(anisotropicMipLevel, 0.0);
+    filteredColor.rgb *= 1.0f * par2;
  
     //filteredColor.a *= 0.8;
 

@@ -96,6 +96,8 @@ private:
 	void buildCameras();
 
 
+
+
 	void loadAssetFromAssimp(const std::string filepath);
 	void processNode(aiNode* ainode, const aiScene *aiscene, Model* assimpModel);
 

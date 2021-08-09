@@ -16,7 +16,7 @@ struct ShadowMapData {
 	XMFLOAT4X4 mShadowTransform = MathUtils::Identity4x4();
 	float mLightRotationAngle = 0.0f;
 	XMFLOAT3 mLightPos = XMFLOAT3(0.2f, -0.5f, 0.1f);
-	XMFLOAT3 mRotatedLightDirections = XMFLOAT3(0.2f, -0.5f, 0.1f);
+	XMFLOAT3 mRotatedLightDirections = XMFLOAT3(0.2f, -0.5f, -0.16f);
 };
 
 

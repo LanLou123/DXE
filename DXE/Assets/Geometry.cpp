@@ -555,8 +555,8 @@ Geometry::MeshData Geometry::CreateGrid(float width, float depth, uint32_t m, ui
 	float dx = width / (n - 1);
 	float dz = depth / (m - 1);
 
-	float du = 1.0f / (n - 1);
-	float dv = 1.0f / (m - 1);
+	float du = 2.0f / (n - 1);
+	float dv = 2.0f / (m - 1);
 
 	meshData.Vertices.resize(vertexCount);
 	for (uint32_t i = 0; i < m; ++i)
