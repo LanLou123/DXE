@@ -158,6 +158,7 @@
     <ClInclude Include="Assets\Scene.h" />
     <ClInclude Include="Assets\Texture.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="ECS\ECSystem.h" />
     <ClInclude Include="Features\DeferredRenderer.h" />
     <ClInclude Include="Features\MeshVoxelizer.h" />
     <ClInclude Include="Features\ShadowMap.h" />

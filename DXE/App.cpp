@@ -74,28 +74,25 @@ void App::BuildRootSignature()
     // =================================================
 
     // range means the location in HLSL shader
-    CD3DX12_DESCRIPTOR_RANGE texTable;
-    texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0
-    CD3DX12_DESCRIPTOR_RANGE texTableShadow;
-    texTableShadow.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); //t1
-    CD3DX12_DESCRIPTOR_RANGE gbufferTable;
-    gbufferTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4, t5
-    CD3DX12_DESCRIPTOR_RANGE voxelTexTable;
-    voxelTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)VOLUME_TEXTURE_TYPE::COUNT, 6); // t6 t7 t8 t9 t10
-    CD3DX12_DESCRIPTOR_RANGE radianceTexTable;
-    radianceTexTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getNumMipLevels(), 11); // t11
+    CD3DX12_DESCRIPTOR_RANGE Range4MainPass[5];
+    Range4MainPass[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0 for diffuse texutre for current material
+    Range4MainPass[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); //t1 for shadowmap texture
+    Range4MainPass[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4, t5 for textures in gbuffer
+    Range4MainPass[3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)VOLUME_TEXTURE_TYPE::COUNT, 6); // t6 t7 t8 t9 t10 for 3d textures in volume buffer
+    Range4MainPass[4].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getNumMipLevels(), 11); // t11 for radiance mipmapped texture
     // Root parameter can be a table, root descriptor or root constants.
     CD3DX12_ROOT_PARAMETER slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::COUNT];
     // Perfomance TIP: Order from most frequent to least frequent.   
     
     slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::OBJ_CBV].InitAsConstantBufferView(0); // obj const buffer
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV].InitAsConstantBufferView(1); // pass const buffer
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MATERIAL_CBV].InitAsConstantBufferView(2); // material const buffer
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::DIFFUSE_TEX_TABLE].InitAsDescriptorTable(1, &texTable, D3D12_SHADER_VISIBILITY_PIXEL); // mesh textures
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE].InitAsDescriptorTable(1, &texTableShadow, D3D12_SHADER_VISIBILITY_PIXEL); // shadow map
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER].InitAsDescriptorTable(1, &gbufferTable, D3D12_SHADER_VISIBILITY_PIXEL);
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::VOXEL].InitAsDescriptorTable(1, &voxelTexTable, D3D12_SHADER_VISIBILITY_ALL);
-    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP].InitAsDescriptorTable(1, &radianceTexTable, D3D12_SHADER_VISIBILITY_ALL);
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MATERIAL_CBV].InitAsConstantBufferView(1); // material const buffer
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV].InitAsConstantBufferView(2); // pass const buffer
+
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::DIFFUSE_TEX_TABLE].InitAsDescriptorTable(1, &Range4MainPass[0], D3D12_SHADER_VISIBILITY_PIXEL); // mesh textures
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE].InitAsDescriptorTable(1, &Range4MainPass[1], D3D12_SHADER_VISIBILITY_PIXEL); // shadow map
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER].InitAsDescriptorTable(1, &Range4MainPass[2], D3D12_SHADER_VISIBILITY_PIXEL);
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::VOXEL].InitAsDescriptorTable(1, &Range4MainPass[3], D3D12_SHADER_VISIBILITY_ALL);
+    slotRootParameter[d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP].InitAsDescriptorTable(1, &Range4MainPass[4], D3D12_SHADER_VISIBILITY_ALL);
 
     auto staticSamplers = GetStaticSamplers();
     // A root signature is an array of root parameters.
@@ -123,28 +120,25 @@ void App::BuildRootSignature()
     // =================================================
 
     // range means the location in HLSL shader
-    CD3DX12_DESCRIPTOR_RANGE texTableVoxelizer;
-    texTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0
-    CD3DX12_DESCRIPTOR_RANGE texTableShadowVoxelizer;
-    texTableShadowVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); //t1
-    CD3DX12_DESCRIPTOR_RANGE gbufferTableVoxelizer;
-    gbufferTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4, t5
-    CD3DX12_DESCRIPTOR_RANGE voxelTexTableVoxelizer;
-    voxelTexTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, (int)VOLUME_TEXTURE_TYPE::COUNT, 0); // u0 u1 u2 u3 u4
-    CD3DX12_DESCRIPTOR_RANGE radianceTexTableVoxelizer;
-    radianceTexTableVoxelizer.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 5); // u5
+    CD3DX12_DESCRIPTOR_RANGE Range4VoxelizerPass[5];
+    Range4VoxelizerPass[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); //t0 for diffuse texutre for current material
+    Range4VoxelizerPass[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); //t1 for shadowmap texture
+    Range4VoxelizerPass[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, (int)GBUFFER_TYPE::COUNT, 2); //t2, t3 ,t4, t5 for textures in gbuffer
+    Range4VoxelizerPass[3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, (int)VOLUME_TEXTURE_TYPE::COUNT, 0); // u0 u1 u2 u3 u4 for 3d textures in volume buffer
+    Range4VoxelizerPass[4].Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 5); // u5 for radiance mipmapped texture
     // Root parameter can be a table, root descriptor or root constants.
 
     CD3DX12_ROOT_PARAMETER slotRootParameterVoxelizer[8];
     // Perfomance TIP: Order from most frequent to least frequent. 
     slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::OBJ_CBV].InitAsConstantBufferView(0); // obj const buffer
-    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV].InitAsConstantBufferView(1); // pass const buffer
-    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::MATERIAL_CBV].InitAsConstantBufferView(2); // material const buffer
-    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::DIFFUSE_TEX_TABLE].InitAsDescriptorTable(1, &texTableVoxelizer, D3D12_SHADER_VISIBILITY_PIXEL); // mesh textures
-    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE].InitAsDescriptorTable(1, &texTableShadowVoxelizer, D3D12_SHADER_VISIBILITY_PIXEL); // shadow map
-    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER].InitAsDescriptorTable(1, &gbufferTableVoxelizer, D3D12_SHADER_VISIBILITY_PIXEL);
-    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::VOXEL].InitAsDescriptorTable(1, &voxelTexTableVoxelizer, D3D12_SHADER_VISIBILITY_PIXEL);
-    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP].InitAsDescriptorTable(1, &radianceTexTableVoxelizer, D3D12_SHADER_VISIBILITY_PIXEL);
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::MATERIAL_CBV].InitAsConstantBufferView(1); // material const buffer
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::MAINPASS_CBV].InitAsConstantBufferView(2); // pass const buffer
+
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::DIFFUSE_TEX_TABLE].InitAsDescriptorTable(1, &Range4VoxelizerPass[0], D3D12_SHADER_VISIBILITY_PIXEL); // mesh textures
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::SHADOWMAP_TEX_TABLE].InitAsDescriptorTable(1, &Range4VoxelizerPass[1], D3D12_SHADER_VISIBILITY_PIXEL); // shadow map
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::G_BUFFER].InitAsDescriptorTable(1, &Range4VoxelizerPass[2], D3D12_SHADER_VISIBILITY_PIXEL);
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::VOXEL].InitAsDescriptorTable(1, &Range4VoxelizerPass[3], D3D12_SHADER_VISIBILITY_PIXEL);
+    slotRootParameterVoxelizer[d3dUtil::MAIN_PASS_UNIFORM::RADIANCEMIP].InitAsDescriptorTable(1, &Range4VoxelizerPass[4], D3D12_SHADER_VISIBILITY_PIXEL);
 
 
     CD3DX12_ROOT_SIGNATURE_DESC rootSigDescVoxelizer(8, slotRootParameterVoxelizer, (UINT)staticSamplers.size(), staticSamplers.data(),
@@ -367,15 +361,20 @@ bool App::Initialize() {
     float BlokcingScale = 0.6;
     float Kursovaya_DraftScale = 1.0;
     float shipscale = 6.0;
+    float castleScale = 4.0;
+    float testScale = 0.04;
+    float planeScale = 30.0;
 
-    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ship.obj"]->World, DirectX::XMMatrixScaling(shipscale, shipscale, shipscale) * DirectX::XMMatrixTranslation(0, -60, 0));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ship.obj"]->World, DirectX::XMMatrixScaling(shipscale, shipscale, shipscale) * DirectX::XMMatrixTranslation(0, -60, 0));
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["SM_Ship01A_01_OBJ.obj"]->World, DirectX::XMMatrixScaling(shipscale, shipscale, shipscale) * DirectX::XMMatrixTranslation(0, -60, 0));
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["mcity.obj"]->World, DirectX::XMMatrixScaling(mcityScale, mcityScale, mcityScale));
+    DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["castle.obj"]->World, DirectX::XMMatrixScaling(castleScale, castleScale, castleScale));
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["Blokcing.obj"]->World, DirectX::XMMatrixScaling(BlokcingScale, BlokcingScale, BlokcingScale));
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["LP_all.fbx"]->World, DirectX::XMMatrixScaling(hallScale, hallScale, hallScale));
-    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["Kursovaya_Draft.fbx"]->World, DirectX::XMMatrixScaling(Kursovaya_DraftScale, Kursovaya_DraftScale, Kursovaya_DraftScale) * DirectX::XMMatrixRotationRollPitchYaw(MathUtils::Pi / 2.0, 0, 0));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["Kursovaya_Draft.fbx"]->World, DirectX::XMMatrixScaling(Kursovaya_DraftScale, Kursovaya_DraftScale, Kursovaya_DraftScale) * DirectX::XMMatrixRotationRollPitchYaw(-MathUtils::Pi / 2.0, 0, 0));
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["maya2sketchfab.fbx"]->World, DirectX::XMMatrixScaling(roomScale, roomScale, roomScale));
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["sponza.obj"]->World, DirectX::XMMatrixScaling(modelScale, modelScale, modelScale));
+    //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ss.obj"]->World, DirectX::XMMatrixScaling(planeScale, planeScale, planeScale));
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["ww2.obj"]->World, DirectX::XMMatrixScaling(ww2Scale, ww2Scale, ww2Scale));
     //DirectX::XMStoreFloat4x4(&mScene->getObjectInfos()["area"]->World,  DirectX::XMMatrixScaling(1,1,1) * DirectX::XMMatrixRotationRollPitchYaw(0, MathUtils::Pi / 2.0,0) * DirectX::XMMatrixTranslation(50, 60, 40) );
 
@@ -648,8 +647,11 @@ void App::Draw(const Timer& gt) {
     VoxelizeMesh(RenderLayer::Dynamic);
     InjectRadiance();
     FillMip();
-    DrawScene();
 
+    //mCommandList->RSSetShadingRate(D3D12_SHADING_RATE_4X4, nullptr);
+
+    DrawScene();
+    //mCommandList->RSSetShadingRate(D3D12_SHADING_RATE_1X1, nullptr);
     // record cmdlist for imgui before we close cmdlist
     {
         mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
@@ -922,7 +924,7 @@ void App::BuildPSOs() {
     shadowRasterDesc.DepthBias = 1;
     shadowRasterDesc.DepthBiasClamp = 0.0f;
     shadowRasterDesc.SlopeScaledDepthBias = 1.0f;
-    //shadowRasterDesc.CullMode = D3D12_CULL_MODE_NONE;
+    shadowRasterDesc.CullMode = D3D12_CULL_MODE_NONE;
     CreatePSO(
         mPSOs["shadow_opaque"].GetAddressOf(),
         mRootSignatures["MainPass"].Get(),
@@ -1104,12 +1106,12 @@ void App::DrawScene() {
     mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
         D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
-    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getResourcePtr(),
-        D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
-    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getResourcePtr(),
-        D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
-    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr(),
-        D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
+    //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getResourcePtr(),
+    //    D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
+    //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getResourcePtr(),
+    //    D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
+    //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr(),
+    //    D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_GENERIC_READ));
 
     // Clear the back buffer and depth buffer.
     mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::LightSteelBlue, 0, nullptr);
@@ -1127,12 +1129,12 @@ void App::DrawScene() {
     DrawRenderItems(mCommandList.Get(), mScene->getObjectInfoLayer()[(int)RenderLayer::Debug]);
     // Indicate a state transition on the resource usage.
 
-    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getResourcePtr(),
-        D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS ));
-    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getResourcePtr(),
-        D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
-    mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr(),
-        D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS ));
+    //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::RADIANCE)->getResourcePtr(),
+    //    D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS ));
+    //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getVolumeTexture(VOLUME_TEXTURE_TYPE::ALBEDO)->getResourcePtr(),
+    //    D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
+    //mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mMeshVoxelizer->getRadianceMipMapedVolumeTexture()->getResourcePtr(),
+    //    D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_UNORDERED_ACCESS ));
 
     mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
         D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
@@ -1304,9 +1306,10 @@ void App::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<
                 objIndex = rObject->ObjCBIndex;
             }
 
-            cmdList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::DIFFUSE_TEX_TABLE, mSrvHeaps["MainPass"]->mGPUHandle(diffTexIndex));
             cmdList->SetGraphicsRootConstantBufferView(d3dUtil::MAIN_PASS_UNIFORM::OBJ_CBV, mCurrFrameResource->getObjGPUcbAddress(objIndex));
             cmdList->SetGraphicsRootConstantBufferView(d3dUtil::MAIN_PASS_UNIFORM::MATERIAL_CBV, mCurrFrameResource->getMaterialGPUcbAddress(materialIndex));
+
+            cmdList->SetGraphicsRootDescriptorTable(d3dUtil::MAIN_PASS_UNIFORM::DIFFUSE_TEX_TABLE, mSrvHeaps["MainPass"]->mGPUHandle(diffTexIndex));
             cmdList->DrawIndexedInstanced(rMesh->IndexCount, 1, rMesh->StartIndexLocation, rMesh->BaseVertexLocation, 0);
         }
     }

@@ -87,6 +87,8 @@ float4 TraceDiffuseCone(float3 position, float3 normal, float3 direction, float 
             outSideVol
         );
 
+        float coll = min(length(VC4.xyz),1.0);
+
         VC4 += pow((1 - VC4.a),1) * sampleCol;
         VA += (1 - VA) * sampleCol.a / 1.0;// / (1.0 + curRadius * 0.0);
 
@@ -385,7 +387,7 @@ float4 PS(VertexOut pin) : SV_Target
     //col.xyz = float3(diffusOcclusion, diffusOcclusion, diffusOcclusion) * 2.0;
 
     float gamma = 0.9;
-    float exposure = 0.7;
+    float exposure = 1.7;
 
     float3 mapped = float3(1.0,1.0,1.0) - exp(-col.xyz * exposure);
 

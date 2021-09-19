@@ -1,29 +1,43 @@
-﻿  App.cpp
+﻿  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  App.cpp
 E:\DX12\DXE\DXE\DXE\App.cpp(24,129): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
 E:\DX12\DXE\DXE\DXE\App.cpp(36,119): warning C4244: 'argument': conversion from 'INT64' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(314,194): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(314,170): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(356,26): warning C4305: 'initializing': truncation from 'double' to 'float'
-E:\DX12\DXE\DXE\DXE\App.cpp(359,162): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(1127,85): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(1127,77): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(1127,48): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\App.cpp(1152,23): warning C4018: '<': signed/unsigned mismatch
-E:\DX12\DXE\DXE\DXE\App.cpp(1160,29): warning C4018: '>=': signed/unsigned mismatch
+E:\DX12\DXE\DXE\DXE\App.cpp(312,197): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(312,173): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(360,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DX12\DXE\DXE\DXE\App.cpp(362,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DX12\DXE\DXE\DXE\App.cpp(364,28): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DX12\DXE\DXE\DXE\App.cpp(365,30): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DX12\DXE\DXE\DXE\App.cpp(369,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+E:\DX12\DXE\DXE\DXE\App.cpp(1155,85): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(1155,77): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(1155,48): warning C4244: 'argument': conversion from 'double' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\App.cpp(1180,23): warning C4018: '<': signed/unsigned mismatch
+E:\DX12\DXE\DXE\DXE\App.cpp(1188,29): warning C4018: '>=': signed/unsigned mismatch
+  Camera.cpp
+  Geometry.cpp
   Material.cpp
   Model.cpp
-E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(163,43): warning C4267: 'initializing': conversion from 'size_t' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(164,41): warning C4267: 'initializing': conversion from 'size_t' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(282,63): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(321,66): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(321,61): warning C4244: 'argument': conversion from 'float' to 'uint32_t', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(360,73): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(360,68): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(166,43): warning C4267: 'initializing': conversion from 'size_t' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(167,41): warning C4267: 'initializing': conversion from 'size_t' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(285,63): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(324,66): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(324,61): warning C4244: 'argument': conversion from 'float' to 'uint32_t', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(363,73): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Model.cpp(363,68): warning C4244: 'argument': conversion from 'double' to 'uint32_t', possible loss of data
   Scene.cpp
-E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(220,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(229,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(243,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
-E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(252,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(109,27): warning C4305: '=': truncation from 'double' to 'float'
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(251,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(261,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(275,31): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+E:\DX12\DXE\DXE\DXE\Assets\Scene.cpp(285,52): warning C4244: '=': conversion from 'INT64' to 'UINT', possible loss of data
+  Texture.cpp
+  Core.cpp
+  DeferredRenderer.cpp
   MeshVoxelizer.cpp
 E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(48,20): warning C4018: '<': signed/unsigned mismatch
 E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(88,20): warning C4018: '<': signed/unsigned mismatch
@@ -34,5 +48,17 @@ E:\DX12\DXE\DXE\DXE\Features\MeshVoxelizer.cpp(357,59): warning C4267: 'argument
   ShadowMap.cpp
   FrameResource.cpp
   main.cpp
+  CommandObject.cpp
+  imgui_impl_dx12.cpp
+  Generating Code...
+E:\DX12\DXE\DXE\DXE\Assets\Texture.cpp(67): warning C4715: 'Texture::uploadTexture': not all control paths return a value
+E:\DX12\DXE\DXE\DXE\Assets\Texture.cpp(384): warning C4715: 'RenderTexture::createTextureBuffer': not all control paths return a value
+  Compiling...
+  imgui_impl_win32.cpp
+  Keyboard.cpp
+  MathUtils.cpp
+  RootSignature.cpp
+  ShaderProgram.cpp
+  Utils.cpp
   Generating Code...
   DXE.vcxproj -> E:\DX12\DXE\DXE\x64\Debug\DXE.exe

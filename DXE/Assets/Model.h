@@ -33,7 +33,8 @@ class Model {
 public:
 
 	Model();
-	Model(ModelType _type);
+	Model(ModelType _type,
+		std::string _matName = "");
 
 	Model(const Model& rhs) = delete;
 	Model& operator=(const Model& rhs) = delete;
@@ -88,6 +89,8 @@ protected:
 	
 
 	UINT globalMeshID;
+
+	std::string mMatName = "";
 
 	std::vector<Vertex> vertices;
 	std::vector<std::uint32_t> indices; // specifically for large meshes whoes index size > 65535

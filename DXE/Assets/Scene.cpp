@@ -39,9 +39,9 @@ void Scene::populateMeshInfos() {
 
     UINT curObjectIndex = 0;
     for (auto& curModel : mModels) {
-
         auto curObjectInfo = std::make_unique<ObjectInfo>();
 
+        // populate information for each mesh
         for (auto& curMesh : curModel.second->getDrawArgs()) {
             auto curDrawArg = curMesh.second;
 
@@ -54,6 +54,8 @@ void Scene::populateMeshInfos() {
             DirectX::XMStoreFloat4x4(&curMeshInfo->World, DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f) * DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f));
             curObjectInfo->mMeshInfos.push_back(std::move(curMeshInfo));
         }
+
+        // populate information for each model/obj
         curObjectInfo->Model = curModel.second.get();
         curObjectInfo->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
         curObjectInfo->ObjCBIndex = curObjectIndex;
@@ -157,20 +159,20 @@ void Scene::buildCameras() {
 
 void Scene::loadModels() {
 
-    auto mymodel1 = std::make_unique<Model>(ModelType::TEMPLATE_MODEL);
+    auto mymodel1 = std::make_unique<Model>(ModelType::TEMPLATE_MODEL, "mat1");
     mymodel1->Name = "model1";
     mymodel1->InitModel(md3dDevice, cpyCommandObject.get());
     mymodel1->setObj2VoxelScale(200.0f);
     mModels["model1"] = std::move(mymodel1);
 
-    auto mymodel2 = std::make_unique<Model>(ModelType::SPHERE_MODEL);
+    auto mymodel2 = std::make_unique<Model>(ModelType::SPHERE_MODEL, "mat2");
     mymodel2->Name = "area";
     mymodel2->InitModel(md3dDevice, cpyCommandObject.get());
     mymodel2->setObj2VoxelScale(200.0f);
     mymodel2->IsDynamic = true;
     mModels["area"] = std::move(mymodel2);
 
-    auto mymodel3 = std::make_unique<Model>(ModelType::GRID_MODEL);
+    auto mymodel3 = std::make_unique<Model>(ModelType::GRID_MODEL, "mat3");
     mymodel3->Name = "ground";
     mymodel3->InitModel(md3dDevice, cpyCommandObject.get());
     mymodel3->setObj2VoxelScale(200.0f);
@@ -178,7 +180,7 @@ void Scene::loadModels() {
     mModels["ground"] = std::move(mymodel3);
 
 
-    auto myquad = std::make_unique<Model>(ModelType::QUAD_MODEL);
+    auto myquad = std::make_unique<Model>(ModelType::QUAD_MODEL, "mat1");
     myquad->Name = "quad";
     myquad->InitModel(md3dDevice, cpyCommandObject.get());
     mModels["quad"] = std::move(myquad);
@@ -326,13 +328,13 @@ void Scene::initScene() {
     loadTextures(); 
     //loadAssetFromAssimp("../Resources/Models/sponza/sponza.obj");
     //loadAssetFromAssimp("../Resources/Models/sibenik/sibenik.obj"); 
-    //loadAssetFromAssimp("../Resources/Models/island/castle.obj");
+    loadAssetFromAssimp("../Resources/Models/island/castle.obj");
     //loadAssetFromAssimp("../Resources/Models/plane/ss.obj");
     //loadAssetFromAssimp("../Resources/Models/room/source/maya2sketchfab.fbx");
     //loadAssetFromAssimp("../Resources/Models/rship/SM_Ship01A_01_OBJ.obj");
-    loadAssetFromAssimp("../Resources/Models/ship.obj");
+    //loadAssetFromAssimp("../Resources/Models/ship.obj");
     //loadAssetFromAssimp("../Resources/Models/Blokcing.obj");
-    //loadAssetFromAssimp("../Resources/Models/montmartre-cityscene/mcity.obj");
+    //loadAssetFromAssimp("../Resources/Models/montmartre-cityscene/mcity.obj");\Cinderella_Castle
     //loadAssetFromAssimp("../Resources/Models/LP_all.fbx");
     //loadAssetFromAssimp("../Resources/Models/Kursovaya_Draft.fbx");
     //loadAssetFromAssimp("C:/Users/ZRoya/Downloads/San_Miguel/san-miguel.obj");

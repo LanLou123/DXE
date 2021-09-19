@@ -20,7 +20,7 @@ cbuffer cbPerObject : register(b0)
 #define VOXELMIPCOUNT 9
 #define PI 3.1415926
 
-cbuffer cbPass : register(b1)
+cbuffer cbPass : register(b2)
 {
     float4x4 gView;
     float4x4 gInvView;
@@ -50,7 +50,7 @@ cbuffer cbPass : register(b1)
 };
 
 
-cbuffer cbMaterial : register(b2)
+cbuffer cbMaterial : register(b1)
 {
     float4   gDiffuseAlbedo;
     float3   gFresnelR0;

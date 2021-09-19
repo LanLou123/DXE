@@ -4,10 +4,13 @@
 #include "Utilities/DescriptorHeap.h"
 #include "Utilities/Utils.h"
 
+
+
 #include "Material.h"
 #include "Texture.h"
 #include "Camera.h"
 #include "Model.h"
+
 
 
 enum class RenderLayer : int {
@@ -36,7 +39,7 @@ struct MeshInfo {
 	UINT StartIndexLocation = 0;
 	int BaseVertexLocation = 0;
 
-	
+
 };
 
 struct ObjectInfo {
@@ -107,20 +110,20 @@ private:
 
 	UINT mClientWidth, mClientHeight;
 
-	std::unordered_map<std::string, std::unique_ptr<Material>>																	mMaterials;
-	std::unordered_map<std::string, std::unique_ptr<Texture>>																	mTextures;
-	std::unordered_map<std::string, std::unique_ptr<Model>>																		mModels;
-	std::unordered_map<std::string, std::unique_ptr<Camera>>																	mCameras;
+	std::unordered_map<std::string, std::unique_ptr<Material>> mMaterials;
+	std::unordered_map<std::string, std::unique_ptr<Texture>> mTextures;
+	std::unordered_map<std::string, std::unique_ptr<Model>> mModels;
+	std::unordered_map<std::string, std::unique_ptr<Camera>> mCameras;
 
-	std::unordered_map<std::string, std::unique_ptr<ObjectInfo>>																mObjectInfos;
-	std::vector<std::vector<ObjectInfo*>>																						mObjectInfoLayer; // a vector of objinfo ptr vectors
+	std::unordered_map<std::string, std::unique_ptr<ObjectInfo>> mObjectInfos;
+	std::vector<std::vector<ObjectInfo*>> mObjectInfoLayer; // a vector of objinfo ptr vectors
 
-	UINT																														globalTextureSRVDescriptorHeapIndex = 0;
-	UINT																														globalMatCBindex = 0;
+	UINT globalTextureSRVDescriptorHeapIndex = 0;
+	UINT globalMatCBindex = 0;
 
 	
-	std::shared_ptr<CommandObject>																								cpyCommandObject;
-	ID3D12Device																												*md3dDevice;
+	std::shared_ptr<CommandObject> cpyCommandObject;
+	ID3D12Device *md3dDevice;
 };
 
 

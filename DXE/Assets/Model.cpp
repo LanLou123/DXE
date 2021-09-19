@@ -2,7 +2,8 @@
 
 Model::Model() : globalMeshID(0), modelType(ModelType::TEMPLATE_MODEL), IsDynamic(false){}
 
-Model::Model(ModelType _type) : modelType(_type), globalMeshID(0), IsDynamic(false) {
+Model::Model(ModelType _type,
+    std::string _matName) : modelType(_type), mMatName(_matName), globalMeshID(0), IsDynamic(false) {
      
 }
 
@@ -212,7 +213,7 @@ void Model::buildQuadGeometry() {
     quadSubMesh.IndexCount = (UINT)quad.Indices32.size();
     quadSubMesh.StartIndexLocation = 0;
     quadSubMesh.BaseVertexLocation = 0;
-    quadSubMesh.materialName = "mat1";
+    quadSubMesh.materialName = mMatName;
     DrawArgs["quad"] = quadSubMesh;
 
     auto totalVertCount = quad.Vertices.size();
@@ -251,7 +252,7 @@ void Model::buildSphereGeometry() {
     sphereSubMesh.IndexCount = (UINT)sphere.Indices32.size();
     sphereSubMesh.StartIndexLocation = sphereIndexOffset;
     sphereSubMesh.BaseVertexLocation = sphereVertexOffset;
-    sphereSubMesh.materialName = "mat2";
+    sphereSubMesh.materialName = mMatName;
     DrawArgs["sphere"] = sphereSubMesh;
 
     auto totalVertCount = sphere.Vertices.size();
@@ -290,7 +291,7 @@ void Model::buildCubeGeometry() {
     sphereSubMesh.IndexCount = (UINT)sphere.Indices32.size();
     sphereSubMesh.StartIndexLocation = sphereIndexOffset;
     sphereSubMesh.BaseVertexLocation = sphereVertexOffset;
-    sphereSubMesh.materialName = "mat2";
+    sphereSubMesh.materialName = mMatName;
     DrawArgs["cube"] = sphereSubMesh;
 
     auto totalVertCount = sphere.Vertices.size();
@@ -329,7 +330,7 @@ void Model::buildGridGeometry() {
     sphereSubMesh.IndexCount = (UINT)sphere.Indices32.size();
     sphereSubMesh.StartIndexLocation = sphereIndexOffset;
     sphereSubMesh.BaseVertexLocation = sphereVertexOffset;
-    sphereSubMesh.materialName = "mat3";
+    sphereSubMesh.materialName = mMatName;
     DrawArgs["grid"] = sphereSubMesh;
 
     auto totalVertCount = sphere.Vertices.size();
@@ -368,7 +369,7 @@ void Model::buildCylinderGeometry() {
     sphereSubMesh.IndexCount = (UINT)sphere.Indices32.size();
     sphereSubMesh.StartIndexLocation = sphereIndexOffset;
     sphereSubMesh.BaseVertexLocation = sphereVertexOffset;
-    sphereSubMesh.materialName = "mat2";
+    sphereSubMesh.materialName = mMatName;
     DrawArgs["grid"] = sphereSubMesh;
 
     auto totalVertCount = sphere.Vertices.size();
@@ -412,14 +413,14 @@ void Model::buildGeometry() {
     boxSubMesh.IndexCount = (UINT)box.Indices32.size();
     boxSubMesh.StartIndexLocation = boxIndexOffset;
     boxSubMesh.BaseVertexLocation = boxVertexOffset;
-    boxSubMesh.materialName = "mat1";
+    boxSubMesh.materialName = mMatName;
     DrawArgs["box"] = boxSubMesh;
 
     Mesh sphereSubMesh;
     sphereSubMesh.IndexCount = (UINT)sphere.Indices32.size();
     sphereSubMesh.StartIndexLocation = sphereIndexOffset;
     sphereSubMesh.BaseVertexLocation = sphereVertexOffset;
-    sphereSubMesh.materialName = "mat1";
+    sphereSubMesh.materialName = mMatName;
     DrawArgs["sphere"] = sphereSubMesh;
 
     auto totalVertCount = box.Vertices.size() + sphere.Vertices.size();

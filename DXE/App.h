@@ -150,7 +150,7 @@ private:
     struct ImguiParameters {
         std::vector<float> LightPos;
         std::vector<float> l2pos = { 20,10,10 };
-        std::vector<float> groundpos = { 0,-100,0 };
+        std::vector<float> groundpos = { 0,-90,0 };
         std::vector<float> ground1pos = { 0,-100,50 };
     }mImguiPara;
 

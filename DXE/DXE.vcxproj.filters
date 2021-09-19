@@ -23,6 +23,9 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{9a161122-1183-4490-b63d-ddf43b82fca2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ECS">
+      <UniqueIdentifier>{ad06ff28-fc62-4c23-8263-aa48a61e1673}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Frames\FrameResource.h">
@@ -99,6 +102,9 @@
     </ClInclude>
     <ClInclude Include="Utilities\Keyboard.h">
       <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\ECSystem.h">
+      <Filter>Source Files\ECS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
